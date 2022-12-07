@@ -1,10 +1,10 @@
 # Databricks notebook source
-saved = spark.sql("select * from ocio_ede_dev.tbl_hl7_mmg_ok_raw sort by enqueuedTime desc")
+saved = spark.sql("select * from ocio_ede_dev.tbl_hl7_mmg_based_ok sort by enqueuedTime desc")
 display(saved)
 
 # COMMAND ----------
 
-saved = spark.sql("select body:metadata:processes[3]:report from ocio_ede_dev.tbl_hl7_message_processor_ok ")
+saved = spark.sql("select body:metadata:processes[3]:report from ocio_ede_dev.tbl_hl7_mmg_based_ok ")
 display(saved)
 
 # COMMAND ----------
@@ -13,7 +13,7 @@ import json
 from pyspark.sql import functions as F
 
 from pyspark.sql.functions import get_json_object
-saved  = spark.sql("select body:message_uuid, body:metadata:processes[3]:report from ocio_ede_dev.tbl_hl7_message_processor_ok sort by enqueuedTime desc")
+saved  = spark.sql("select body:message_uuid, body:metadata:processes[3]:report from ocio_ede_dev.tbl_hl7_mmg_based_ok sort by enqueuedTime desc")
 
 bodycollect = saved.collect()
 
