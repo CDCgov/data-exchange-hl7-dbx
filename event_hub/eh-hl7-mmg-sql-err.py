@@ -1,9 +1,9 @@
 # Databricks notebook source
 import json, os
 ev_namespace    ="tf-eventhub-namespace-dev"
-ev_name         ="hl7-recdeb-ok"
-ev_sas_key_name = os.getenv("v_hl7_recdeb_ok_key")
-ev_sas_key_val = os.getenv("v_hl7_recdeb_ok_key_val")
+ev_name         ="hl7-mmg-sql-err"
+ev_sas_key_name = os.getenv("v_hl7_mmg_sql_err_key")
+ev_sas_key_val = os.getenv("v_hl7_mmg_sql_err_key_val")
 
 conn_string="Endpoint=sb://{0}.servicebus.windows.net/;EntityPath={1};SharedAccessKeyName={2};SharedAccessKey={3}".format(ev_namespace, ev_name, ev_sas_key_name, ev_sas_key_val)
 
@@ -21,11 +21,10 @@ df = df.withColumn("body", df["body"].cast("string"))
 # COMMAND ----------
 
 db_name ="ocio_ede_dev"
-tbl_name = "tbl_hl7_recdeb_ok"
+tbl_name = "tbl_hl7_mmg_sql_err"
 schema_name = db_name + "." + tbl_name
-chkpoint_loc = "/tmp/delta/events/hl7_recdeb_ok/_checkpoints/"
+chkpoint_loc = "/tmp/delta/events/tbl_hl7_mmg_sql_err/_checkpoints/"
 
-#df.writeStream.outputMode("append").format("console").start().awaitTermination()
 #df.writeStream.outputMode("append").format("console").option("truncate", false).start().awaitTermination()
 df.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(schema_name)
 
@@ -34,7 +33,7 @@ df.writeStream.format("delta").outputMode("append").option("checkpointLocation",
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT count(*) FROM ocio_ede_dev.tbl_hl7_recdeb_ok;
+# MAGIC SELECT * FROM ocio_ede_dev.tbl_hl7_mmg_sql_err;
 
 # COMMAND ----------
 

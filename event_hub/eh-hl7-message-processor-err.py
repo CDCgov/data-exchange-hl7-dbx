@@ -33,7 +33,7 @@ df.writeStream.format("delta").outputMode("append").option("checkpointLocation",
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT count(*) FROM ocio_ede_dev.tbl_hl7_message_processor_err;
+# MAGIC SELECT count(*)  FROM ocio_ede_dev.tbl_hl7_message_processor_err;
 
 # COMMAND ----------
 

@@ -20,10 +20,20 @@ df = df.withColumn("body", df["body"].cast("string"))
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC DROP TABLE ocio_ede_dev.tbl_hl7_mmg_validation_err;
+
+# COMMAND ----------
+
+# MAGIC %sh
+# MAGIC ls /tmp/delta/
+
+# COMMAND ----------
+
 db_name ="ocio_ede_dev"
 tbl_name = "tbl_hl7_mmg_validation_err"
 schema_name = db_name + "." + tbl_name
-chkpoint_loc = "/tmp/delta/events/hl7-mmg-validation-err/_checkpoints/"
+chkpoint_loc = "/tmp/delta/events/hl7_mmg_validation_err/_checkpoints/"
 
 #df.writeStream.outputMode("append").format("console").option("truncate", false).start().awaitTermination()
 df.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(schema_name)
@@ -36,4 +46,5 @@ df.writeStream.format("delta").outputMode("append").option("checkpointLocation",
 # MAGIC SELECT count(*) FROM ocio_ede_dev.tbl_hl7_mmg_validation_err;
 
 # COMMAND ----------
+
 

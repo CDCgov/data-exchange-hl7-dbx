@@ -9,7 +9,7 @@ conn_string="Endpoint=sb://{0}.servicebus.windows.net/;EntityPath={1};SharedAcce
 
 ehConf = {}
 ehConf['eventhubs.connectionString'] = sc._jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(conn_string)
-#print(conn_string)
+print(conn_string)
 
 # COMMAND ----------
 
@@ -32,6 +32,24 @@ df.writeStream.format("delta").outputMode("append").option("checkpointLocation",
 
 # MAGIC %sql
 # MAGIC SELECT Count(*) FROM ocio_ede_dev.tbl_hl7_file_dropped;
+
+# COMMAND ----------
+
+db_name ="ocio_ede_dev"
+tbl_name = "tbl_hl7_file_dropped"
+schema_name = db_name + "." + tbl_name
+chkpoint_loc = "/tmp/delta/events/" +tbl_name + "/_checkpoints/"
+print(chkpoint_loc)
+
+# COMMAND ----------
+
+hl7StructureErrTableName = "ocio_ede_dev.tbl_hl7_structure_err"
+df =  spark.read.format("delta").table(hl7StructureErrTableName)
+df2 = spark.sql('''SELECT cast(body AS STRING) FROM ocio_ede_dev.tbl_hl7_structure_err ''')
+#df2 = df.select("body")
+#df3 = df2.withColumn("body", df["body"].cast("to_json"))
+#df3 = df2.to_json(df2)
+display(df2)
 
 # COMMAND ----------
 
