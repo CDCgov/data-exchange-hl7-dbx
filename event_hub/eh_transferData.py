@@ -67,8 +67,9 @@ def normalizeString(str):
 # DBTITLE 1,Opinionated method that knows the Event Hub, and Lake configurations. All it needs is what Topic to load!
 def transferEventHubDataToLake(eventHubTopic):
     ev_namespace    = "tf-eventhub-namespace-dev"
-    ev_sas_key_name = os.getenv("v_hl7_file_dropped_key")
-    ev_sas_key_val  = os.getenv("v_hl7_file_dropped_key_val")
+    ev_sas_key_name = "tf-eventhub-namespace-dev-key"
+    ev_sas_key_val  = os.getenv("event-hub-policy-key")
+
 
     ehConfig = EventHubConfig(ev_namespace, eventHubTopic, ev_sas_key_name, ev_sas_key_val)
     
