@@ -49,7 +49,7 @@ val issueTypeSchema = new StructType()
 //                             .add("metadata", new MapType , true) TODO: gives null pointer exception - 
 
 val issueArraySchema = new ArrayType(issueTypeSchema, false)
-val entriesSchema = new StructType().add("content", issueArraySchema, true).add("structure", issueArraySchema, true).add("value_set", issueArraySchema, true)
+val entriesSchema = new StructType().add("content", issueArraySchema, true).add("structure", issueArraySchema, true).add("value-set", issueArraySchema, true)
 
 // COMMAND ----------
 
@@ -64,12 +64,12 @@ val processSchema = new StructType()
          .add("status", StringType, true)
          .add("error-count", new StructType()
               .add("structure", IntegerType, true)
-              .add("value_set", IntegerType, true)
+              .add("value-set", IntegerType, true)
               .add("content", IntegerType, true)
               , true)
          .add("warning-count",  new StructType()
               .add("structure", IntegerType, true)
-              .add("value_set", IntegerType, true)
+              .add("value-set", IntegerType, true)
               .add("content", IntegerType, true)
               , true)
         , true)
@@ -77,13 +77,18 @@ val processSchema = new StructType()
 val schema =  new StructType()
     .add("content", StringType, true)
     .add("message_uuid", StringType, true)
-    .add("message_hash", StringType, true)
+   // .add("message_hash", StringType, true)
     .add("metadata", new StructType()
          
          .add("provenance", new StructType()
              .add("file_path", StringType, true)
              .add("file_timestamp", StringType, true)
+             .add("event_timestamp", StringType, true)
              .add("file_size", LongType, true)
+             .add("message_hash", StringType, true)
+             .add("message_index", StringType, true)
+             .add("ext_original_file_name", StringType, true)
+             .add("ext_system_provider", StringType, true)
              .add("single_or_batch", StringType, true), true)
          
         .add("processes", new ArrayType(processSchema, true), true ))
@@ -92,8 +97,8 @@ val schema =  new StructType()
          .add("current_status", StringType, true)
          .add("problem", new StructType()
               .add("process_name", StringType, true)
-              .add("exception_class", StringType, true)
-              .add("stacktrace", StringType, true)
+              //.add("exception_class", StringType, true)
+              //.add("stacktrace", StringType, true)
               .add("error_message", StringType, true)
               .add("should_retry", BooleanType, true)
               .add("retry_count", IntegerType, true)
@@ -114,10 +119,16 @@ display(df3)
 
 // COMMAND ----------
 
-val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid", "message_hash", "metadata", "structureReport")
+val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata", "structureReport")
   .withColumn("report", $"structureReport.report")
-  .withColumn("errCount", $"report.error-count.structure" +  $"report.error-count.value_set" +  $"report.error-count.content" )
+  .withColumn("errCount", $"report.error-count.structure" +  $"report.error-count.value-set" +  $"report.error-count.content" )
 display( df4 )
+
+// COMMAND ----------
+
+val df_Metadata = df3.select("message_uuid","metadata.provenance.file_path", "metadata.provenance.file_size","metadata.provenance.message_hash","metadata.provenance.message_index","metadata.provenance.single_or_batch","metadata.provenance.event_timestamp",
+                             "summary.current_status","summary.problem.process_name","summary.problem.error_message","summary.problem.should_retry","summary.problem.retry_count","summary.problem.max_retries")
+display(df_Metadata)
 
 // COMMAND ----------
 
