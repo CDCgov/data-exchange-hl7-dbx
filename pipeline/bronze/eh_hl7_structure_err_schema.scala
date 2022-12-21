@@ -126,34 +126,12 @@ display( df4 )
 
 // COMMAND ----------
 
-val df_Metadata = df3.select("message_uuid","metadata.provenance.file_path", "metadata.provenance.file_size","metadata.provenance.message_hash","metadata.provenance.message_index","metadata.provenance.single_or_batch","metadata.provenance.event_timestamp",
-                             "summary.current_status","summary.problem.process_name","summary.problem.error_message","summary.problem.should_retry","summary.problem.retry_count","summary.problem.max_retries")
+val df_Metadata = df3.select("message_uuid","metadata.provenance.file_path", "metadata.provenance.file_size", "metadata.provenance.message_hash","metadata.provenance.message_index","metadata.provenance.single_or_batch","metadata.provenance.event_timestamp","summary.current_status", "summary.problem.process_name","summary.problem.error_message","summary.problem.should_retry","summary.problem.retry_count","summary.problem.max_retries")
 display(df_Metadata)
 
 // COMMAND ----------
 
-//df4.createOrReplaceTempView( "ocio_ede_dev.tbl_hl7_structure_err_raw")
-//df4.write.mode("overwrite").saveAsTable("ocio_ede_dev.tbl_hl7_structure_err_raw")
-/// -------
-//df4.write.format("delta").mode("overwrite").saveAsTable("ocio_ede_dev.tbl_hl7_structure_err_raw_d")
-//target_schema_name="ocio_ede_dev.tbl_hl7_structure_err_bronze"
-////df4.write.format("delta").mode("overwrite").saveAsTable(target_schema_name)
-
-// COMMAND ----------
-
-// MAGIC %sql
-// MAGIC --DROP TABLE ocio_ede_dev.tbl_hl7_structure_err_bronze_stream
-
-// COMMAND ----------
-
-//df4.write.format("delta").mode("overwrite").saveAsTable("ocio_ede_dev.tbl_hl7_structure_err_raw_d")
-//target_schema_name="ocio_ede_dev.tbl_hl7_structure_err_bronze"
-////df4.write.format("delta").mode("overwrite").saveAsTable(target_schema_name)
-
-///df.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(schema_name)
-//val target_schema_name="ocio_ede_dev.tbl_hl7_structure_err_bronze_stream"
-//val chkpoint_loc = "/tmp/delta/events/tbl_hl7_structure_err_bronze/_checkpoints/"
-
+// Writing to Bronze table
 println(target_schema_name)
 df4.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
 
@@ -161,42 +139,6 @@ df4.writeStream.format("delta").outputMode("append").option("checkpointLocation"
 
 // MAGIC %sql
 // MAGIC Select count(*) FROM ocio_dex_dev.hl7_structure_err_bronze;
-
-// COMMAND ----------
-
-// MAGIC %sql
-// MAGIC --CREATE OR REPLACE VIEW ocio_ede_dev.v_hl7_structure_err_bronze AS 
-// MAGIC SELECT  message_uuid, message_hash,      --metadata.provenance.file_path as file_path, 
-// MAGIC         process_name, process_status, process_start_time, process_end_time, 
-// MAGIC         report_status,
-// MAGIC         report_content.path, report_content.line as line,
-// MAGIC         CASE WHEN report_content.category IS NULL THEN 'VALID MESSAGE' ELSE report_content.category END AS category,
-// MAGIC         CASE WHEN report_content.classification  IS NULL THEN 'VALID MESSAGE' ELSE report_content.classification END AS classification,
-// MAGIC         report_content.description as description, errCount
-// MAGIC FROM (
-// MAGIC     SELECT message_uuid, message_hash,      --metadata.provenance.file_path as file_path, 
-// MAGIC           metadata.processes[1].process_name as process_name, metadata.processes[1].status as process_status,
-// MAGIC           metadata.processes[1].start_processing_time as process_start_time,  metadata.processes[1].end_processing_time as process_end_time, 
-// MAGIC           report.status as report_status,
-// MAGIC           explode (report.entries.content) as report_content,
-// MAGIC           errCount
-// MAGIC           --,structureReport.process_name, structureReport.report
-// MAGIC       FROM  ocio_dex_dev.hl7_structure_err_bronze
-// MAGIC   ) 
-// MAGIC  -- where message_uuid="49ac6b1d-f29c-42e8-8961-1bafa5ae012a";
-
-// COMMAND ----------
-
-// MAGIC %sql
-// MAGIC SELECT message_uuid, message_hash,      --metadata.provenance.file_path as file_path, 
-// MAGIC       metadata.processes[1].process_name as process_name, metadata.processes[1].status as process_status,
-// MAGIC       metadata.processes[1].start_processing_time as process_start_time,  metadata.processes[1].end_processing_time as process_end_time, 
-// MAGIC       report.status as report_status,
-// MAGIC       report.entries.content[1].path as report_path, report.entries.content[1].line as line,
-// MAGIC       report.entries.content[1].category as category, report.entries.content[1].classification as classification, 
-// MAGIC       report.entries.content[1].description as description, errCount
-// MAGIC       --,structureReport.process_name, structureReport.report
-// MAGIC   FROM ocio_dex_dev.hl7_structure_err_bronze; 
 
 // COMMAND ----------
 

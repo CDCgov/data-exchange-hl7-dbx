@@ -100,8 +100,8 @@ display(df3)
 
 val df4 = df3.withColumn("mmgReport", explode($"processes") ).filter( $"mmgReport.process_name" === "MMG-VALIDATOR").select("message_uuid", "message_hash", "metadata", "mmgReport")
   .withColumn("report", from_json($"mmgReport.report", new ArrayType(issueTypeSchema, true)) )
-
-// .withColumn("errsCount", getErrsCount($"report"))
+  .withColumn("issuesAndErrsCount", size($"report"))
+//.withColumn("errsCount", getErrsCount($"report"))
 //   .withColumn("report_json", from_json($"report", new ArrayType(issueTypeSchema, true)) )
 display( df4 )
 
@@ -115,38 +115,13 @@ display( df4 )
 //df4.write.format("delta").mode("overwrite").saveAsTable("ocio_ede_dev.tbl_hl7_mmg_ok_raw_d")
 /// Create after Dataframe DF5 after explode
 //df4.write.format("delta").mode("overwrite").saveAsTable(target_schema_name)
-
-// COMMAND ----------
-
-val issuesDF = df4.withColumn("exploded", explode($"report"))
-//display(issuesDF.select("message_uuid", "exploded.*")) -- Orgininal 
-//display(issuesDF.select("message_uuid","message_hash", "mmgReport.process_name","mmgReport.status", "issuesAndErrsCount", "exploded.*"))
-
-val df5 = issuesDF.select("message_uuid","message_hash", "mmgReport.process_name","mmgReport.status",  "exploded.*")
-display (df5)
-//display(issuesDF.select("message_uuid","message_hash", "metadata.provenance.file_path", "exploded.*"))
-
-// COMMAND ----------
-
-//df5.write.format("delta").mode("overwrite").saveAsTable("ocio_ede_dev.tbl_hl7_mmg_ok_raw_new_d")
-//df5.write.format("delta").mode("overwrite").saveAsTable(target_schema_name)
-//println(target_schema_name)
-
-println(target_schema_name)
-df5.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+df4.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+display (df4)
 
 // COMMAND ----------
 
 // MAGIC %sql
-// MAGIC --SELECT * FROM ocio_ede_dev.tbl_hl7_mmg_ok_raw_new_d;
-// MAGIC SELECT COUNT(*) FROM ocio_dex_dev.hl7_mmg_validation_ok_bronze;
-
-// COMMAND ----------
-
-// MAGIC %sql
-// MAGIC SELECT message_uuid, PROCESS_NAME as Service, status as Classification, 
-// MAGIC         Category, hl7path as FiledName, lineNumber as Line, message as Description
-// MAGIC     FROM ocio_dex_dev.hl7_mmg_validation_ok_bronze;
+// MAGIC SELECT count(*) FROM ocio_dex_dev.hl7_mmg_validation_ok_bronze
 
 // COMMAND ----------
 
