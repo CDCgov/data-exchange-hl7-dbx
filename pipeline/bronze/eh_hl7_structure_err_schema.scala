@@ -1,4 +1,9 @@
 // Databricks notebook source
+// MAGIC %md 
+// MAGIC Modified : 12/29/2022
+
+// COMMAND ----------
+
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 
@@ -18,25 +23,6 @@ val df =  spark.readStream.format("delta").table(src_schema_name)
 
 // COMMAND ----------
 
-/*
-  {
-    "line": 72,
-    "column": 5,
-    "path": "OBX[69]-1[1]",
-    "description": "CN-020 -  PATIENT_RESULT.ORDER_OBSERVATION.OBSERVATION.OBX-1 (Set ID - OBX) shall be valued sequentially starting with the value '1'. ",
-    "category": "Constraint Failure",
-    "classification": "Error",
-    "stackTrace": [
-        {
-            "assertion": "SetId(1[1].1[1]) # Context: Group OBSERVATION (OBSERVATION)",
-            "reasons": [
-                "[72, 5] Expected 69, Found nn"
-            ]
-        }
-    ],
-    "metaData": {}
-}
-*/
 val stackTraceSchema = new StructType().add("assertion", StringType, true).add("reasons", new ArrayType(StringType, true), true)
 val issueTypeSchema = new StructType()
                              .add("line", StringType, true)
@@ -121,13 +107,10 @@ display(df3)
 
 val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata", "structureReport")
   .withColumn("report", $"structureReport.report")
-  .withColumn("errCount", $"report.error-count.structure" +  $"report.error-count.value-set" +  $"report.error-count.content" )
+  .withColumn("errorCount", $"report.error-count.structure" + $"report.error-count.value-set" + $"report.error-count.content" )
+  .withColumn("warningCount", $"report.warning-count.structure" + $"report.warning-count.value-set" + $"report.warning-count.content" )
+
 display( df4 )
-
-// COMMAND ----------
-
-val df_Metadata = df3.select("message_uuid","metadata.provenance.file_path", "metadata.provenance.file_size", "metadata.provenance.message_hash","metadata.provenance.message_index","metadata.provenance.single_or_batch","metadata.provenance.event_timestamp","summary.current_status", "summary.problem.process_name","summary.problem.error_message","summary.problem.should_retry","summary.problem.retry_count","summary.problem.max_retries")
-display(df_Metadata)
 
 // COMMAND ----------
 
@@ -138,7 +121,15 @@ df4.writeStream.format("delta").outputMode("append").option("checkpointLocation"
 // COMMAND ----------
 
 // MAGIC %sql
-// MAGIC Select count(*) FROM ocio_dex_dev.hl7_structure_err_bronze;
+// MAGIC SELECT COUNT(*) FROM ocio_dex_dev.hl7_structure_err_bronze;
+
+// COMMAND ----------
+
+/*
+val df_Metadata = df3.select("message_uuid","metadata.provenance.file_path", "metadata.provenance.file_size", "metadata.provenance.message_hash","metadata.provenance.message_index","metadata.provenance.single_or_batch","metadata.provenance.event_timestamp","summary.current_status", "summary.problem.process_name","summary.problem.error_message","summary.problem.should_retry","summary.problem.retry_count","summary.problem.max_retries")
+display(df_Metadata)
+*/
+
 
 // COMMAND ----------
 
