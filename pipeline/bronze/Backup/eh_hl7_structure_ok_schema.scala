@@ -4,25 +4,17 @@ import org.apache.spark.sql.types._
 
 // COMMAND ----------
 
-val source_db = "ocio_ede_dev"
+val source_db = "ocio_dex_dev"
 val target_db = "ocio_ede_dex_dev"
-val src_tbl_name = "tbl_hl7_structure_err"
-val target_tbl_name = "tbl_hl7_structure_err_bronze"
+val src_tbl_name = "hl7_structure_ok_eh_raw"
+val target_tbl_name = "hl7_structure_ok_bronze"
 
 val src_schema_name = source_db + "." + src_tbl_name
 val target_schema_name = source_db + "." + target_tbl_name
-//val target_schema_name = target_db + "." + target_tbl_name
+val chkpoint_loc = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + target_tbl_name + "/_checkpoint"
 
-//val hl7StructureErrTableName = "ocio_ede_dev.tbl_hl7_structure_err"
-//val df =  spark.read.format("delta").table(hl7StructureErrTableName) // .repartition(320) // The ideal number of partitions = total number of cores X 4. 
-//spark.readStream.format("eventhubs").options(**ehConf).load()
-val df =  spark.readStream.format("delta").table(src_schema_name)
-display(df)
-
-// COMMAND ----------
-
-// MAGIC %sql
-// MAGIC Select count(*) from ocio_ede_dev.tbl_hl7_structure_err
+val df =  spark.readStream.format("delta").table(src_schema_name ) // .repartition(320) // The ideal number of partitions = total number of cores X 4. 
+display( df)
 
 // COMMAND ----------
 
@@ -70,12 +62,12 @@ val processSchema = new StructType()
    .add("report", new StructType()
          .add("entries", entriesSchema, true)
          .add("status", StringType, true)
-         .add("error-count", new StructType()
+         .add("error_count", new StructType()
               .add("structure", IntegerType, true)
               .add("value_set", IntegerType, true)
               .add("content", IntegerType, true)
               , true)
-         .add("warning-count",  new StructType()
+         .add("warning_count",  new StructType()
               .add("structure", IntegerType, true)
               .add("value_set", IntegerType, true)
               .add("content", IntegerType, true)
@@ -113,7 +105,7 @@ val schema =  new StructType()
 
 val df1 = df.withColumn("bodyJson", from_json(col("body"), schema))
 val df2 = df1.select("bodyJson.*")
-display(df2)
+display( df2 )
 
 // COMMAND ----------
 
@@ -124,86 +116,50 @@ display(df3)
 
 val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid", "message_hash", "metadata", "structureReport")
   .withColumn("report", $"structureReport.report")
-  .withColumn("errCount", $"report.error-count.structure" +  $"report.error-count.value_set" +  $"report.error-count.content" )
-display( df4 )
+  .withColumn("errCount", $"report.error_count.structure" +  $"report.error_count.value_set" +  $"report.error_count.content" )
+
+display(df4)
 
 // COMMAND ----------
 
 //df4.createOrReplaceTempView( "ocio_ede_dev.tbl_hl7_structure_err_raw")
-//df4.write.mode("overwrite").saveAsTable("ocio_ede_dev.tbl_hl7_structure_err_raw")
+//df4.write.mode("overwrite").saveAsTable("ocio_ede_dev.tbl_hl7_structure_ok_raw")
 
 // COMMAND ----------
 
-//df4.write.format("delta").mode("overwrite").saveAsTable("ocio_ede_dev.tbl_hl7_structure_err_raw_d")
-//target_schema_name="ocio_ede_dev.tbl_hl7_structure_err_bronze"
-////df4.write.format("delta").mode("overwrite").saveAsTable(target_schema_name)
+//df4.write.format("delta").mode("overwrite").saveAsTable("ocio_ede_dev.tbl_hl7_structure_ok_raw_d")
+//df4.write.format("delta").mode("overwrite").saveAsTable(target_schema_name)
+//println(target_schema_name)
 
 // COMMAND ----------
-
-// MAGIC %sql
-// MAGIC --DROP TABLE ocio_ede_dev.tbl_hl7_structure_err_bronze_stream
-
-// COMMAND ----------
-
-// MAGIC %fs 
-// MAGIC ls  /tmp/delta/events/tbl_hl7_structure_err_bronze
-
-// COMMAND ----------
-
-//df4.write.format("delta").mode("overwrite").saveAsTable("ocio_ede_dev.tbl_hl7_structure_err_raw_d")
-//target_schema_name="ocio_ede_dev.tbl_hl7_structure_err_bronze"
-////df4.write.format("delta").mode("overwrite").saveAsTable(target_schema_name)
 
 ///df.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(schema_name)
-val target_schema_name="ocio_ede_dev.tbl_hl7_structure_err_bronze_stream"
-val chkpoint_loc = "/tmp/delta/events/tbl_hl7_structure_err_bronze/_checkpoints/"
+//val target_schema_name="ocio_ede_dev.tbl_hl7_structure_ok_bronze_stream"
+//val chkpoint_loc = "/tmp/delta/events/tbl_hl7_structure_ok_bronze/_checkpoints/"
 println(target_schema_name)
 df4.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
 
 // COMMAND ----------
 
 // MAGIC %sql
-// MAGIC Select count(*) FROM ocio_ede_dev.tbl_hl7_structure_err_bronze_stream;
+// MAGIC Select count(*) FROM ocio_dex_dev.hl7_structure_ok_bronze
 
 // COMMAND ----------
 
 // MAGIC %sql
-// MAGIC CREATE OR REPLACE VIEW ocio_ede_dev.v_hl7_structure_err_bronze AS 
-// MAGIC SELECT  message_uuid, message_hash,      --metadata.provenance.file_path as file_path, 
-// MAGIC         process_name, process_status, process_start_time, process_end_time, 
-// MAGIC         report_status,
-// MAGIC         report_content.path, report_content.line as line,
-// MAGIC         CASE WHEN report_content.category IS NULL THEN 'VALID MESSAGE' ELSE report_content.category END AS category,
-// MAGIC         CASE WHEN report_content.classification  IS NULL THEN 'VALID MESSAGE' ELSE report_content.classification END AS classification,
-// MAGIC         report_content.description as description, errCount
-// MAGIC FROM (
-// MAGIC     SELECT message_uuid, message_hash,      --metadata.provenance.file_path as file_path, 
-// MAGIC           metadata.processes[1].process_name as process_name, metadata.processes[1].status as process_status,
-// MAGIC           metadata.processes[1].start_processing_time as process_start_time,  metadata.processes[1].end_processing_time as process_end_time, 
-// MAGIC           report.status as report_status,
-// MAGIC           explode (report.entries.content) as report_content,
-// MAGIC           errCount
-// MAGIC           --,structureReport.process_name, structureReport.report
-// MAGIC       FROM  ocio_ede_dev.tbl_hl7_structure_err_bronze_stream
-// MAGIC   ) 
-// MAGIC  -- where message_uuid="49ac6b1d-f29c-42e8-8961-1bafa5ae012a";
-
-// COMMAND ----------
-
-// MAGIC %sql
-// MAGIC SELECT message_uuid, message_hash,      --metadata.provenance.file_path as file_path, 
+// MAGIC SELECT message_uuid, message_hash, 
+// MAGIC       metadata.provenance.file_path as file_path, 
 // MAGIC       metadata.processes[1].process_name as process_name, metadata.processes[1].status as process_status,
-// MAGIC       metadata.processes[1].start_processing_time as process_start_time,  metadata.processes[1].end_processing_time as process_end_time, 
-// MAGIC       report.status as report_status,
-// MAGIC       report.entries.content[1].path as report_path, report.entries.content[1].line as line,
-// MAGIC       report.entries.content[1].category as category, report.entries.content[1].classification as classification, 
+// MAGIC       metadata.processes[1].start_processing_time as process_start_time,  
+// MAGIC       metadata.processes[1].end_processing_time as process_end_time, 
+// MAGIC       report.status as report_status, report.entries.content[1].path as report_path, report.entries.content[1].line as lineNum,
+// MAGIC       CASE WHEN report.entries.content[1].category  IS NULL THEN 'VALID' ELSE report.entries.content[1].category END AS category,
+// MAGIC       CASE WHEN report.entries.content[1].classification  IS NULL THEN 'VALID' ELSE report.entries.content[1].classification END AS classification,
+// MAGIC    --   report.entries.content[1].category as category, report.entries.content[1].classification as classification, 
 // MAGIC       report.entries.content[1].description as description, errCount
 // MAGIC       --,structureReport.process_name, structureReport.report
-// MAGIC   FROM ocio_ede_dev.tbl_hl7_structure_err_bronze_stream; 
+// MAGIC   FROM ocio_dex_dev.hl7_structure_ok_bronze
 
 // COMMAND ----------
 
-// MAGIC %sql
-// MAGIC select message_uuid, report_content.path, report_content.line from (
-// MAGIC Select message_uuid, explode(report.entries.content) as report_content FROM ocio_ede_dev.tbl_hl7_structure_err_bronze_stream
-// MAGIC   where message_uuid = '896b2726-8a8c-4556-9770-0afb45687862' );
+
