@@ -133,8 +133,4 @@ display(df_Metadata)
 
 // COMMAND ----------
 
-hello
-
-// COMMAND ----------
-
 
