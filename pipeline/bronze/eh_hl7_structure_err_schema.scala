@@ -1,4 +1,9 @@
 // Databricks notebook source
+// MAGIC %sql
+// MAGIC select * from ocio_dex_dev.hl7_structure_err_eh_raw
+
+// COMMAND ----------
+
 // MAGIC %md 
 // MAGIC Modified : 12/29/2022
 
@@ -16,7 +21,7 @@ val target_tbl_name = "hl7_structure_err_bronze"
 
 val src_schema_name = source_db + "." + src_tbl_name
 val target_schema_name = source_db + "." + target_tbl_name
-val chkpoint_loc = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + target_tbl_name + "/_checkpoint"
+val chkpoint_loc = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + target_tbl_name + "/_checkpoint1"
 
 val df =  spark.readStream.format("delta").table(src_schema_name)
 //display(df)
@@ -36,6 +41,9 @@ val issueTypeSchema = new StructType()
 
 val issueArraySchema = new ArrayType(issueTypeSchema, false)
 val entriesSchema = new StructType().add("content", issueArraySchema, true).add("structure", issueArraySchema, true).add("value-set", issueArraySchema, true)
+
+val mmgArraySchema = new ArrayType(StringType, false)
+val messageInfoSchema = new StructType().add("event_code", StringType, true).add("route", StringType, true).add("mmgs", mmgArraySchema, true).add("reporting_jurisdiction", StringType, true)
 
 // COMMAND ----------
 
@@ -62,6 +70,7 @@ val processSchema = new StructType()
 
 val schema =  new StructType()
     .add("content", StringType, true)
+    .add("message_info", messageInfoSchema, true)
     .add("message_uuid", StringType, true)
    // .add("message_hash", StringType, true)
     .add("metadata", new StructType()
@@ -105,10 +114,12 @@ display(df3)
 
 // COMMAND ----------
 
-val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata", "structureReport")
+val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata", "structureReport","message_info.route")
   .withColumn("report", $"structureReport.report")
   .withColumn("errorCount", $"report.error-count.structure" + $"report.error-count.value-set" + $"report.error-count.content" )
   .withColumn("warningCount", $"report.warning-count.structure" + $"report.warning-count.value-set" + $"report.warning-count.content" )
+ 
+val df5 = df3.select($"message_info.route")
 
 display( df4 )
 
@@ -129,8 +140,4 @@ df4.writeStream.format("delta").outputMode("append").option("checkpointLocation"
 val df_Metadata = df3.select("message_uuid","metadata.provenance.file_path", "metadata.provenance.file_size", "metadata.provenance.message_hash","metadata.provenance.message_index","metadata.provenance.single_or_batch","metadata.provenance.event_timestamp","summary.current_status", "summary.problem.process_name","summary.problem.error_message","summary.problem.should_retry","summary.problem.retry_count","summary.problem.max_retries")
 display(df_Metadata)
 */
-
-
-// COMMAND ----------
-
 
