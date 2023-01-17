@@ -114,12 +114,16 @@ display(df3)
 
 // COMMAND ----------
 
-val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata", "structureReport","message_info.route")
+val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata.provenance","metadata.processes","metadata.provenance.message_hash", "structureReport","message_info")
   .withColumn("report", $"structureReport.report")
+  .withColumn("process_version", $"structureReport.process_version")
+  .withColumn("validation_status", $"structureReport.status")
+  .withColumn("process_start_time", $"structureReport.start_processing_time")
+  .withColumn("process_end_time", $"structureReport.end_processing_time")
   .withColumn("errorCount", $"report.error-count.structure" + $"report.error-count.value-set" + $"report.error-count.content" )
   .withColumn("warningCount", $"report.warning-count.structure" + $"report.warning-count.value-set" + $"report.warning-count.content" )
  
-val df5 = df3.select($"message_info.route")
+val df5 = df3.select($"message_info")
 
 display( df4 )
 
