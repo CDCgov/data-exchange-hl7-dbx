@@ -74,6 +74,19 @@ schema = StructType([ StructField("content", StringType(), True), \
 
 # COMMAND ----------
 
+from pyspark.sql.functions import from_json, col, get_json_object
+df1 = df_source.withColumn("bodyJson", from_json(col("body"), schema))
+df_body = df1.select("bodyJson.*")
+display(df_body)
+
+# COMMAND ----------
+
+df_body.printSchema()
+df3 = df_body.withColumn("processes", df_body.metadata.processes)
+display(df3)
+
+# COMMAND ----------
+
 dbutils.help()
 
 # COMMAND ----------
