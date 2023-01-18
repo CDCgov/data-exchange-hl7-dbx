@@ -1,5 +1,16 @@
 # Databricks notebook source
 # MAGIC %md
+# MAGIC ### Import Spark SQL Types
+
+# COMMAND ----------
+
+from pyspark.sql.types import *
+
+# COMMAND ----------
+
+# MAGIC 
+# MAGIC 
+# MAGIC %md
 # MAGIC ### Schemas Common ( Bronze )
 
 # COMMAND ----------
