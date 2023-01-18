@@ -5,8 +5,49 @@ from pyspark.sql.types import *
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Input and Output Tables
+
+# COMMAND ----------
+
 inputTable = "ocio_dex_dev.hl7_mmg_sql_ok_eh_raw"
 outputTable = "ocio_dex_dev.hl7_mmg_sql_ok_bronze"
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Schemas Needed
+
+# COMMAND ----------
+
+schema_evhub_body = StructType([    #StructField("content", StringType(), True), # drop content no longer propagating 
+                          StructField("message_info", StringType(), True),
+                          StructField("metadata", StringType(), True),
+                          StructField("summary", StringType(), True),
+                          StructField("message_uuid", StringType(), True),
+                          StructField("metadata_version", StringType(), True),
+                      ])
+
+schema_metadata = StructType([    
+                       StructField("provenance", StringType(), True),
+                       StructField("processes", StringType(), True),
+                     ])
+
+schema_process = StructType([    
+                       StructField("status", StringType(), True),
+                       StructField("process_name", StringType(), True),
+                       StructField("process_version", StringType(), True),
+                       StructField("start_processing_time", StringType(), True),
+                       StructField("end_processing_time", StringType(), True),
+                       StructField("report", StringType(), True),
+                     ])
+
+schema_processes = ArrayType(schema_process, True)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Read Input
 
 # COMMAND ----------
 
@@ -16,23 +57,18 @@ display( df1 )
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Transformations
+
+# COMMAND ----------
+
 df2 = df1.select("body")
 
 display( df2 )
 
 # COMMAND ----------
 
-schema1 = StructType([    #StructField("content", StringType(), True), # drop content no longer propagating 
-                          StructField("message_info", StringType(), True),
-                          StructField("metadata", StringType(), True),
-                          StructField("summary", StringType(), True),
-                          StructField("message_uuid", StringType(), True),
-                          StructField("metadata_version", StringType(), True),
-                      ])
-
-# COMMAND ----------
-
-df3 = df2.selectExpr("cast(body as string) as json").select( from_json("json", schema1).alias("data") ).select("data.*")
+df3 = df2.selectExpr("cast(body as string) as json").select( from_json("json", schema_evhub_body).alias("data") ).select("data.*")
 
 display( df3 )
 
@@ -44,15 +80,8 @@ display( df4 )
 
 # COMMAND ----------
 
-schema2 = StructType([    
-                       StructField("provenance", StringType(), True),
-                       StructField("processes", StringType(), True),
-                     ])
-
-# COMMAND ----------
-
 df5 = df4.selectExpr("message_uuid", "summary", "metadata_version", "message_info", "cast(metadata as string) as json") \
-            .select("message_uuid", "summary", "metadata_version", "message_info",  from_json("json", schema2).alias("data")) \
+            .select("message_uuid", "summary", "metadata_version", "message_info",  from_json("json", schema_metadata).alias("data")) \
             .select("message_uuid", "summary", "metadata_version", "message_info", "data.*") \
             .withColumnRenamed("provenance", "metadata_provenance")
             
@@ -61,23 +90,8 @@ display( df5 )
 
 # COMMAND ----------
 
-schema4 = StructType([    
-                       StructField("status", StringType(), True),
-                       StructField("process_name", StringType(), True),
-                       StructField("process_version", StringType(), True),
-                       StructField("start_processing_time", StringType(), True),
-                       StructField("end_processing_time", StringType(), True),
-                       StructField("report", StringType(), True),
-                     ])
-
-
-schema3 = ArrayType(schema4, True)
-
-
-# COMMAND ----------
-
 df6 = df5.selectExpr("message_uuid", "summary", "metadata_version", "metadata_provenance", "message_info", "cast(processes as string)") \
-         .select("message_uuid", "summary", "metadata_version", "metadata_provenance", "message_info", from_json("processes", schema3).alias("processes"))
+         .select("message_uuid", "summary", "metadata_version", "metadata_provenance", "message_info", from_json("processes", schema_processes).alias("processes"))
 
 display( df6 )
 
@@ -88,6 +102,11 @@ df7 = df6.withColumn( "mmg_sql_model_arr", expr("filter(processes, x -> x.proces
            .drop( "mmg_sql_model_arr" )
                      
 display( df7 )
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Make Final Output DataFrame
 
 # COMMAND ----------
 
@@ -104,10 +123,11 @@ display( df8 )
 
 # COMMAND ----------
 
-#option("mergeSchema", "true") - dev only
-    
-df8.write.mode('overwrite').saveAsTable( outputTable )
+# MAGIC %md
+# MAGIC ### Write Output
 
 # COMMAND ----------
 
-
+#option("mergeSchema", "true") - dev only
+    
+df8.write.mode('overwrite').saveAsTable( outputTable )
