@@ -1,4 +1,9 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC ### Imports 
+
+# COMMAND ----------
+
 from pyspark.sql.functions import *
 
 from pyspark.sql.types import *
@@ -10,8 +15,12 @@ from pyspark.sql.types import *
 
 # COMMAND ----------
 
-inputTable = "ocio_dex_dev.hl7_mmg_sql_ok_eh_raw"
-outputTable = "ocio_dex_dev.hl7_mmg_sql_ok_bronze"
+# TODO: change to Lake config for DB name and checkpoint name
+
+input_table = "ocio_dex_dev.hl7_mmg_sql_ok_eh_raw"
+output_table = "ocio_dex_dev.hl7_mmg_sql_ok_bronze"
+
+output_checkpoint = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + output_table + "/_checkpoint"
 
 # COMMAND ----------
 
@@ -20,38 +29,20 @@ outputTable = "ocio_dex_dev.hl7_mmg_sql_ok_bronze"
 
 # COMMAND ----------
 
-schema_evhub_body = StructType([    #StructField("content", StringType(), True), # drop content no longer propagating 
-                          StructField("message_info", StringType(), True),
-                          StructField("metadata", StringType(), True),
-                          StructField("summary", StringType(), True),
-                          StructField("message_uuid", StringType(), True),
-                          StructField("metadata_version", StringType(), True),
-                      ])
-
-schema_metadata = StructType([    
-                       StructField("provenance", StringType(), True),
-                       StructField("processes", StringType(), True),
-                     ])
-
-schema_process = StructType([    
-                       StructField("status", StringType(), True),
-                       StructField("process_name", StringType(), True),
-                       StructField("process_version", StringType(), True),
-                       StructField("start_processing_time", StringType(), True),
-                       StructField("end_processing_time", StringType(), True),
-                       StructField("report", StringType(), True),
-                     ])
-
-schema_processes = ArrayType(schema_process, True)
+# MAGIC %run ../common/schemas
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Read Input
+# MAGIC ### Read Input Table
 
 # COMMAND ----------
 
-df1 = spark.read.format("delta").table( inputTable )
+#TODO: change to streaming
+# df1 = spark.readStream.format("delta").table( input_table )
+
+
+df1 = spark.read.format("delta").table( input_table )
 
 display( df1 )
 
@@ -124,10 +115,11 @@ display( df8 )
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Write Output
+# MAGIC ### Write Output Table
 
 # COMMAND ----------
 
 #option("mergeSchema", "true") - dev only
-    
-df8.write.mode('overwrite').saveAsTable( outputTable )
+
+#TODO: change to streaming and append, with checkpoint output_checkpoint
+df8.write.mode('overwrite').saveAsTable( output_table )
