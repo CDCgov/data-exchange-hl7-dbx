@@ -34,19 +34,8 @@ df_source =  spark.readStream.format("delta").table(src_schema_name)
 
 # COMMAND ----------
 
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, ArrayType, LongType, BooleanType
-issueTypeSchema = StructType([ StructField("classification", StringType(), True), \
-                          StructField("category", StringType(), True), \
-                          StructField("fieldName", StringType(), True), \
-                          StructField("Path", StringType(), True), \
-                          StructField("line", StringType(), True), \
-                          StructField("errorMessage", StringType(), True), \
-                          StructField("description", StringType(), True) ])
+from pyspark.sql.types import *
 
-issueArraySchema = ArrayType(issueTypeSchema, False)
-entriesSchema = StructType([ StructField("entries", issueArraySchema, True), \
-                         StructField("error-count", IntegerType(), True), \
-                         StructField("warning-count", IntegerType(), True) ])        
 
 # COMMAND ----------
 
@@ -97,7 +86,7 @@ display( df4 )
 
 # COMMAND ----------
 
-# Creating a Target Bronze table in the Database.
+# Creating a Target table in the Database.
 target_schema_name = f"{target_database}.{target_table}"
 
 df4.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
