@@ -5,7 +5,12 @@ from pyspark.sql.types import *
 
 # COMMAND ----------
 
-df1 = spark.read.format("delta").table( "ocio_dex_dev.hl7_mmg_sql_ok_eh_raw" )
+inputTable = "ocio_dex_dev.hl7_mmg_sql_ok_eh_raw"
+outputTable = "ocio_dex_dev.hl7_mmg_sql_ok_bronze"
+
+# COMMAND ----------
+
+df1 = spark.read.format("delta").table( inputTable )
 
 display( df1 )
 
@@ -27,9 +32,15 @@ schema1 = StructType([    #StructField("content", StringType(), True), # drop co
 
 # COMMAND ----------
 
-df3 = df2.selectExpr("cast(body as string) as json").select(from_json("json", schema1).alias("data")).select("data.*")
+df3 = df2.selectExpr("cast(body as string) as json").select( from_json("json", schema1).alias("data") ).select("data.*")
 
 display( df3 )
+
+# COMMAND ----------
+
+df4 = df3.filter( df3.message_uuid.isNotNull() )
+
+display( df4 )
 
 # COMMAND ----------
 
@@ -40,13 +51,13 @@ schema2 = StructType([
 
 # COMMAND ----------
 
-df4 = df3.selectExpr("message_uuid", "summary", "metadata_version", "message_info", "cast(metadata as string) as json") \
+df5 = df4.selectExpr("message_uuid", "summary", "metadata_version", "message_info", "cast(metadata as string) as json") \
             .select("message_uuid", "summary", "metadata_version", "message_info",  from_json("json", schema2).alias("data")) \
             .select("message_uuid", "summary", "metadata_version", "message_info", "data.*") \
             .withColumnRenamed("provenance", "metadata_provenance")
             
 
-display( df4 )
+display( df5 )
 
 # COMMAND ----------
 
@@ -65,28 +76,37 @@ schema3 = ArrayType(schema4, True)
 
 # COMMAND ----------
 
-df5 = df4.selectExpr("message_uuid", "summary", "metadata_version", "metadata_provenance", "message_info", "cast(processes as string)") \
+df6 = df5.selectExpr("message_uuid", "summary", "metadata_version", "metadata_provenance", "message_info", "cast(processes as string)") \
          .select("message_uuid", "summary", "metadata_version", "metadata_provenance", "message_info", from_json("processes", schema3).alias("processes"))
 
-display( df5 )
-
-# COMMAND ----------
-
-df6 = df5.withColumn("mmg_sql_model_arr", expr("filter(processes, x -> x.process_name = 'mmgSQLTransformer')")) \
-         .withColumn( "mmg_sql_model", element_at( col('mmg_sql_model_arr'), -1)["report"] ) \
-        .drop("processes", "mmg_sql_model_arr")
-                     
 display( df6 )
 
 # COMMAND ----------
 
-df7 = df6.filter(df6.message_uuid.isNotNull())
-
+df7 = df6.withColumn( "mmg_sql_model_arr", expr("filter(processes, x -> x.process_name = 'mmgSQLTransformer')") ) \
+           .withColumn( "process_mmg_sql_model", element_at( col('mmg_sql_model_arr'), -1) ) \
+           .drop( "mmg_sql_model_arr" )
+                     
 display( df7 )
 
 # COMMAND ----------
 
-df7.write.mode('overwrite').saveAsTable( "ocio_dex_dev.hl7_mmg_sql_ok_bronze" )
+df8 = df7.withColumn( "process_status", col("process_mmg_sql_model.status") ) \
+        .withColumn( "process_name", col("process_mmg_sql_model.process_name") ) \
+        .withColumn( "process_version", col("process_mmg_sql_model.process_version") ) \
+        .withColumn( "start_processing_time", col("process_mmg_sql_model.start_processing_time") ) \
+        .withColumn( "end_processing_time", col("process_mmg_sql_model.end_processing_time") ) \
+        .withColumn( "process_report", col("process_mmg_sql_model.report") ) \
+        .drop( "process_mmg_sql_model" )
+
+
+display( df8 )
+
+# COMMAND ----------
+
+#option("mergeSchema", "true") - dev only
+    
+df8.write.mode('overwrite').saveAsTable( outputTable )
 
 # COMMAND ----------
 
