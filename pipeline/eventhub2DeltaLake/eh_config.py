@@ -6,6 +6,8 @@
 # COMMAND ----------
 
 # DBTITLE 1,Class to hold Event Hub configuration 
+import json, os
+
 class EventHubConfig:
     def __init__(self, namespace, topic, sasKey, sasValue):
         self.namespace = namespace
@@ -19,6 +21,7 @@ class EventHubConfig:
     def getConfig(self):
         ehConf = {}
         ehConf['eventhubs.connectionString'] = sc._jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(self.connString())
+        ehConf['eventhubs.consumerGroup'] = "dbx-" + self.topic + "-cg-001"
         return ehConf
 
 # COMMAND ----------
@@ -29,23 +32,7 @@ class EventHubConfig:
 
 # COMMAND ----------
 
-# DBTITLE 1,Class to hold Lake configuration
-class LakeConfig:
-    def __init__(self, rootFolder, dbName, tableName):
-        self.rootFolder = rootFolder
-        self.dbName = dbName
-        self.tableName = tableName
-        
-    def getSchemaName(self):
-        return self.dbName + "." + self.tableName
-    
-    def getCheckpointLocation(self):
-        return self.rootFolder + "events/" + self.tableName + "/_checkpoint"
-
-# COMMAND ----------
-
-def normalizeString(str):
-    return str.replace("-", "_").lower()
+# MAGIC %run ../common/common_fns
 
 # COMMAND ----------
 
@@ -56,8 +43,8 @@ def _transferEventHubDataToLake(eventHubConfig, lakeConfig):
     
     # Standardize on Table names for Event Hub topics:
 #     lakeConfig.tableName = "tbl_bronze_" + eventHubConfig.topic
-    
-    df.writeStream.format("delta").outputMode("append").option("checkpointLocation", lakeConfig.getCheckpointLocation()).toTable(lakeConfig.getSchemaName())
+    tbl_name = normalizeString(eventHubConfig.topic) + "_eh_raw"
+    df.writeStream.format("delta").outputMode("append").option("checkpointLocation", lakeConfig.getCheckpointLocation(tbl_name)).toTable(lakeConfig.getSchemaName(tbl_name))
 
 # COMMAND ----------
 
@@ -74,12 +61,10 @@ def transferEventHubDataToLake(eventHubTopic):
     ehConfig = EventHubConfig(ev_namespace, eventHubTopic, ev_sas_key_name, ev_sas_key_val)
     
     db_name  = "ocio_dex_dev"
- ##   tbl_name = "tbl_bronze_" + normalizeString(eventHubTopic)
-    tbl_name = normalizeString(eventHubTopic) + "_eh_raw"
  ##  root_folder = "/tmp/delta/"
     root_folder = 'abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/' 
     
-    lakeConfig = LakeConfig(root_folder, db_name, tbl_name) 
+    lakeConfig = LakeConfig(root_folder, db_name) 
     _transferEventHubDataToLake(ehConfig, lakeConfig)
 
 # COMMAND ----------
