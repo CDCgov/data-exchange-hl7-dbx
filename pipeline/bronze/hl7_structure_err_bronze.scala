@@ -148,3 +148,4 @@ val df_Metadata = df3.select("message_uuid","metadata.provenance.file_path", "me
 display(df_Metadata)
 */
 
+// COMMAND ----------
