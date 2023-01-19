@@ -21,12 +21,14 @@ val target_tbl_name = "hl7_structure_err_bronze"
 
 val src_schema_name = source_db + "." + src_tbl_name
 val target_schema_name = source_db + "." + target_tbl_name
-val chkpoint_loc = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + target_tbl_name + "/_checkpoint1"
+val chkpoint_loc = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + target_tbl_name + "/_checkpoint"
 
 val df =  spark.readStream.format("delta").table(src_schema_name)
 //display(df)
 
 // COMMAND ----------
+
+ 
 
 val stackTraceSchema = new StructType().add("assertion", StringType, true).add("reasons", new ArrayType(StringType, true), true)
 val issueTypeSchema = new StructType()
@@ -72,8 +74,8 @@ val schema =  new StructType()
     .add("content", StringType, true)
     .add("message_info", messageInfoSchema, true)
     .add("message_uuid", StringType, true)
-   // .add("message_hash", StringType, true)
-    .add("metadata", new StructType()
+    .add("metadata_version", StringType, true)
+    .add("metadata", new StructType()    
          
          .add("provenance", new StructType()
              .add("file_path", StringType, true)
@@ -114,8 +116,9 @@ display(df3)
 
 // COMMAND ----------
 
-val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata.provenance","metadata.processes","metadata.provenance.message_hash", "structureReport","message_info")
+val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata_version","message_info","summary","metadata.provenance","metadata.processes","metadata.provenance.message_hash", "structureReport")
   .withColumn("report", $"structureReport.report")
+  .withColumn("process_name", $"structureReport.process_name")
   .withColumn("process_version", $"structureReport.process_version")
   .withColumn("validation_status", $"structureReport.status")
   .withColumn("process_start_time", $"structureReport.start_processing_time")
@@ -123,7 +126,7 @@ val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"st
   .withColumn("errorCount", $"report.error-count.structure" + $"report.error-count.value-set" + $"report.error-count.content" )
   .withColumn("warningCount", $"report.warning-count.structure" + $"report.warning-count.value-set" + $"report.warning-count.content" )
  
-val df5 = df3.select($"message_info")
+
 
 display( df4 )
 
@@ -136,7 +139,7 @@ df4.writeStream.format("delta").outputMode("append").option("checkpointLocation"
 // COMMAND ----------
 
 // MAGIC %sql
-// MAGIC SELECT COUNT(*) FROM ocio_dex_dev.hl7_structure_err_bronze;
+// MAGIC SELECT * FROM ocio_dex_dev.hl7_structure_err_bronze 
 
 // COMMAND ----------
 
