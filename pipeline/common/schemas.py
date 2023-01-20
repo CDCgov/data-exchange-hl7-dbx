@@ -67,6 +67,35 @@ schema_summary = StructType ([
     StructField("problem", schema_problem, True)
 ])
 
+
+schema_reportType = StructType([    
+    StructField("line", StringType(), True),
+    StructField("column", StringType(), True),
+    StructField("path", StringType(), True),
+    StructField("description", StringType(), True),
+    StructField("category", StringType(), True),
+    StructField("classification", StringType(), True),    
+ ])
+ 
+schema_entries = StructType([    
+    StructField("content", ArrayType(schema_reportType, True)),
+    StructField("structure", ArrayType(schema_reportType, True)),
+    StructField("value-set", ArrayType(schema_reportType, True)),      
+ ])
+
+schema_count = StructType([    
+    StructField("structure", IntegerType(), True),
+    StructField("content", IntegerType(), True),
+    StructField("value-set", IntegerType(), True),      
+ ])
+
+schema_report = StructType([    
+    StructField("entries", schema_entries, True),
+    StructField("error-count", schema_count, True),
+    StructField("warning-count", schema_count, True), 
+    StructField("status", StringType(), True),
+ ])
+
 # COMMAND ----------
 
 schema_validation_bronze = StructType([
