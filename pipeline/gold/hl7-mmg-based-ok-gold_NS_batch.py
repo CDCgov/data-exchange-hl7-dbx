@@ -16,7 +16,7 @@ from pyspark.sql.functions import *
 input_table = "ocio_dex_dev.hl7_mmg_based_ok_silver"
 
 output_database = "ocio_dex_dev"
-output_table_suffix = "_hl7_mmg_based_ok_TEMP_gold"
+output_table_suffix = "hl7_mmg_based_ok_TEMP_gold"
 
 #TODO:
 output_checkpoint = ""
@@ -132,7 +132,7 @@ for program_route in routes_list:
     # TODO: df_one_batch_model2 write append to program table
     ######################################################################################
 
-    output_location_full = output_database + program_route + output_table_suffix
+    output_location_full = f"{output_database}.{program_route}_{output_table_suffix}"
     print(output_location_full)
 #     df_one_batch_model2.write.mode('append').saveAsTable( output_location_full )
 
