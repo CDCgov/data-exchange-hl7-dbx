@@ -14,7 +14,9 @@ from pyspark.sql.functions import *
 # COMMAND ----------
 
 input_table = "ocio_dex_dev.hl7_mmg_sql_ok_silver"
-output_table = "ocio_dex_dev.hl7_mmg_sql_ok_NS_gold"
+
+output_database = "ocio_dex_dev"
+output_table_suffix = "_hl7_mmg_sql_ok_TEMP_gold"
 
 #TODO:
 output_checkpoint = ""
@@ -119,8 +121,10 @@ for row in data_itr_df_singles:
     ######################################################################################
     # TODO: df_one_row_singles_2 write append to program table
     ######################################################################################
-    program_route = "_" + row["message_info"]["route"]
-#     df_one_row_singles_2.write.mode('append').saveAsTable( output_table + program_route)
+    program_route = "." + row["message_info"]["route"]
+    output_location_full = output_database + program_route + output_table_suffix
+    print(output_location_full)
+#     df_one_row_singles_2.write.mode('append').saveAsTable( output_location_full )
     
     # working through each row, done this row
     print("working on (done) message_uuid: -> " + row_message_uuid)
@@ -163,7 +167,7 @@ for row in data_itr_df_tables:
     
     cols_tables = row["tables_keys"]
     df_one_row_tables = df_tables.filter( col("message_uuid") == row_message_uuid )
-    program_route = "_" + row["message_info"]["route"]
+    program_route = "." + row["message_info"]["route"]
     
     # create specific df from this row, one column per table
     df_one_row_tables_1 = (reduce(
@@ -201,7 +205,9 @@ for row in data_itr_df_tables:
              ######################################################################################
              # TODO: repeat_table write append to program table
              ######################################################################################
-#              repeat_table.write.mode('append').saveAsTable( output_table + program_route + "_" + col_table )
+             output_table_location_full = output_database + program_route + output_table_suffix + "_" + col_table
+             print(output_table_location_full)
+#              repeat_table.write.mode('append').saveAsTable( output_table_location_full )
             
          print("working on table (done): -> " + col_table)
     
