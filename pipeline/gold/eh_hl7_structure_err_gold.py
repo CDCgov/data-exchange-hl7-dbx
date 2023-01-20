@@ -4,14 +4,6 @@
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC 
-# MAGIC   select distinct route, message_uuid, count(*) over (partition by route) as routeCnt from ocio_dex_dev.hl7_structure_err_silver
-# MAGIC   
-# MAGIC  
-
-# COMMAND ----------
-
 from pyspark.sql import functions
 df = spark.sql("select distinct route from ocio_dex_dev.hl7_Routes")
 

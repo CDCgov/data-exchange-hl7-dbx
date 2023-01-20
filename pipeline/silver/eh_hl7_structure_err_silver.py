@@ -20,7 +20,7 @@ from datetime import datetime
 from pyspark.sql import functions as F
 from pyspark.sql.functions import col,concat
 
-df2 = df.select('message_uuid', 'message_info.route', 'message_hash', 'provenance.message_index','process_start_time', 'process_end_time', 'provenance.ext_original_file_name', 'report.entries.content','report.entries.structure','report.entries.value-set','errorCount' )
+df2 = df.select('message_uuid', 'metadata_version','message_info','summary',  'provenance','report.entries.content','report.entries.structure','report.entries.value-set','errorCount' )
 
 df3 = df2.withColumn("error_concat",concat(col("content"),col("structure"),col("value-set")))
 
@@ -28,7 +28,7 @@ df3 = df2.withColumn("error_concat",concat(col("content"),col("structure"),col("
 df3 = df3.withColumn('error_concat', F.explode('error_concat'))
 
 
-df4 = df3.select('message_uuid','route', 'message_hash', 'message_index', 'process_start_time', 'process_end_time','ext_original_file_name', 'error_concat.line','error_concat.column','error_concat.path','error_concat.description','error_concat.category','error_concat.stacktrace')
+df4 = df3.select('message_uuid','metadata_version',  'message_info.*', 'summary.*', 'provenance.*', 'error_concat.line','error_concat.column','error_concat.path','error_concat.description','error_concat.category')
 display(df4)
 
 
