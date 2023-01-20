@@ -137,7 +137,7 @@ for program_route in routes_list:
 #     df_one_batch_model2.write.mode('append').saveAsTable( output_location_full )
 
     # working through each batch of route
-    print("working on (start) route: -> " + program_route)
+    print("working on (done) route: -> " + program_route)
     
     
 
