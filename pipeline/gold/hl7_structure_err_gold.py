@@ -20,7 +20,7 @@ routeList = df_route.collect()
 
 df1 =  spark.readStream.format("delta").table("ocio_dex_dev.hl7_structure_err_silver")
 
-# looping thorough each row of the routes dataframe
+# looping through each row of the routes dataframe
 for row in routeList:
     '''display(str(row['route']))'''
     route_check = str(row['route'])    
@@ -38,7 +38,7 @@ for row in routeList:
     else:
         df2 = df1.filter(col("message_info.route") == route_check)
     
-    df2.writeStream.partionBy("message_info.route").format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+    df2.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
      
 
 
