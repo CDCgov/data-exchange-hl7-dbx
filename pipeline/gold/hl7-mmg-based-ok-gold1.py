@@ -16,10 +16,8 @@ from pyspark.sql.functions import *
 input_table = "ocio_dex_dev.hl7_mmg_based_ok_silver"
 
 output_database = "ocio_dex_dev"
-output_table_suffix = "hl7_mmg_based_ok_TEMP_gold"
+output_table_suffix = "hl7_mmg_based_ok_TEMP1_gold"
 
-#TODO:
-output_checkpoint = ""
 
 # COMMAND ----------
 
@@ -84,8 +82,9 @@ def transformAndSendToRoute(batchDF, batchId):
         printToFile(f"records affected: {df_one_batch_model2.count()}")
 
         output_location_full = f"{output_database}.{program_route}_{output_table_suffix}"
-        print(output_location_full)
-        df_one_batch_model2.write.mode('append').saveAsTable( output_location_full )
+        printToFile(output_location_full)
+        chkpoint_loc = f"abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/{output_location_full}_TMP/_checkpoint" 
+        df_one_batch_model2.write.mode('append').option("checkpointLocation", chkpoint_loc).saveAsTable( output_location_full )
         # working through each batch of route
         printToFile("working on (done) route: -> " + program_route)
 
