@@ -1,4 +1,9 @@
 // Databricks notebook source
+// MAGIC %sql
+// MAGIC select * from ocio_dex_dev.hl7_structure_err_eh_raw
+
+// COMMAND ----------
+
 // MAGIC %md 
 // MAGIC Modified : 12/29/2022
 
@@ -23,6 +28,8 @@ val df =  spark.readStream.format("delta").table(src_schema_name)
 
 // COMMAND ----------
 
+ 
+
 val stackTraceSchema = new StructType().add("assertion", StringType, true).add("reasons", new ArrayType(StringType, true), true)
 val issueTypeSchema = new StructType()
                              .add("line", StringType, true)
@@ -36,6 +43,9 @@ val issueTypeSchema = new StructType()
 
 val issueArraySchema = new ArrayType(issueTypeSchema, false)
 val entriesSchema = new StructType().add("content", issueArraySchema, true).add("structure", issueArraySchema, true).add("value-set", issueArraySchema, true)
+
+val mmgArraySchema = new ArrayType(StringType, false)
+val messageInfoSchema = new StructType().add("event_code", StringType, true).add("route", StringType, true).add("mmgs", mmgArraySchema, true).add("reporting_jurisdiction", StringType, true)
 
 // COMMAND ----------
 
@@ -62,9 +72,10 @@ val processSchema = new StructType()
 
 val schema =  new StructType()
     .add("content", StringType, true)
+    .add("message_info", messageInfoSchema, true)
     .add("message_uuid", StringType, true)
-   // .add("message_hash", StringType, true)
-    .add("metadata", new StructType()
+    .add("metadata_version", StringType, true)
+    .add("metadata", new StructType()    
          
          .add("provenance", new StructType()
              .add("file_path", StringType, true)
@@ -105,10 +116,17 @@ display(df3)
 
 // COMMAND ----------
 
-val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata", "structureReport")
+val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata_version","message_info","summary","metadata.provenance","metadata.processes","metadata.provenance.message_hash", "structureReport")
   .withColumn("report", $"structureReport.report")
+  .withColumn("process_name", $"structureReport.process_name")
+  .withColumn("process_version", $"structureReport.process_version")
+  .withColumn("validation_status", $"structureReport.status")
+  .withColumn("process_start_time", $"structureReport.start_processing_time")
+  .withColumn("process_end_time", $"structureReport.end_processing_time")
   .withColumn("errorCount", $"report.error-count.structure" + $"report.error-count.value-set" + $"report.error-count.content" )
   .withColumn("warningCount", $"report.warning-count.structure" + $"report.warning-count.value-set" + $"report.warning-count.content" )
+ 
+
 
 display( df4 )
 
@@ -121,7 +139,7 @@ df4.writeStream.format("delta").outputMode("append").option("checkpointLocation"
 // COMMAND ----------
 
 // MAGIC %sql
-// MAGIC SELECT COUNT(*) FROM ocio_dex_dev.hl7_structure_err_bronze;
+// MAGIC SELECT * FROM ocio_dex_dev.hl7_structure_err_bronze 
 
 // COMMAND ----------
 
@@ -130,7 +148,4 @@ val df_Metadata = df3.select("message_uuid","metadata.provenance.file_path", "me
 display(df_Metadata)
 */
 
-
 // COMMAND ----------
-
-hello
