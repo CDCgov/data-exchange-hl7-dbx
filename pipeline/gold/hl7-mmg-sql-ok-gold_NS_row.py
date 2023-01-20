@@ -73,7 +73,7 @@ dfdev3.count()
 
 # COMMAND ----------
 
-df1 = dfdev3
+df1 = dfdev3.drop("event_timestamp")
 
 # COMMAND ----------
 
