@@ -16,7 +16,7 @@ from pyspark.sql.functions import *
 input_table = "ocio_dex_dev.hl7_mmg_based_ok_silver"
 
 output_database = "ocio_dex_dev"
-output_table_suffix = "hl7_mmg_based_ok_TEMP1_gold"
+output_table_suffix = "hl7_mmg_based_ok_gold"
 
 
 # COMMAND ----------
@@ -37,7 +37,7 @@ output_table_suffix = "hl7_mmg_based_ok_TEMP1_gold"
 
 df1 = spark.readStream.format("delta").table( input_table )
 
-display( df1 )
+#display( df1 )
 
 
 # COMMAND ----------
@@ -53,9 +53,12 @@ df2 = df1.withColumn( "mmg_based_model_map_keys", map_keys("mmg_based_model_map"
 # COMMAND ----------
 
 def printToFile(message):
+    import datetime
     with open("./output-log.txt", "a") as f:
-        f.write(f"{message}\n")
+        f.write(f"{datetime.datetime.now()} - {message}\n")
 
+def normalize(name):
+    return name.replace(".", "_").replace(" ", "_").replace("'", "")
     
 def transformAndSendToRoute(batchDF, batchId):
     routes_row_list = batchDF.select("message_info.route").distinct().collect() 
@@ -71,19 +74,20 @@ def transformAndSendToRoute(batchDF, batchId):
 
         # create specific df from this batch adding columns for each of mmg based model entry
         df_one_batch_model1 = (reduce(
-            lambda red_df, col_name: red_df.withColumn( col_name, red_df["mmg_based_model_map"][col_name] ),
+            lambda red_df, col_name: red_df.withColumn( normalize(col_name), red_df["mmg_based_model_map"][col_name] ),
             cols_needed,
             df_one_route
         ))
-
+        
+       # printToFile(df_one_batch_model1.columns)
         # drop no longer needed columns
         df_one_batch_model2 = df_one_batch_model1.drop("mmg_based_model_map", "mmg_based_model_map_keys")
 
         printToFile(f"records affected: {df_one_batch_model2.count()}")
 
-        output_location_full = f"{output_database}.{program_route}_{output_table_suffix}"
+        output_location_full = f"{output_database}.{normalize(program_route)}_{output_table_suffix}"
         printToFile(output_location_full)
-        chkpoint_loc = f"abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/{output_location_full}_TMP/_checkpoint" 
+        chkpoint_loc = f"abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/{output_location_full}/_checkpoint" 
         df_one_batch_model2.write.mode('append').option("checkpointLocation", chkpoint_loc).saveAsTable( output_location_full )
         # working through each batch of route
         printToFile("working on (done) route: -> " + program_route)
