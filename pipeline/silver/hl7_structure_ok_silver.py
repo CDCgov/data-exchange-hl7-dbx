@@ -1,7 +1,6 @@
 # Databricks notebook source
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-from datetime import datetime
 
 from pyspark.sql import functions as F
 from pyspark.sql.functions import col,concat
@@ -48,11 +47,6 @@ df4.writeStream.format("delta").outputMode("append").option("checkpointLocation"
 
 
 
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC select * from ocio_dex_dev.hl7_structure_ok_silver 
 
 # COMMAND ----------
 
