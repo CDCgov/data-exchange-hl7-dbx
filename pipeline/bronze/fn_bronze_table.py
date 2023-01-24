@@ -25,7 +25,7 @@ def createBronzeTable(topic, processName):
     input_table = topic + "_eh_raw"
     output_table = topic + "_bronze"
     ## Read Raw info
-    rawDF = spark.readStream.format("delta").table( lakeConfig.getSchemaName(input_table) )
+    rawDF = spark.readStream.format("delta").option("ignoreDeletes", "true").table( lakeConfig.getSchemaName(input_table) )
     metadataDF = rawDF.select( from_json("body", schema_evhub_body_v2).alias("data") ).select("data.*")
     
     mdExplodedDF = metadataDF.select("message_uuid", "message_info", "summary", "metadata_version",  \

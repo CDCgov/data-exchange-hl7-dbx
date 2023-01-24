@@ -11,7 +11,7 @@
  chkpoint_loc = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + target_tbl_name + "/_checkpoint"
 
 
-df =  spark.readStream.format("delta").table("ocio_dex_dev.hl7_structure_err_bronze")
+df =  spark.readStream.format("delta").option("ignoreDeletes", "true").table("ocio_dex_dev.hl7_structure_err_bronze")
 
 # COMMAND ----------
 
@@ -21,7 +21,7 @@ from datetime import datetime
 from pyspark.sql import functions as F
 from pyspark.sql.functions import col,concat
 
-df2 = df.select('message_uuid', 'metadata_version','message_info','summary',  'provenance','report.entries.content','report.entries.structure','report.entries.value-set','errorCount' )
+df2 = df.select('message_uuid', 'metadata_version','message_info','summary',  'provenance','report.entries.content','report.entries.structure','report.entries.value-set','error_count' )
 
 #concat 3 arrays(structure,content, valueset)
 df3 = df2.withColumn("error_concat",concat(col("content"),col("structure"),col("value-set")))

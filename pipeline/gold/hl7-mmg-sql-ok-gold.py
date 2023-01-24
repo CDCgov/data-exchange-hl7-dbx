@@ -72,7 +72,7 @@ output_checkpoint = lake_config.getCheckpointLocation(output_table_name)
 # COMMAND ----------
 
 
-df1 = spark.readStream.format("delta").table( input_table )
+df1 = spark.readStream.format("delta").option("ignoreDeletes", "true").table( input_table )
 
 # display( df1 )
 

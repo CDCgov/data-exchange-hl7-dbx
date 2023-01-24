@@ -37,7 +37,7 @@ source = f"{input_db}.{input_table}"
 # COMMAND ----------
 
 
-df1 = spark.readStream.format("delta").table( source )
+df1 = spark.readStream.format("delta").option("ignoreDeletes", "true").table( source )
 
 #display( df1 )
 

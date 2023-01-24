@@ -25,7 +25,7 @@ output_table_suffix = "hl7_mmg_validation_err_gold"
 
 # COMMAND ----------
 
-df1 = spark.readStream.format("delta").table( input_table )
+df1 = spark.readStream.format("delta").option("ignoreDeletes", "true").table( input_table )
 display( df1 )
 
 # COMMAND ----------
