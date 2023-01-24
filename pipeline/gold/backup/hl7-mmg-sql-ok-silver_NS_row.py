@@ -8,13 +8,30 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
+# MAGIC %run ../common/common_fns
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ### Input and Output Tables
 
 # COMMAND ----------
 
-input_table = "ocio_dex_dev.hl7_mmg_sql_ok_bronze"
-output_table = "ocio_dex_dev.hl7_mmg_sql_ok_silver"
+#TODO: move to config when available in lake config
+
+root_folder = 'abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/' 
+db_name  = "ocio_dex_dev"
+
+lake_config = LakeConfig(root_folder, db_name)
+
+# COMMAND ----------
+
+input_table = db_name + ".hl7_mmg_sql_ok_bronze"
+output_table_name = "hl7_mmg_sql_ok_silver"
+
+output_table = lake_config.getSchemaName(output_table_name)
+
+output_checkpoint = lake_config.getCheckpointLocation(output_table)
 
 # COMMAND ----------
 
@@ -32,10 +49,7 @@ output_table = "ocio_dex_dev.hl7_mmg_sql_ok_silver"
 
 # COMMAND ----------
 
-#TODO: change to streaming
-# df1 = spark.readStream.format("delta").table( input_table )
-
-df1 = spark.read.format("delta").table( input_table )
+df1 = spark.readStream.format("delta").table( input_table )
 
 display( df1 )
 
@@ -46,8 +60,8 @@ display( df1 )
 
 # COMMAND ----------
 
-df2 = df1.drop("processes", "process_status", "process_name", "process_version", "start_processing_time", "end_processing_time") \
-        .withColumnRenamed("process_report", "mmg_sql_model_string")
+df2 = df1.drop("processes", "status", "process_name", "process_version", "start_processing_time", "end_processing_time") \
+        .withColumnRenamed("report", "mmg_sql_model_string")
 
 display( df2 )
 
@@ -58,16 +72,12 @@ display( df2 )
 
 # COMMAND ----------
 
-df3 = df2.withColumn( "metadata_provenance", from_json( col("metadata_provenance"), schema_metadata_provenance) ) \
-         .withColumn( "message_info", from_json( col("message_info"), schema_message_info) ) \
-         .withColumn("mmg_sql_model_map", from_json(col("mmg_sql_model_string"), schema_generic_json)) \
+df3 = df2.withColumn("mmg_sql_model_map", from_json(col("mmg_sql_model_string"), schema_generic_json)) \
          .drop("mmg_sql_model_string")
 
 display( df3 )
 
 # COMMAND ----------
-
-
 
 df4 = df3.withColumn( "mmg_sql_model_singles",  map_filter("mmg_sql_model_map", lambda k, _: k != "tables" ) ) \
          .withColumn( "mmg_sql_model_tables", from_json( col("mmg_sql_model_map.tables" ), schema_tables) ) \
@@ -83,6 +93,5 @@ display( df4 )
 # COMMAND ----------
 
 
-#TODO: change to streaming and append, with checkpoint output_checkpoint
+df4.writeStream.format("delta").outputMode("append").option("checkpointLocation", output_checkpoint ).toTable( output_table )
 
-df4.write.mode('overwrite').saveAsTable( output_table )
