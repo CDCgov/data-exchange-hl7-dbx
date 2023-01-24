@@ -1,6 +1,7 @@
 # Databricks notebook source
 # MAGIC %sql
 # MAGIC  SELECT * FROM ocio_dex_dev.hl7_structure_err_bronze 
+# MAGIC  
 
 # COMMAND ----------
 
@@ -22,13 +23,14 @@ from pyspark.sql.functions import col,concat
 
 df2 = df.select('message_uuid', 'metadata_version','message_info','summary',  'provenance','report.entries.content','report.entries.structure','report.entries.value-set','errorCount' )
 
+#concat 3 arrays(structure,content, valueset)
 df3 = df2.withColumn("error_concat",concat(col("content"),col("structure"),col("value-set")))
 
 
 df3 = df3.withColumn('error_concat', F.explode('error_concat'))
 
 
-df4 = df3.select('message_uuid','metadata_version',  'message_info.*', 'summary.*', 'provenance.*', 'error_concat.line','error_concat.column','error_concat.path','error_concat.description','error_concat.category')
+df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 'provenance', 'error_concat.line','error_concat.column',df3.error_concat.path.alias("field"),'error_concat.description','error_concat.category')
 display(df4)
 
 

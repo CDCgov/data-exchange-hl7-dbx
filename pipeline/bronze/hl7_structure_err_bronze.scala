@@ -28,8 +28,6 @@ val df =  spark.readStream.format("delta").table(src_schema_name)
 
 // COMMAND ----------
 
- 
-
 val stackTraceSchema = new StructType().add("assertion", StringType, true).add("reasons", new ArrayType(StringType, true), true)
 val issueTypeSchema = new StructType()
                              .add("line", StringType, true)
@@ -147,5 +145,3 @@ df4.writeStream.format("delta").outputMode("append").option("checkpointLocation"
 val df_Metadata = df3.select("message_uuid","metadata.provenance.file_path", "metadata.provenance.file_size", "metadata.provenance.message_hash","metadata.provenance.message_index","metadata.provenance.single_or_batch","metadata.provenance.event_timestamp","summary.current_status", "summary.problem.process_name","summary.problem.error_message","summary.problem.should_retry","summary.problem.retry_count","summary.problem.max_retries")
 display(df_Metadata)
 */
-
-// COMMAND ----------
