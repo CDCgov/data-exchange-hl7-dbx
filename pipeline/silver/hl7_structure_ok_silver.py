@@ -16,7 +16,7 @@ from pyspark.sql.functions import col,concat
  chkpoint_loc = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + target_tbl_name + "/_checkpoint"
 
 
-df =  spark.readStream.format("delta").table("ocio_dex_dev.hl7_structure_ok_bronze")
+df =  spark.readStream.format("delta").option("ignoreDeletes", "true").table("ocio_dex_dev.hl7_structure_ok_bronze")
 
 # COMMAND ----------
 
