@@ -1,6 +1,7 @@
 # Databricks notebook source
 # MAGIC %sql
 # MAGIC  SELECT * FROM ocio_dex_dev.hl7_structure_err_bronze 
+# MAGIC  
 
 # COMMAND ----------
 
