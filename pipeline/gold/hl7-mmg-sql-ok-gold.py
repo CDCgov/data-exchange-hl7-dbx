@@ -111,7 +111,7 @@ def write_single_table(df_singles, batch_routes_list):
         route_normalized = route.replace(".", "_")
         output_location_full = f"{output_database}.{route_normalized}_{output_table_suffix}"
         print_to_file(output_location_full)
-    #     df_one_row_singles_2.write.mode('append').saveAsTable( output_location_full )
+        df_one_batch_singles_2.write.mode('append').saveAsTable( output_location_full )
 
         # working through each row, done this row
         print_to_file("working on (done) route: -> " + route)
@@ -175,7 +175,7 @@ def write_repeat_tables(df_tables, batch_routes_list):
                  ######################################################################################
                  output_table_location_full = output_database + program_route + output_table_suffix + "_" + col_table
                  print_to_file(output_table_location_full)
-    #              repeat_table.write.mode('append').saveAsTable( output_table_location_full )
+                 repeat_table.write.mode('append').saveAsTable( output_table_location_full )
 
              print_to_file("working on table (done): -> " + col_table)
 
