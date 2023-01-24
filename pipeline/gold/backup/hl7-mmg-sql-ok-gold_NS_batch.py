@@ -119,7 +119,7 @@ for route in batch_routes_list:
     route_normalized = route.replace(".", "_")
     output_location_full = f"{output_database}.{route_normalized}_{output_table_suffix}"
     print(output_location_full)
-#     df_one_row_singles_2.write.mode('append').saveAsTable( output_location_full )
+    df_one_batch_singles_2.write.mode('append').saveAsTable( output_location_full )
     
     # working through each row, done this row
     print("working on (done) route: -> " + route)
@@ -196,9 +196,9 @@ for route in batch_routes_list:
              ######################################################################################
              # TODO: repeat_table write append to program table
              ######################################################################################
-             output_table_location_full = output_database + program_route + output_table_suffix + "_" + col_table
+             output_table_location_full = output_database + "." + program_route + "_" + output_table_suffix + "_" + col_table
              print(output_table_location_full)
-#              repeat_table.write.mode('append').saveAsTable( output_table_location_full )
+             repeat_table.write.mode('append').saveAsTable( output_table_location_full )
             
          print("working on table (done): -> " + col_table)
     
