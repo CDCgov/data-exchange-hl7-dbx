@@ -1,12 +1,7 @@
 // Databricks notebook source
 // MAGIC %md
-// MAGIC Updated - 1/23/23
-// MAGIC BY: Ramanbir (swy4)
-
-// COMMAND ----------
-
-// MAGIC %sql
-// MAGIC SELECT * FROM ocio_dex_dev.hl7_mmg_validation_ok_eh_raw
+// MAGIC Updated - 1/24/23
+// MAGIC BY: swy4
 
 // COMMAND ----------
 
@@ -133,8 +128,11 @@ display(df_mmgreport)
 //Selecting fields to Create a Delta table
 val df5 = df_mmgreport.select("message_uuid","metadata_version","message_info", "summary","metadata.provenance", "metadata.processes",
                              "processReport.process_name",  "processReport.process_version", "processReport.start_processing_time", 
-                             "processReport.end_processing_time", "report", "report.error-count", "report.warning-count", "report.status"
+                             "processReport.end_processing_time", "report"
                              )
+                            .withColumn("error_count", $"report.error-count") // used seprately so that i can use alias for error-count
+                            .withColumn("warning_count", $"report.warning-count")
+                            .withColumn("status", $"report.status")
  
 display(df5)
 
