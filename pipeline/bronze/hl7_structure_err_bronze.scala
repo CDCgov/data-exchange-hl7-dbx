@@ -4,11 +4,6 @@
 
 // COMMAND ----------
 
-// MAGIC %md 
-// MAGIC Modified : 12/29/2022
-
-// COMMAND ----------
-
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 
@@ -94,8 +89,8 @@ val schema =  new StructType()
          .add("current_status", StringType, true)
          .add("problem", new StructType()
               .add("process_name", StringType, true)
-              //.add("exception_class", StringType, true)
-              //.add("stacktrace", StringType, true)
+              .add("exception_class", StringType, true)
+              .add("stacktrace", StringType, true)
               .add("error_message", StringType, true)
               .add("should_retry", BooleanType, true)
               .add("retry_count", IntegerType, true)
@@ -107,34 +102,34 @@ val schema =  new StructType()
 
 val df1 = df.withColumn("bodyJson", from_json(col("body"), schema))
 val df2 = df1.select("bodyJson.*")
-display(df2)
+//display(df2)
 
 // COMMAND ----------
 
 val df3 = df2.withColumn("processes", $"metadata.processes")
-display(df3)
+//display(df3)
 
 // COMMAND ----------
 
-val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata_version","message_info","summary","metadata.provenance","metadata.processes","metadata.provenance.message_hash", "structureReport")
+val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"structureReport.process_name" === "STRUCTURE-VALIDATOR").select("message_uuid",  "metadata_version","message_info","summary","metadata.provenance","metadata.processes", "structureReport")
   .withColumn("report", $"structureReport.report")
   .withColumn("process_name", $"structureReport.process_name")
   .withColumn("process_version", $"structureReport.process_version")
   .withColumn("validation_status", $"structureReport.status")
   .withColumn("process_start_time", $"structureReport.start_processing_time")
   .withColumn("process_end_time", $"structureReport.end_processing_time")
-  .withColumn("errorCount", $"report.error-count.structure" + $"report.error-count.value-set" + $"report.error-count.content" )
-  .withColumn("warningCount", $"report.warning-count.structure" + $"report.warning-count.value-set" + $"report.warning-count.content" )
+  .withColumn("error_count", $"report.error-count.structure" + $"report.error-count.value-set" + $"report.error-count.content" )
+  .withColumn("warning_count", $"report.warning-count.structure" + $"report.warning-count.value-set" + $"report.warning-count.content" )
  
+val df5 = df4.drop("structureReport")
 
-
-display( df4 )
+//display( df5 )
 
 // COMMAND ----------
 
 // Writing to Bronze table
 println(target_schema_name)
-df4.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+df5.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
 
 // COMMAND ----------
 
@@ -147,5 +142,3 @@ df4.writeStream.format("delta").outputMode("append").option("checkpointLocation"
 val df_Metadata = df3.select("message_uuid","metadata.provenance.file_path", "metadata.provenance.file_size", "metadata.provenance.message_hash","metadata.provenance.message_index","metadata.provenance.single_or_batch","metadata.provenance.event_timestamp","summary.current_status", "summary.problem.process_name","summary.problem.error_message","summary.problem.should_retry","summary.problem.retry_count","summary.problem.max_retries")
 display(df_Metadata)
 */
-
-// COMMAND ----------
