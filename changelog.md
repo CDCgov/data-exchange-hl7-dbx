@@ -4,7 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
+### [0.0.5] - 2023-01-25
+  - DEX Release 0.0.11
+  
+  - Creted common schema for all Bronze Tables with common function for table creation.
+  - Created Notebooks to generate bronze table from all Event Hub Raw tables:
+    - hl7-recdeb-ok, hl7-recdeb-err 
+    - hl7-structure-ok, hl7-structure-err
+    - hl7-mmg-validation-ok, hl7-mmg-validation-err
+    - hl7-mmg-based-ok, hl7-mmg-based-err
+    - hl7-mmg-sql-ok, hl7-mmg-sql-err
+  - Created Notebooks to generate Silver and Gold table for Validation tables:
+    - hl7-structure-ok, hl7-structure-err
+    - hl7-mmg-validation-ok, hl7-mmg-validation-err
+  - Created Notebooks to generate Silver and Gold tables of data product tables:
+    - hl7-mmg-based-ok
+    - hl7-mmg-sql-ok
+   
+  
 ### [0.0.4] - 2023-01-11
   - DEX Release 0.0.10
   
