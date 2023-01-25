@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - hl7-structure-ok, hl7-structure-err
     - hl7-mmg-validation-ok, hl7-mmg-validation-err
     - hl7-mmg-based-ok, hl7-mmg-based-err
-    - hl7-mmg-sql-ok, hl7-mmg-sqlerr
+    - hl7-mmg-sql-ok, hl7-mmg-sql-err
   - Created Notebooks to generate Silver and Gold table for Validation tables:
     - hl7-structure-ok, hl7-structure-err
     - hl7-mmg-validation-ok, hl7-mmg-validation-err
