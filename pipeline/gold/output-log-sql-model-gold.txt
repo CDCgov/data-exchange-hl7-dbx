@@ -1,0 +1,134 @@
+2023-01-24 16:53:42.038412 - #########################################################################
+2023-01-24 16:53:51.445234 - working on (start) route: -> lyme_disease
+2023-01-24 16:55:55.385604 - #########################################################################
+2023-01-24 16:56:04.785037 - working on (start) route: -> lyme_disease
+2023-01-24 16:56:10.544117 - ocio_dex_dev.lyme_disease_hl7_mmg_sql_ok_gold
+2023-01-24 16:56:10.766918 - working on (done) route: -> lyme_disease
+2023-01-24 16:56:10.995525 - working on (start) route: -> tbrd
+2023-01-24 16:56:18.833355 - ocio_dex_dev.tbrd_hl7_mmg_sql_ok_gold
+2023-01-24 16:56:18.982489 - working on (done) route: -> tbrd
+2023-01-24 16:56:20.229790 - working on repeat tables (start) route: ->  + lyme_disease
+2023-01-24 16:56:21.377554 - working on table (start): -> race_category
+2023-01-24 16:56:22.480356 - ocio_dex_devlyme_diseasehl7_mmg_sql_ok_gold_race_category
+2023-01-24 16:56:22.664836 - working on table (done): -> race_category
+2023-01-24 16:56:22.831889 - working on table (start): -> binational_reporting_criteria
+2023-01-24 16:56:23.759116 - ocio_dex_devlyme_diseasehl7_mmg_sql_ok_gold_binational_reporting_criteria
+2023-01-24 16:56:23.913070 - working on table (done): -> binational_reporting_criteria
+2023-01-24 16:56:24.230646 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-01-24 16:56:27.476134 - ocio_dex_devlyme_diseasehl7_mmg_sql_ok_gold_repeating_variables_for_disease_exposure
+2023-01-24 16:56:27.800194 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-01-24 16:56:27.962980 - working on table (start): -> clinical_manifestations_repeating_group
+2023-01-24 16:56:30.288214 - ocio_dex_devlyme_diseasehl7_mmg_sql_ok_gold_clinical_manifestations_repeating_group
+2023-01-24 16:56:30.582048 - working on table (done): -> clinical_manifestations_repeating_group
+2023-01-24 16:56:30.832461 - working on table (start): -> antibiotics_treatment_repeating_group
+2023-01-24 16:56:31.951742 - ocio_dex_devlyme_diseasehl7_mmg_sql_ok_gold_antibiotics_treatment_repeating_group
+2023-01-24 16:56:32.178190 - working on table (done): -> antibiotics_treatment_repeating_group
+2023-01-24 16:56:32.346940 - working on table (start): -> industry_and_occupation_repeating_group
+2023-01-24 16:56:33.753332 - ocio_dex_devlyme_diseasehl7_mmg_sql_ok_gold_industry_and_occupation_repeating_group
+2023-01-24 16:56:33.951291 - working on table (done): -> industry_and_occupation_repeating_group
+2023-01-24 16:56:34.195313 - working on table (start): -> epidemiology_laboratory_repeating_group
+2023-01-24 16:56:36.380672 - ocio_dex_devlyme_diseasehl7_mmg_sql_ok_gold_epidemiology_laboratory_repeating_group
+2023-01-24 16:56:36.534477 - working on table (done): -> epidemiology_laboratory_repeating_group
+2023-01-24 16:56:36.685988 - working on repeat tables (done) route: -> lyme_disease
+2023-01-24 16:56:36.860141 - working on repeat tables (start) route: ->  + tbrd
+2023-01-24 16:56:38.244457 - working on table (start): -> race_category
+2023-01-24 16:56:39.461241 - ocio_dex_devtbrdhl7_mmg_sql_ok_gold_race_category
+2023-01-24 16:56:39.620565 - working on table (done): -> race_category
+2023-01-24 16:56:39.769725 - working on table (start): -> binational_reporting_criteria
+2023-01-24 16:56:41.280367 - working on table (done): -> binational_reporting_criteria
+2023-01-24 16:56:41.457872 - working on table (start): -> type_of_complication
+2023-01-24 16:56:41.952335 - working on table (done): -> type_of_complication
+2023-01-24 16:56:42.113003 - working on table (start): -> transfused_product
+2023-01-24 16:56:42.518129 - working on table (done): -> transfused_product
+2023-01-24 16:56:42.669712 - working on table (start): -> donated_product
+2023-01-24 16:56:43.274652 - working on table (done): -> donated_product
+2023-01-24 16:56:43.413731 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-01-24 16:56:44.377852 - ocio_dex_devtbrdhl7_mmg_sql_ok_gold_repeating_variables_for_disease_exposure
+2023-01-24 16:56:44.549001 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-01-24 16:56:44.697691 - working on table (start): -> clinical_manifestation
+2023-01-24 16:56:46.299122 - ocio_dex_devtbrdhl7_mmg_sql_ok_gold_clinical_manifestation
+2023-01-24 16:56:46.451586 - working on table (done): -> clinical_manifestation
+2023-01-24 16:56:46.599508 - working on table (start): -> antibiotics_treatment_repeating_group
+2023-01-24 16:56:48.036466 - ocio_dex_devtbrdhl7_mmg_sql_ok_gold_antibiotics_treatment_repeating_group
+2023-01-24 16:56:48.326868 - working on table (done): -> antibiotics_treatment_repeating_group
+2023-01-24 16:56:48.465468 - working on table (start): -> industry_and_occupation_repeating_group
+2023-01-24 16:56:49.419623 - working on table (done): -> industry_and_occupation_repeating_group
+2023-01-24 16:56:49.574987 - working on table (start): -> travel_history
+2023-01-24 16:56:50.149677 - working on table (done): -> travel_history
+2023-01-24 16:56:50.326907 - working on table (start): -> tick_bite_repeating_group
+2023-01-24 16:56:50.873694 - working on table (done): -> tick_bite_repeating_group
+2023-01-24 16:56:51.039280 - working on table (start): -> blood_transfusion_date_repeating_group
+2023-01-24 16:56:51.583762 - working on table (done): -> blood_transfusion_date_repeating_group
+2023-01-24 16:56:51.721898 - working on table (start): -> organ_transplant_repeating_group
+2023-01-24 16:56:52.222824 - working on table (done): -> organ_transplant_repeating_group
+2023-01-24 16:56:52.391869 - working on table (start): -> blood_donation_date_repeating_group
+2023-01-24 16:56:52.957991 - working on table (done): -> blood_donation_date_repeating_group
+2023-01-24 16:56:53.118690 - working on table (start): -> epidemiology_laboratory_repeating_group
+2023-01-24 16:56:53.667232 - working on table (done): -> epidemiology_laboratory_repeating_group
+2023-01-24 16:56:53.852869 - working on repeat tables (done) route: -> tbrd
+2023-01-24 20:40:20.796132 - #########################################################################
+2023-01-24 20:40:29.551806 - working on (start) route: -> lyme_disease
+2023-01-24 20:40:35.856076 - ocio_dex_dev.lyme_disease_hl7_mmg_sql_ok_gold
+2023-01-24 20:40:39.995425 - working on (done) route: -> lyme_disease
+2023-01-24 20:40:40.319707 - working on (start) route: -> tbrd
+2023-01-24 20:40:47.378315 - ocio_dex_dev.tbrd_hl7_mmg_sql_ok_gold
+2023-01-24 20:40:50.541726 - working on (done) route: -> tbrd
+2023-01-24 20:40:50.787641 - working on repeat tables (start) route: ->  + lyme_disease
+2023-01-24 20:40:51.364486 - working on table (start): -> race_category
+2023-01-24 20:40:53.330273 - ocio_dex_dev.lyme_disease_hl7_mmg_sql_ok_gold_race_category
+2023-01-24 20:40:56.038762 - working on table (done): -> race_category
+2023-01-24 20:40:56.223819 - working on table (start): -> binational_reporting_criteria
+2023-01-24 20:40:56.845376 - ocio_dex_dev.lyme_disease_hl7_mmg_sql_ok_gold_binational_reporting_criteria
+2023-01-24 20:40:58.667869 - working on table (done): -> binational_reporting_criteria
+2023-01-24 20:40:58.854622 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-01-24 20:40:59.892687 - ocio_dex_dev.lyme_disease_hl7_mmg_sql_ok_gold_repeating_variables_for_disease_exposure
+2023-01-24 20:41:02.482658 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-01-24 20:41:02.655905 - working on table (start): -> clinical_manifestations_repeating_group
+2023-01-24 20:41:03.780265 - ocio_dex_dev.lyme_disease_hl7_mmg_sql_ok_gold_clinical_manifestations_repeating_group
+2023-01-24 20:41:06.762316 - working on table (done): -> clinical_manifestations_repeating_group
+2023-01-24 20:41:06.926075 - working on table (start): -> antibiotics_treatment_repeating_group
+2023-01-24 20:41:07.765054 - ocio_dex_dev.lyme_disease_hl7_mmg_sql_ok_gold_antibiotics_treatment_repeating_group
+2023-01-24 20:41:10.394964 - working on table (done): -> antibiotics_treatment_repeating_group
+2023-01-24 20:41:10.559472 - working on table (start): -> industry_and_occupation_repeating_group
+2023-01-24 20:41:11.745183 - ocio_dex_dev.lyme_disease_hl7_mmg_sql_ok_gold_industry_and_occupation_repeating_group
+2023-01-24 20:41:14.534047 - working on table (done): -> industry_and_occupation_repeating_group
+2023-01-24 20:41:14.674068 - working on table (start): -> epidemiology_laboratory_repeating_group
+2023-01-24 20:41:15.813340 - ocio_dex_dev.lyme_disease_hl7_mmg_sql_ok_gold_epidemiology_laboratory_repeating_group
+2023-01-24 20:41:18.417086 - working on table (done): -> epidemiology_laboratory_repeating_group
+2023-01-24 20:41:18.599268 - working on repeat tables (done) route: -> lyme_disease
+2023-01-24 20:41:18.760174 - working on repeat tables (start) route: ->  + tbrd
+2023-01-24 20:41:19.364435 - working on table (start): -> race_category
+2023-01-24 20:41:20.074321 - ocio_dex_dev.tbrd_hl7_mmg_sql_ok_gold_race_category
+2023-01-24 20:41:22.658770 - working on table (done): -> race_category
+2023-01-24 20:41:22.832136 - working on table (start): -> binational_reporting_criteria
+2023-01-24 20:41:23.390811 - working on table (done): -> binational_reporting_criteria
+2023-01-24 20:41:23.538348 - working on table (start): -> type_of_complication
+2023-01-24 20:41:24.077384 - working on table (done): -> type_of_complication
+2023-01-24 20:41:24.337749 - working on table (start): -> transfused_product
+2023-01-24 20:41:37.920237 - working on table (done): -> transfused_product
+2023-01-24 20:41:38.252129 - working on table (start): -> donated_product
+2023-01-24 20:41:39.643646 - working on table (done): -> donated_product
+2023-01-24 20:41:39.821597 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-01-24 20:41:40.629918 - ocio_dex_dev.tbrd_hl7_mmg_sql_ok_gold_repeating_variables_for_disease_exposure
+2023-01-24 20:41:42.613567 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-01-24 20:41:42.827496 - working on table (start): -> clinical_manifestation
+2023-01-24 20:41:43.675340 - ocio_dex_dev.tbrd_hl7_mmg_sql_ok_gold_clinical_manifestation
+2023-01-24 20:41:45.568627 - working on table (done): -> clinical_manifestation
+2023-01-24 20:41:45.733628 - working on table (start): -> antibiotics_treatment_repeating_group
+2023-01-24 20:41:46.393771 - ocio_dex_dev.tbrd_hl7_mmg_sql_ok_gold_antibiotics_treatment_repeating_group
+2023-01-24 20:41:50.203136 - working on table (done): -> antibiotics_treatment_repeating_group
+2023-01-24 20:41:50.391318 - working on table (start): -> industry_and_occupation_repeating_group
+2023-01-24 20:41:50.782974 - working on table (done): -> industry_and_occupation_repeating_group
+2023-01-24 20:41:50.941645 - working on table (start): -> travel_history
+2023-01-24 20:41:51.359047 - working on table (done): -> travel_history
+2023-01-24 20:41:51.509634 - working on table (start): -> tick_bite_repeating_group
+2023-01-24 20:41:51.811551 - working on table (done): -> tick_bite_repeating_group
+2023-01-24 20:41:51.970670 - working on table (start): -> blood_transfusion_date_repeating_group
+2023-01-24 20:41:52.341045 - working on table (done): -> blood_transfusion_date_repeating_group
+2023-01-24 20:41:52.514710 - working on table (start): -> organ_transplant_repeating_group
+2023-01-24 20:41:52.807643 - working on table (done): -> organ_transplant_repeating_group
+2023-01-24 20:41:52.951891 - working on table (start): -> blood_donation_date_repeating_group
+2023-01-24 20:41:53.327919 - working on table (done): -> blood_donation_date_repeating_group
+2023-01-24 20:41:53.496542 - working on table (start): -> epidemiology_laboratory_repeating_group
+2023-01-24 20:41:53.826845 - working on table (done): -> epidemiology_laboratory_repeating_group
+2023-01-24 20:41:54.032828 - working on repeat tables (done) route: -> tbrd
