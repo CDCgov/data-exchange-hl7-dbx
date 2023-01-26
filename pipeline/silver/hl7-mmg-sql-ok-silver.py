@@ -76,4 +76,4 @@ df4 = df3.withColumn( "mmg_sql_model_singles",  map_filter("mmg_sql_model_map", 
 
 
 
-df4.writeStream.format("delta").outputMode("append").option("checkpointLocation", output_checkpoint).toTable( output_table )
+df4.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", output_checkpoint).toTable( output_table )
