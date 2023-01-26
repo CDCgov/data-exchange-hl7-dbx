@@ -75,4 +75,4 @@ df3 = df2.withColumn( "mmg_based_model_map", from_json( col("mmg_based_model_str
 target_schema_name = f"{output_db}.{output_table}"
 chkpoint_loc = f"abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/{output_table}/_checkpoint"
 
-df3.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+df3.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)

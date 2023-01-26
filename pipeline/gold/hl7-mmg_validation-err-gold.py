@@ -26,13 +26,13 @@ output_table_suffix = "hl7_mmg_validation_err_gold"
 # COMMAND ----------
 
 df1 = spark.readStream.format("delta").option("ignoreDeletes", "true").table( input_table )
-display( df1 )
+# display( df1 )
 
 # COMMAND ----------
 
 def printToFile(message):
     import datetime
-    with open("./output-log.txt", "a") as f:
+    with open("./mmg-validation-err-gold-output-log.txt", "a") as f:
         f.write(f"{datetime.datetime.now()} - {message}\n")
 
 def normalize(name):
@@ -65,12 +65,7 @@ def transformAndSendToRoute(batchDF, batchId):
 
 # COMMAND ----------
 
-df1.writeStream.foreachBatch( transformAndSendToRoute ).start()
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC SELECT * FROM ocio_dex_dev.lyme_disease_hl7_mmg_validation_err_gold
+df1.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------
 

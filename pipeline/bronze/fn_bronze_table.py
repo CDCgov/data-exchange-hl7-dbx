@@ -37,7 +37,7 @@ def createBronzeTable(topic, processName):
            .select("*", "receiver_process.*") \
            .drop ("receiver_process")
     
-    processExplodedDF.writeStream.format("delta").outputMode("append").option("checkpointLocation", lakeConfig.getCheckpointLocation(output_table)).toTable(lakeConfig.getSchemaName(output_table))
+    processExplodedDF.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", lakeConfig.getCheckpointLocation(output_table)).toTable(lakeConfig.getSchemaName(output_table))
     
 #     df.writeStream(...._)
     return processExplodedDF

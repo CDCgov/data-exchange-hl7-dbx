@@ -30,7 +30,7 @@ lake_config = LakeConfig(root_folder, db_name)
 
 def print_to_file(message):
     import datetime
-    with open("./output-log-sql-model-gold.txt", "a") as f:
+    with open("./sql-ok-gold-output-log.txt", "a") as f:
         f.write(f"{datetime.datetime.now()} - {message}\n")
         
 print_to_file("#########################################################################")
@@ -221,7 +221,7 @@ def transform_send(batch_df, batch_id):
 
 # COMMAND ----------
 
- df1.writeStream.foreachBatch(transform_send).start()
+ df1.writeStream.trigger(availableNow=True).foreachBatch(transform_send).start()
 
 # COMMAND ----------
 
