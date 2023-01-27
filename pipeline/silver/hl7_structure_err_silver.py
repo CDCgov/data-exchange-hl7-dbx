@@ -27,16 +27,6 @@ df3 = df3.withColumn('error_concat', F.explode('error_concat'))
 df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 'provenance', 'error_concat.line','error_concat.column',df3.error_concat.path.alias("field"),'error_concat.description','error_concat.category')
 #display(df4)
 
-
-
 # COMMAND ----------
 
 df4.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
-
-
-
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC select * from ocio_dex_dev.hl7_structure_err_silver 
