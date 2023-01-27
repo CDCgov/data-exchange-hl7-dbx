@@ -6,7 +6,9 @@ from pyspark.sql import functions as F
 from pyspark.sql.functions import col,concat
 
 
-%run ../common/schemas
+# COMMAND ----------
+
+# MAGIC %run ../common/schemas
 
 # COMMAND ----------
 
@@ -20,9 +22,7 @@ df =  spark.readStream.format("delta").option("ignoreDeletes", "true").table("oc
 
 # COMMAND ----------
 
-df1 = df.withColumn( "report", from_json( col("report"), schema_report)) 
-             
-    
+df1 = df.withColumn( "report", from_json( col("report"), schema_report))
 
 # COMMAND ----------
 
@@ -37,17 +37,10 @@ df3 = df3.withColumn('error_concat', F.explode('error_concat'))
 
 
 df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 'provenance', 'error_concat.line','error_concat.column',df3.error_concat.path.alias("field"),'error_concat.description','error_concat.category')
-'''display(df4)'''
+# display(df4)
 
 
 
 # COMMAND ----------
 
 df4.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
-
-
-
-
-# COMMAND ----------
-
-
