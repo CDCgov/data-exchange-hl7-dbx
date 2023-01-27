@@ -43,7 +43,7 @@ df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 
 
 # COMMAND ----------
 
-df4.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+df4.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
 
 
 

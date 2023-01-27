@@ -54,7 +54,7 @@ df2 = df1.withColumn( "mmg_based_model_map_keys", map_keys("mmg_based_model_map"
 
 def printToFile(message):
     import datetime
-    with open("./output-log.txt", "a") as f:
+    with open("./mmg-based-ok-gold-output-log.txt", "a") as f:
         f.write(f"{datetime.datetime.now()} - {message}\n")
 
 def normalize(name):
@@ -96,7 +96,7 @@ def transformAndSendToRoute(batchDF, batchId):
 
 # COMMAND ----------
 
-df2.writeStream.foreachBatch( transformAndSendToRoute ).start()
+df2.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------
 

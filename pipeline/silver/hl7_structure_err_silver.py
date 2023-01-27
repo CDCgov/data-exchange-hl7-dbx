@@ -1,10 +1,4 @@
 # Databricks notebook source
-# MAGIC %sql
-# MAGIC  SELECT * FROM ocio_dex_dev.hl7_structure_err_bronze 
-# MAGIC  
-
-# COMMAND ----------
-
  source_db = "ocio_dex_dev"
  target_tbl_name = "hl7_structure_err_silver"
  target_schema_name = source_db + "." + target_tbl_name
@@ -31,13 +25,13 @@ df3 = df3.withColumn('error_concat', F.explode('error_concat'))
 
 
 df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 'provenance', 'error_concat.line','error_concat.column',df3.error_concat.path.alias("field"),'error_concat.description','error_concat.category')
-display(df4)
+#display(df4)
 
 
 
 # COMMAND ----------
 
-df4.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+df4.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
 
 
 
@@ -46,7 +40,3 @@ df4.writeStream.format("delta").outputMode("append").option("checkpointLocation"
 
 # MAGIC %sql
 # MAGIC select * from ocio_dex_dev.hl7_structure_err_silver 
-
-# COMMAND ----------
-
-
