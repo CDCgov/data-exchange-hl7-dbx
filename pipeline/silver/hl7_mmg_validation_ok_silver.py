@@ -1,7 +1,11 @@
 # Databricks notebook source
-# MAGIC %md
-# MAGIC Updated - 1/23/23
-# MAGIC BY: Ramanbir (swy4)
+from datetime import datetime
+from pyspark.sql import functions as F
+from pyspark.sql.functions import col,concat
+
+# COMMAND ----------
+
+# MAGIC %run ../common/schemas
 
 # COMMAND ----------
 
@@ -16,9 +20,9 @@ df =  spark.readStream.format("delta").option("ignoreDeletes", "true").table("oc
 # COMMAND ----------
 
 spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
-from datetime import datetime
-from pyspark.sql import functions as F
-from pyspark.sql.functions import col,concat
+
+
+df1 = df.withColumn( "report", from_json( col("report"), schema_report))
 
 df2 = df.withColumn('issue', F.explode('report.entries'))
 
