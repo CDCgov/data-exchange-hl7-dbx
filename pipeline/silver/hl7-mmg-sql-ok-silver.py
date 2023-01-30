@@ -1,5 +1,27 @@
 # Databricks notebook source
 # MAGIC %md
+# MAGIC ### Notebook setting 
+
+# COMMAND ----------
+
+TOPIC = "hl7_mmg_sql_ok"
+STAGE_IN = "bronze"
+STAGE_OUT = "silver"
+
+# COMMAND ----------
+
+# MAGIC %run ../common/common_fns
+
+# COMMAND ----------
+
+lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+
+# check print database_config
+print( lake_util.print_database_config() )
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ### Imports 
 
 # COMMAND ----------
@@ -10,13 +32,6 @@ from pyspark.sql.functions import *
 
 # MAGIC %md
 # MAGIC ### Input and Output Tables
-
-# COMMAND ----------
-
-input_table = "ocio_dex_dev.hl7_mmg_sql_ok_bronze"
-output_table = "ocio_dex_dev.hl7_mmg_sql_ok_silver"
-
-output_checkpoint = f"abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/{output_table}/_checkpoint"
 
 # COMMAND ----------
 
@@ -34,9 +49,7 @@ output_checkpoint = f"abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.window
 
 # COMMAND ----------
 
-
-df1 = spark.readStream.format("delta").option("ignoreDeletes", "true").table( input_table )
-
+df1 = lake_util.read_stream_from_table()
 
 # COMMAND ----------
 
@@ -74,6 +87,4 @@ df4 = df3.withColumn( "mmg_sql_model_singles",  map_filter("mmg_sql_model_map", 
 
 # COMMAND ----------
 
-
-
-df4.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", output_checkpoint).toTable( output_table )
+lake_util.write_stream_to_table(df4)
