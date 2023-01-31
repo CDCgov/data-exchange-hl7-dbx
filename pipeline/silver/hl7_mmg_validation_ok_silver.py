@@ -1,21 +1,31 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC Updated - 1/23/23
-# MAGIC BY: Ramanbir (swy4)
+# MAGIC ### Notebook setting 
 
 # COMMAND ----------
 
-source_db = "ocio_dex_dev"
-target_tbl_name = "hl7_mmg_validation_ok_silver"
-target_schema_name = source_db + "." + target_tbl_name
-chkpoint_loc = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + target_tbl_name + "/_checkpoint"
-
-df =  spark.readStream.format("delta").option("ignoreDeletes", "true").table("ocio_dex_dev.hl7_mmg_validation_ok_bronze")
-# display(df)
+TOPIC = "hl7_mmg_validation_ok"
+STAGE_IN = "bronze"
+STAGE_OUT = "silver"
 
 # COMMAND ----------
 
-spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
+# MAGIC %run ../common/common_fns
+
+# COMMAND ----------
+
+lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+
+# check print database_config
+print( lake_util.print_database_config() )
+
+# COMMAND ----------
+
+df = lake_util.read_stream_from_table()
+
+# COMMAND ----------
+
+# spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
 from datetime import datetime
 from pyspark.sql import functions as F
 from pyspark.sql.functions import col,concat
@@ -31,5 +41,4 @@ df3 = df2.select('message_uuid', 'metadata_version','message_info','summary', 'p
 
 # COMMAND ----------
 
-# print(target_schema_name)
-df3.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+lake_util.write_stream_to_table(df3)
