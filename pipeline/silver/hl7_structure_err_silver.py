@@ -1,11 +1,27 @@
 # Databricks notebook source
- source_db = "ocio_dex_dev"
- target_tbl_name = "hl7_structure_err_silver"
- target_schema_name = source_db + "." + target_tbl_name
- chkpoint_loc = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + target_tbl_name + "/_checkpoint"
+# MAGIC %md
+# MAGIC ### Notebook setting 
 
+# COMMAND ----------
 
-df =  spark.readStream.format("delta").option("ignoreDeletes", "true").table("ocio_dex_dev.hl7_structure_err_bronze")
+TOPIC = "hl7_structure_err"
+STAGE_IN = "bronze"
+STAGE_OUT = "silver"
+
+# COMMAND ----------
+
+# MAGIC %run ../common/common_fns
+
+# COMMAND ----------
+
+lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+
+# check print database_config
+print( lake_util.print_database_config() )
+
+# COMMAND ----------
+
+df = lake_util.read_stream_from_table()
 
 # COMMAND ----------
 
@@ -29,4 +45,4 @@ df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 
 
 # COMMAND ----------
 
-df4.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+lake_util.write_stream_to_table(df4)
