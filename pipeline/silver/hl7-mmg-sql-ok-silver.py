@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_mmg_based_ok"
+TOPIC = "hl7_mmg_sql_ok"
 STAGE_IN = "bronze"
 STAGE_OUT = "silver"
 
@@ -27,6 +27,11 @@ print( lake_util.print_database_config() )
 # COMMAND ----------
 
 from pyspark.sql.functions import *
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Input and Output Tables
 
 # COMMAND ----------
 
@@ -54,9 +59,8 @@ df1 = lake_util.read_stream_from_table()
 # COMMAND ----------
 
 df2 = df1.drop("processes", "status", "process_name", "process_version", "start_processing_time", "end_processing_time") \
-        .withColumnRenamed("report", "mmg_based_model_string")
+        .withColumnRenamed("report", "mmg_sql_model_string")
 
-# display( df2 )
 
 # COMMAND ----------
 
@@ -65,10 +69,16 @@ df2 = df1.drop("processes", "status", "process_name", "process_version", "start_
 
 # COMMAND ----------
 
-df3 = df2.withColumn( "mmg_based_model_map", from_json( col("mmg_based_model_string"), schema_generic_json) ) \
-         .drop("mmg_based_model_string")
+df3 = df2.withColumn("mmg_sql_model_map", from_json(col("mmg_sql_model_string"), schema_generic_json)) \
+         .drop("mmg_sql_model_string")
 
-# display( df3 )
+
+# COMMAND ----------
+
+df4 = df3.withColumn( "mmg_sql_model_singles",  map_filter("mmg_sql_model_map", lambda k, _: k != "tables" ) ) \
+         .withColumn( "mmg_sql_model_tables", from_json( col("mmg_sql_model_map.tables" ), schema_tables) ) \
+         .drop( "mmg_sql_model_map" )
+
 
 # COMMAND ----------
 
@@ -77,5 +87,4 @@ df3 = df2.withColumn( "mmg_based_model_map", from_json( col("mmg_based_model_str
 
 # COMMAND ----------
 
-lake_util.write_stream_to_table(df3)
-
+lake_util.write_stream_to_table(df4)

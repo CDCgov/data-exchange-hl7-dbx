@@ -1,11 +1,7 @@
 // Databricks notebook source
-// MAGIC %sql
-// MAGIC select * from ocio_dex_dev.hl7_structure_err_eh_raw
-
-// COMMAND ----------
-
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
+import org.apache.spark.sql.streaming.Trigger
 
 // COMMAND ----------
 
@@ -126,13 +122,8 @@ val df5 = df4.drop("structureReport")
 // COMMAND ----------
 
 // Writing to Bronze table
-println(target_schema_name)
-df5.writeStream.format("delta").outputMode("append").option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
-
-// COMMAND ----------
-
-// MAGIC %sql
-// MAGIC SELECT * FROM ocio_dex_dev.hl7_structure_err_bronze 
+//println(target_schema_name)
+df5.writeStream.format("delta").outputMode("append").trigger(Trigger.AvailableNow()).option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
 
 // COMMAND ----------
 

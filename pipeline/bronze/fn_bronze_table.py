@@ -12,20 +12,19 @@
 
 # COMMAND ----------
 
-#TODO: change to streaming
-# df1 = spark.readStream.format("delta").table( input_table )
+STAGE_IN = "eh_raw"
+STAGE_OUT = "bronze"
+
+# COMMAND ----------
+
 from pyspark.sql.functions import *
 
 def createBronzeTable(topic, processName):
-    ## Prepare params
-    db_name  = "ocio_dex_dev"
-    root_folder = 'abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/' 
-    lakeConfig = LakeConfig(root_folder, db_name)
+  
+    lake_util = LakeUtil( TableConfig(database_config, topic, STAGE_IN, STAGE_OUT) )
 
-    input_table = topic + "_eh_raw"
-    output_table = topic + "_bronze"
-    ## Read Raw info
-    rawDF = spark.readStream.format("delta").option("ignoreDeletes", "true").table( lakeConfig.getSchemaName(input_table) )
+    rawDF = lake_util.read_stream_from_table()
+    
     metadataDF = rawDF.select( from_json("body", schema_evhub_body_v2).alias("data") ).select("data.*")
     
     mdExplodedDF = metadataDF.select("message_uuid", "message_info", "summary", "metadata_version",  \
@@ -37,14 +36,21 @@ def createBronzeTable(topic, processName):
            .select("*", "receiver_process.*") \
            .drop ("receiver_process")
     
-    processExplodedDF.writeStream.format("delta").outputMode("append").option("checkpointLocation", lakeConfig.getCheckpointLocation(output_table)).toTable(lakeConfig.getSchemaName(output_table))
+    lake_util.write_stream_to_table(processExplodedDF)
     
-#     df.writeStream(...._)
     return processExplodedDF
 
 
 # COMMAND ----------
 
-# recdebOk = createBronzeTable("hl7_mmg_based_ok", "mmgBasedTransformer")
+# it can be used in bronze notebook to check, confirm db, table, and checkpoint
+def print_bronze_database_config(topic):
+    
+    lake_util = LakeUtil( TableConfig(database_config, topic, STAGE_IN, STAGE_OUT) )
 
-# display(recdebOk)
+    # check print database_config
+    print( lake_util.print_database_config() )
+
+# COMMAND ----------
+
+

@@ -44,7 +44,7 @@ def _transferEventHubDataToLake(eventHubConfig, lakeConfig):
     # Standardize on Table names for Event Hub topics:
 #     lakeConfig.tableName = "tbl_bronze_" + eventHubConfig.topic
     tbl_name = normalizeString(eventHubConfig.topic) + "_eh_raw"
-    df.writeStream.format("delta").outputMode("append").option("checkpointLocation", lakeConfig.getCheckpointLocation(tbl_name)).toTable(lakeConfig.getSchemaName(tbl_name))
+    df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", lakeConfig.getCheckpointLocation(tbl_name)).toTable(lakeConfig.getSchemaName(tbl_name))
 
 # COMMAND ----------
 

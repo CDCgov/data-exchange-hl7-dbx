@@ -35,7 +35,7 @@ df1 = spark.readStream.format("delta").option("ignoreDeletes", "true").table( in
 
 def printToFile(message):
     import datetime
-    with open("./output-log.txt", "a") as f:
+    with open("./structure-err-output-log.txt", "a") as f:
         f.write(f"{datetime.datetime.now()} - {message}\n")
 
 def normalize(name):
@@ -68,7 +68,7 @@ def transformAndSendToRoute(batchDF, batchId):
 
 # COMMAND ----------
 
-df1.writeStream.foreachBatch( transformAndSendToRoute ).start()
+df1.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------
 
