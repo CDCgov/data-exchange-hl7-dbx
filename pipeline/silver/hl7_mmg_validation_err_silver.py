@@ -1,27 +1,40 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC ### Notebook setting 
+
+# COMMAND ----------
+
+TOPIC = "hl7_mmg_validation_err"
+STAGE_IN = "bronze"
+STAGE_OUT = "silver"
+
+# COMMAND ----------
+
+# MAGIC %run ../common/common_fns
+
+# COMMAND ----------
+
+lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+
+# check print database_config
+print( lake_util.print_database_config() )
+
+# COMMAND ----------
+
+lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+
+# check print database_config
+print( lake_util.print_database_config() )
+
+# COMMAND ----------
+
+df = lake_util.read_stream_from_table()
+
+# COMMAND ----------
+
 from datetime import datetime
 from pyspark.sql import functions as F
 from pyspark.sql.functions import col,concat
-
-# COMMAND ----------
-
-# MAGIC %run ../common/schemas
-
-# COMMAND ----------
-
-source_db = "ocio_dex_dev"
-target_tbl_name = "hl7_mmg_validation_err_silver"
-target_schema_name = source_db + "." + target_tbl_name
-chkpoint_loc = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/" + target_tbl_name + "/_checkpoint"
-
-df =  spark.readStream.format("delta").option("ignoreDeletes", "true").table("ocio_dex_dev.hl7_mmg_validation_err_bronze")
-# display(df)
-
-# COMMAND ----------
-
-spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
-
-df1 = df.withColumn( "report", from_json( col("report"), schema_report))
 
 df2 = df.withColumn('issue', F.explode('report.entries'))
 
@@ -34,5 +47,4 @@ df3 = df2.select('message_uuid', 'metadata_version','message_info','summary', 'p
 
 # COMMAND ----------
 
-# print(target_schema_name)
-df3.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+lake_util.write_stream_to_table(df3)
