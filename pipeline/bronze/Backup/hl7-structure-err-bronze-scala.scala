@@ -96,12 +96,12 @@ val schema =  new StructType()
 
 val df1 = df.withColumn("bodyJson", from_json(col("body"), schema))
 val df2 = df1.select("bodyJson.*")
-//display(df2)
+display(df2)
 
 // COMMAND ----------
 
 val df3 = df2.withColumn("processes", $"metadata.processes")
-//display(df3)
+display(df3)
 
 // COMMAND ----------
 
@@ -117,13 +117,14 @@ val df4 = df3.withColumn("structureReport", explode($"processes") ).filter( $"st
  
 val df5 = df4.drop("structureReport")
 
-//display( df5 )
+display( df5 )
 
 // COMMAND ----------
 
 // Writing to Bronze table
 //println(target_schema_name)
-df5.writeStream.format("delta").outputMode("append").trigger(Trigger.AvailableNow()).option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
+df5.writeStream.format("delta").outputMode("append")  //.trigger(Trigger.AvailableNow())
+.option("checkpointLocation", chkpoint_loc).toTable(target_schema_name)
 
 // COMMAND ----------
 

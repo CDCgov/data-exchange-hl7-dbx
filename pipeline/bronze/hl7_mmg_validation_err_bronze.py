@@ -3,4 +3,4 @@
 
 # COMMAND ----------
 
-validation_ok  = createBronzeTable("hl7_mmg_validation_err", "MMG-VALIDATOR")
+validation_ok  = createBronzeMMGValidator("hl7_mmg_validation_err", "MMG-VALIDATOR")
