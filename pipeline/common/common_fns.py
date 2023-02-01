@@ -61,7 +61,7 @@ class TableConfig:
         return f"{self.database_config.output_database}.{self.topic}_{self.stage_out}"
     
     def output_checkpoint(self):
-        return f"{self.database_config.output_checkpoint_prefix}{self.database_config.output_database}.{self.topic}_{self.stage_out}_checkpoint"   
+        return f"{self.database_config.output_checkpoint_prefix}{self.topic}_{self.stage_out}/_checkpoint"   
 
 # database_config = DatabaseConfig(environment)
 
