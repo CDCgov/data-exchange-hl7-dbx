@@ -45,16 +45,6 @@ df1 = lake_util.read_stream_from_table()
 
 # COMMAND ----------
 
-def printToFile(message):
-    import datetime
-    with open("./mmg-validation-ok-gold-output-log.txt", "a") as f:
-        f.write(f"{datetime.datetime.now()} - {message}\n")
-
-def normalize(name):
-    if name is not None:
-        return name.replace(".", "_").replace(" ", "_").replace("'", "")
-    else:
-        return str(name)
     
 def transformAndSendToRoute(batchDF, batchId):
     routes_row_list = batchDF.select("message_info.route").distinct().collect() 
@@ -69,7 +59,8 @@ def transformAndSendToRoute(batchDF, batchId):
         else:    
             df_one_route = batchDF.filter( col("message_info.route") == program_route )
             
-        printToFile( lake_util.print_gold_database_config( program_route ) )
+        printToFile(f"records affected: {df_one_route.count()}")
+        printToFile( lake_util.get_for_print_gold_database_config( program_route ) )
         lake_util.write_gold_to_table(df_one_route, program_route)
         
         # working through each batch of route

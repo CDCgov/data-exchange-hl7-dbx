@@ -1,9 +1,0 @@
-2023-02-01 13:15:51.858803 - working on (start) route: -> gen_case_map_v1.0_vectorborne_diseases
-2023-02-01 13:15:52.317992 - None
-2023-02-01 13:15:54.562589 - working on (done) route: -> gen_case_map_v1.0_vectorborne_diseases
-2023-02-01 13:15:54.731074 - working on (start) route: -> lyme_disease
-2023-02-01 13:15:54.899496 - None
-2023-02-01 13:15:57.531822 - working on (done) route: -> lyme_disease
-2023-02-01 13:15:57.732992 - working on (start) route: -> arboviral_v1_3_2_mmg_20210721
-2023-02-01 13:15:57.914620 - None
-2023-02-01 13:16:01.030381 - working on (done) route: -> arboviral_v1_3_2_mmg_20210721

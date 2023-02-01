@@ -22,16 +22,23 @@ gold_output_database_checkpoint_prefix = dbutils.widgets.get("gold_output_databa
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Normalize String
+# MAGIC ### Common Functions
 
 # COMMAND ----------
 
 def normalizeString(str):
     return str.replace("-", "_").lower()
 
-# used in mmg-based-model
 def normalize(name):
-    return name.replace(".", "_").replace(" ", "_").replace("'", "").lower()
+    if name is not None:
+        return name.replace(".", "_").replace(" ", "_").replace("'", "")
+    else:
+        return str(name)
+  
+def printToFile(message):
+    import datetime
+    with open("./structure-ok-output-log.txt", "a") as f:
+        f.write(f"{datetime.datetime.now()} - {message}\n")
 
 # COMMAND ----------
 
@@ -109,6 +116,9 @@ class LakeUtil:
     def print_gold_database_config(self, program_route):
         print(self.table_config.output_gold_table(program_route))
         print(self.table_config.output_gold_table_checkpoint(program_route))
+        
+    def get_for_print_gold_database_config(self, program_route):
+        return f"table: { self.table_config.output_gold_table(program_route) } - checkpoint: { self.table_config.output_gold_table_checkpoint(program_route) }"
 
     def read_stream_from_table(self):
         return spark.readStream.format("delta").option("ignoreDeletes", "true").table( self.table_config.input_database_table() )

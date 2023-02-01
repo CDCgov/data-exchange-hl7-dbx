@@ -59,14 +59,7 @@ df2 = df1.withColumn( "mmg_based_model_map_keys", map_keys("mmg_based_model_map"
 
 # COMMAND ----------
 
-def printToFile(message):
-    import datetime
-    with open("./mmg-based-ok-gold-output-log.txt", "a") as f:
-        f.write(f"{datetime.datetime.now()} - {message}\n")
-
-def normalize(name):
-    return name.replace(".", "_").replace(" ", "_").replace("'", "")
-    
+   
 def transformAndSendToRoute(batchDF, batchId):
     routes_row_list = batchDF.select("message_info.route").distinct().collect() 
     routes_list = [x.route for x in routes_row_list]
@@ -91,14 +84,11 @@ def transformAndSendToRoute(batchDF, batchId):
         df_one_batch_model2 = df_one_batch_model1.drop("mmg_based_model_map", "mmg_based_model_map_keys")
 
         printToFile(f"records affected: {df_one_batch_model2.count()}")
-
-        printToFile( lake_util.print_gold_database_config( program_route ) )
-    
+        printToFile( lake_util.get_for_print_gold_database_config( program_route ) )
         lake_util.write_gold_to_table(df_one_batch_model2, program_route)
 
         # working through each batch of route
         printToFile("working on (done) route: -> " + program_route)
-
 
 
 # COMMAND ----------
