@@ -8,6 +8,10 @@ structureOk  = createBronzeStructureValidator("hl7_structure_ok", "STRUCTURE-VAL
 
 # COMMAND ----------
 
+# print_bronze_database_config("hl7_structure_ok")
+
+# COMMAND ----------
+
 # %sql SELECT * FROM ocio_dex_dev.hl7_structure_ok_bronze
 
 # COMMAND ----------

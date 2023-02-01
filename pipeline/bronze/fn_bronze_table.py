@@ -29,7 +29,7 @@ def createBronzeStructureValidator(topic, processName):
   .withColumn("report", col("structureReport.report")) \
   .withColumn("process_name", col("structureReport.process_name")) \
   .withColumn("process_version", col("structureReport.process_version")) \
-  .withColumn("validation_status", col("structureReport.status")) \
+  .withColumn("status", col("structureReport.status")) \
   .withColumn("process_start_time", col("structureReport.start_processing_time")) \
   .withColumn("process_end_time", col("structureReport.end_processing_time")) \
   .withColumn("error_count", col("report.error-count.structure") + col("report.error-count.value-set") + col("report.error-count.content" )) \

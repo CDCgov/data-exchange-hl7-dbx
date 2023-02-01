@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-print_bronze_database_config("hl7_structure_err")
+# print_bronze_database_config("hl7_structure_err")
 
 # COMMAND ----------
 

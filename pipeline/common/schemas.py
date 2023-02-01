@@ -98,17 +98,17 @@ schema_report = StructType([
 
 # COMMAND ----------
 
-issueTypeSchema = StructType([StructField("classification", StringType(), True), \
-                      StructField("category", StringType(), True), \
-                      StructField("fieldName", StringType(), True), \
-                      StructField("path", StringType(), True), \
-                      StructField("line", StringType(), True), \
-                      StructField("errorMessage", StringType(), True), \
+issueTypeSchema = StructType([StructField("classification", StringType(), True),
+                      StructField("category", StringType(), True),
+                      StructField("fieldName", StringType(), True),
+                      StructField("path", StringType(), True),
+                      StructField("line", StringType(), True),
+                      StructField("errorMessage", StringType(), True),
                       StructField("description", StringType(), True) ])
 
-mmgReportSchema = StructType([StructField("entries", ArrayType(issueTypeSchema, True), True), \
-                              StructField("error-count", IntegerType(), True), \
-                              StructField("warning-count",  IntegerType(), True), \
+mmgReportSchema = StructType([StructField("entries", ArrayType(issueTypeSchema, True), True),
+                              StructField("error-count", IntegerType(), True),
+                              StructField("warning-count",  IntegerType(), True),
                               StructField("status", StringType(), True)])
 
 
@@ -123,9 +123,9 @@ schema_validation_bronze = StructType([
      StructField("start_processing_time", StringType(), True),
      StructField("end_processing_time", StringType(), True),
     # Validation Specific (all the above is common to all bronze tables)
-     StructField("error_count", IntegerType(), True),
-     StructField("warning_count", IntegerType(), True),
-     StructField("validation_status", StringType(), True),
+     StructField("error-count", IntegerType(), True),
+     StructField("warning-count", IntegerType(), True),
+     StructField("status", StringType(), True),
      StructField("report", StringType(), True)
 ])
 
