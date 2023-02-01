@@ -31,8 +31,8 @@ from pyspark.sql.functions import *
 lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
 # test check print gold database_config
-print( lake_util.print_database_config() )
-print( lake_util.print_gold_database_config("myprogramroute") )
+# print( lake_util.print_database_config() )
+# print( lake_util.print_gold_database_config("myprogramroute") )
 
 # COMMAND ----------
 
@@ -59,7 +59,7 @@ def normalize(name):
 def transformAndSendToRoute(batchDF, batchId):
     routes_row_list = batchDF.select("message_info.route").distinct().collect() 
     routes_list = [x.route for x in routes_row_list]
-    from functools import reduce
+
     for program_route in routes_list:
         # working through each batch of route
         printToFile("working on (start) route: -> " + str(program_route))
