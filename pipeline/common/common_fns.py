@@ -31,13 +31,14 @@ def normalizeString(str):
 
 def normalize(name):
     if name is not None:
-        return name.replace(".", "_").replace(" ", "_").replace("'", "")
+        return name.replace(".", "_").replace(" ", "_").replace("'", "").lower()
     else:
         return str(name)
   
-def printToFile(message):
+def printToFile(topic, message):
     import datetime
-    with open("./structure-ok-output-log.txt", "a") as f:
+    file_loc = f"./{topic}-output-log.txt"
+    with open(file_loc, "a") as f:
         f.write(f"{datetime.datetime.now()} - {message}\n")
 
 # COMMAND ----------
@@ -92,8 +93,15 @@ class TableConfig:
     def output_gold_table_checkpoint(self, program_route):
         output_gold_tbl = f"{self.database_config.gold_output_database}.{normalize(program_route)}_{self.topic}_gold"
         return  f"{gold_output_database_checkpoint_prefix}{output_gold_tbl}/_checkpoint" 
+      
+    def output_gold_repeat_table(self, program_route, repeat_table):
+        gold_tbl = f"{self.database_config.gold_output_database}.{normalize(program_route)}_{self.topic}_gold"
+        return f"{gold_tbl}_{repeat_table}"
+    
+    def output_gold_repeat_table_checkpoint(self, program_route, repeat_table):
+        gold_tbl = f"{self.database_config.gold_output_database}.{normalize(program_route)}_{self.topic}_gold"
+        return f"{gold_output_database_checkpoint_prefix}{gold_tbl}_{repeat_table}/_checkpoint" 
 
-# database_config = DatabaseConfig(environment)
 
 # COMMAND ----------
 
@@ -119,6 +127,13 @@ class LakeUtil:
         
     def get_for_print_gold_database_config(self, program_route):
         return f"table: { self.table_config.output_gold_table(program_route) } - checkpoint: { self.table_config.output_gold_table_checkpoint(program_route) }"
+    
+    def print_gold_database_repeat_config(self, program_route, repeat_table):
+        print(self.table_config.output_gold_repeat_table(program_route, repeat_table))
+        print(self.table_config.output_gold_repeat_table_checkpoint(program_route, repeat_table))
+    
+    def get_for_print_gold_database_repeat_config(self, program_route, repeat_table):
+        return f"table: { self.table_config.output_gold_repeat_table(program_route, repeat_table) } - checkpoint: { self.table_config.output_gold_repeat_table_checkpoint(program_route, repeat_table) }"
 
     def read_stream_from_table(self):
         return spark.readStream.format("delta").option("ignoreDeletes", "true").table( self.table_config.input_database_table() )
@@ -127,10 +142,19 @@ class LakeUtil:
         df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", self.table_config.output_checkpoint() ).toTable( self.table_config.output_database_table() )
     
     def write_gold_to_table(self, df, program_route):
-        df.write.format("delta").mode("append").option("checkpointLocation", self.table_config.output_gold_table_checkpoint(program_route) ).saveAsTable( self.table_config.output_gold_table(program_route) )
-        
-    def write_gold_stream_to_table(self, df, program_route):
-        df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", self.table_config.output_gold_table_checkpoint(program_route) ).toTable( self.table_config.output_gold_table(program_route) )
+        df.write.format("delta").mode("append") \
+        .option("checkpointLocation", self.table_config.output_gold_table_checkpoint(program_route) ) \
+        .saveAsTable( self.table_config.output_gold_table(program_route) )
+    
+    def write_gold_repeat_to_table(self, df, program_route, repeat_table):
+        #TODO determine if checkpoints are needed here, or should move to the writeStream in the notebooks which should be configured then.
+        df.write.format("delta").mode("append") \
+        .option("checkpointLocation", self.table_config.output_gold_repeat_table_checkpoint(program_route, repeat_table) ) \
+        .saveAsTable( self.table_config.output_gold_repeat_table(program_route, repeat_table) )
+
+# this is not used since all notebooks use foreachbatch so using write_gold_to_table
+#     def write_gold_stream_to_table(self, df, program_route):
+#         df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", self.table_config.output_gold_table_checkpoint(program_route) ).toTable( self.table_config.output_gold_table(program_route) )
         
 
 # COMMAND ----------

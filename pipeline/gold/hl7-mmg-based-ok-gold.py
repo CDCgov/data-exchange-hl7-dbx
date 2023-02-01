@@ -66,7 +66,7 @@ def transformAndSendToRoute(batchDF, batchId):
     from functools import reduce
     for program_route in routes_list:
         # working through each batch of route
-        printToFile("working on (start) route: -> " + program_route)
+        printToFile(TOPIC, "working on (start) route: -> " + program_route)
         df_one_route = batchDF.filter( col("message_info.route") == program_route )
 
         # this batch of messages they all have the same mmg, so same keys just need one (first)
@@ -79,16 +79,15 @@ def transformAndSendToRoute(batchDF, batchId):
             df_one_route
         ))
         
-       # printToFile(df_one_batch_model1.columns)
         # drop no longer needed columns
         df_one_batch_model2 = df_one_batch_model1.drop("mmg_based_model_map", "mmg_based_model_map_keys")
 
-        printToFile(f"records affected: {df_one_batch_model2.count()}")
-        printToFile( lake_util.get_for_print_gold_database_config( program_route ) )
+        printToFile(TOPIC, f"records affected: {df_one_batch_model2.count()}")
+        printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
         lake_util.write_gold_to_table(df_one_batch_model2, program_route)
 
         # working through each batch of route
-        printToFile("working on (done) route: -> " + program_route)
+        printToFile(TOPIC, "working on (done) route: -> " + program_route)
 
 
 # COMMAND ----------
