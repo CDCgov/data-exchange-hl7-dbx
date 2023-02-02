@@ -1,8 +1,4 @@
 # Databricks notebook source
-import json, os
-
-# COMMAND ----------
-
 # MAGIC %run ./eh_config
 
 # COMMAND ----------
