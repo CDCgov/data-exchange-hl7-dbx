@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_structure_err"
+TOPIC = "hl7_structure"
 STAGE_IN = "silver"
 STAGE_OUT = "gold"
 

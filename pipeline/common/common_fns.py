@@ -184,3 +184,21 @@ class LakeConfig:
     
     def getCheckpointLocation(self, tableName):
         return self.rootFolder + "events/" + tableName + "/_checkpoint"
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Class to get ReadStream on a table
+
+# COMMAND ----------
+
+class getTableStream:
+    def __init__(self, database_config,tableName):
+        self.database_config = database_config
+        self.tableName = tableName
+        
+    def input_database_table(self):
+        return f"{self.database_config.database}.{self.tableName}"    
+        
+    def getReadStream(self):
+        return spark.readStream.format("delta").option("ignoreDeletes", "true").table(self.input_database_table())
