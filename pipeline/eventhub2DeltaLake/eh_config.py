@@ -51,11 +51,12 @@ def _transferEventHubDataToLake(eventHubConfig, lakeConfig):
 # DBTITLE 1,Opinionated method that knows the Event Hub, and Lake configurations. All it needs is what Topic to load!
 def transferEventHubDataToLake(eventHubTopic):
     ev_namespace    = "tf-eventhub-namespace-dev"
-    ev_sas_key_name = os.getenv("v_tf_eventhub_namespace_dev_key")
-    ev_sas_key_val  = os.getenv("v_tf_eventhub_namespace_dev_key_val")
-
-#    ev_sas_key_name = "tf-eventhub-namespace-dev-key"
-#    ev_sas_key_val  = os.getenv("event-hup-policy-key")
+ ##   ev_sas_key_name = os.getenv("v_tf_eventhub_namespace_dev_key")
+ ##  ev_sas_key_val  = os.getenv("v_tf_eventhub_namespace_dev_key_val")
+ ## Replace with Key Vault   
+    ev_sas_key_name = dbutils.secrets.get(scope="dbs-scope-dex", key="tf-eh-namespace-dev-key")
+    ev_sas_key_val = dbutils.secrets.get(scope="dbs-scope-dex", key="tf-eh-namespace-dev-key-val")
+    
 
 ### Creating Connnection String 
     ehConfig = EventHubConfig(ev_namespace, eventHubTopic, ev_sas_key_name, ev_sas_key_val)
