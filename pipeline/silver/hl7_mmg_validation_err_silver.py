@@ -16,15 +16,10 @@ STAGE_OUT = "silver"
 
 lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
-# check print database_config
-print( lake_util.print_database_config() )
-
 # COMMAND ----------
 
 lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
-# check print database_config
-print( lake_util.print_database_config() )
 
 # COMMAND ----------
 
