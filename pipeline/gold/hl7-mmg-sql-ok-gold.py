@@ -152,7 +152,7 @@ def write_repeat_tables(df_tables, batch_routes_list):
                  ######################################################################################
                  printToFile(TOPIC, f"records affected: {repeat_table.count()}")
                  col_table_norm = normalize(col_table)
-                 printToFile(TOPIC, lake_util.get_for_print_gold_database_repeat_config( program_route, col_table_norm ) )
+                 # printToFile(TOPIC, lake_util.get_for_print_gold_database_repeat_config( program_route, col_table_norm ) )
                  lake_util.write_gold_repeat_to_table(repeat_table, program_route, col_table_norm)
 
 
