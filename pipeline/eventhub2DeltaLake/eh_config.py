@@ -1,7 +1,5 @@
 # Databricks notebook source
-# MAGIC %md
-# MAGIC This notebook provides the basic classes to configure Event Hub and Lake configs.
-# MAGIC Those two classes are used by the transferEventHubDataToLake method - it will read the appropriate topic from the Event Hub namespace and write its content to the given table.
+# MAGIC %run ../common/common_fns
 
 # COMMAND ----------
 
@@ -21,6 +19,8 @@ class EventHubConfig:
     def getConfig(self):
         ehConf = {}
         ehConf['eventhubs.connectionString'] = sc._jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(self.connString())
+        
+        # TODO: keep name in sync with infra
         ehConf['eventhubs.consumerGroup'] = "dbx-" + self.topic + "-cg-001"
         return ehConf
 
@@ -29,10 +29,6 @@ class EventHubConfig:
 # TEST
 # eh = EventHubConfig("namespace", "topic", "sasKey", "pwd-123")
 # print(eh.getConfig())
-
-# COMMAND ----------
-
-# MAGIC %run ../common/common_fns
 
 # COMMAND ----------
 
@@ -50,20 +46,26 @@ def _transferEventHubDataToLake(eventHubConfig, lakeConfig):
 
 # DBTITLE 1,Opinionated method that knows the Event Hub, and Lake configurations. All it needs is what Topic to load!
 def transferEventHubDataToLake(eventHubTopic):
-    ev_namespace    = "tf-eventhub-namespace-dev"
- ##   ev_sas_key_name = os.getenv("v_tf_eventhub_namespace_dev_key")
- ##  ev_sas_key_val  = os.getenv("v_tf_eventhub_namespace_dev_key_val")
- ## Replace with Key Vault   
+
+    # from other notebook (at top) from widgets
+    ev_namespace = eventhub_namespace
+    db_name =  database
+    root_folder =  database_folder
+    
+    # TODO: to get per environment
     ev_sas_key_name = dbutils.secrets.get(scope="dbs-scope-dex", key="tf-eh-namespace-dev-key")
     ev_sas_key_val = dbutils.secrets.get(scope="dbs-scope-dex", key="tf-eh-namespace-dev-key-val")
-    
+
+#    ev_sas_key_name = "tf-eventhub-namespace-dev-key"
+#    ev_sas_key_val  = os.getenv("event-hup-policy-key")
+
 
 ### Creating Connnection String 
     ehConfig = EventHubConfig(ev_namespace, eventHubTopic, ev_sas_key_name, ev_sas_key_val)
     
-    db_name  = "ocio_dex_dev"
+#     db_name  = "ocio_dex_dev"
  ##  root_folder = "/tmp/delta/"
-    root_folder = 'abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/' 
+#     root_folder = 'abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/' 
     
     lakeConfig = LakeConfig(root_folder, db_name) 
     _transferEventHubDataToLake(ehConfig, lakeConfig)

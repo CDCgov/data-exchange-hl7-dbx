@@ -4,8 +4,15 @@
 
 # COMMAND ----------
 
+dbutils.widgets.dropdown("eventhub_namespace", "tf-eventhub-namespace-dev", ["tf-eventhub-namespace-dev"])
+
+#
+
 dbutils.widgets.dropdown("database", "ocio_dex_dev", ["ocio_dex_dev"])
 dbutils.widgets.dropdown("database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/"])
+dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/"])
+
+#
 
 ####### this can be used if final gold moves to Edav, etc..
 dbutils.widgets.dropdown("gold_output_database", "ocio_dex_dev", ["ocio_dex_dev"])
@@ -13,8 +20,10 @@ dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio
 
 # COMMAND ----------
 
+eventhub_namespace =  dbutils.widgets.get("eventhub_namespace")
 database =  dbutils.widgets.get("database")
 database_checkpoint_prefix = dbutils.widgets.get("database_checkpoint_prefix")
+database_folder = dbutils.widgets.get("database_folder")
 
 gold_output_database =  dbutils.widgets.get("gold_output_database")
 gold_output_database_checkpoint_prefix = dbutils.widgets.get("gold_output_database_checkpoint_prefix")
@@ -175,3 +184,21 @@ class LakeConfig:
     
     def getCheckpointLocation(self, tableName):
         return self.rootFolder + "events/" + tableName + "/_checkpoint"
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Class to get ReadStream on a table
+
+# COMMAND ----------
+
+class getTableStream:
+    def __init__(self, database_config,tableName):
+        self.database_config = database_config
+        self.tableName = tableName
+        
+    def input_database_table(self):
+        return f"{self.database_config.database}.{self.tableName}"    
+        
+    def getReadStream(self):
+        return spark.readStream.format("delta").option("ignoreDeletes", "true").table(self.input_database_table())
