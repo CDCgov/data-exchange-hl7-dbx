@@ -77,13 +77,3 @@ def createBronzeTable(topic, processName):
     lake_util.write_stream_to_table(processExplodedDF)
     return processExplodedDF
 
-
-# COMMAND ----------
-
-# it can be used in bronze notebook to check, confirm db, table, and checkpoint
-def print_bronze_database_config(topic):
-    
-    lake_util = LakeUtil( TableConfig(database_config, topic, STAGE_IN, STAGE_OUT) )
-
-    # check print database_config
-    print( lake_util.print_database_config() )

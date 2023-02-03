@@ -27,14 +27,3 @@ process_name = "mmgBasedTransformer"
 
 df1 = createBronzeTable( topic, process_name )
 
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Dev Only
-
-# COMMAND ----------
-
-
-# display( df1 )
-
