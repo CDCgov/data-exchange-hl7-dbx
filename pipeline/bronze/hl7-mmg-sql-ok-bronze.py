@@ -24,19 +24,5 @@ process_name = "mmgSQLTransformer"
 
 # COMMAND ----------
 
-# it can be used in bronze notebook to check, confirm db, table, and checkpoint:
-# print_bronze_database_config(topic)
-
 
 df1 = createBronzeTable( topic, process_name )
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Dev Only
-
-# COMMAND ----------
-
-
-# display( df1 )
-

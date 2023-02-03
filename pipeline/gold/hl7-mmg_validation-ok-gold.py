@@ -30,9 +30,6 @@ from pyspark.sql.functions import *
 
 lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
-# test check print gold database_config
-# print( lake_util.print_database_config() )
-# print( lake_util.print_gold_database_config("myprogramroute") )
 
 # COMMAND ----------
 
@@ -60,7 +57,7 @@ def transformAndSendToRoute(batchDF, batchId):
             df_one_route = batchDF.filter( col("message_info.route") == program_route )
             
         printToFile(TOPIC, f"records affected: {df_one_route.count()}")
-        printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
+        #printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
         lake_util.write_gold_to_table(df_one_route, program_route)
         
         # working through each batch of route

@@ -16,9 +16,6 @@ STAGE_OUT = "gold"
 
 lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
-# test check print gold database_config
-# print( lake_util.print_database_config() )
-# print( lake_util.print_gold_database_config("myprogramroute") )
 
 # COMMAND ----------
 
@@ -83,7 +80,7 @@ def transformAndSendToRoute(batchDF, batchId):
         df_one_batch_model2 = df_one_batch_model1.drop("mmg_based_model_map", "mmg_based_model_map_keys")
 
         printToFile(TOPIC, f"records affected: {df_one_batch_model2.count()}")
-        printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
+        #printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
         lake_util.write_gold_to_table(df_one_batch_model2, program_route)
 
         # working through each batch of route

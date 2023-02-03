@@ -32,10 +32,6 @@ from functools import reduce
 
 lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
-# test check print gold database_config
-# print( lake_util.print_database_config() )
-# print( lake_util.print_gold_database_config("program_route_name") )
-# print( lake_util.print_gold_database_repeat_config("program_route_name", "repeat_table_name") )
 
 # COMMAND ----------
 
@@ -90,7 +86,7 @@ def write_single_table(df_singles, batch_routes_list):
         route_normalized = normalize(route)
         
         printToFile(TOPIC, f"records affected: {df_one_batch_singles_2.count()}")
-        printToFile(TOPIC, lake_util.get_for_print_gold_database_config( route_normalized ) )
+        #printToFile(TOPIC, lake_util.get_for_print_gold_database_config( route_normalized ) )
         lake_util.write_gold_to_table(df_one_batch_singles_2, route_normalized)
 
 
