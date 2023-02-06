@@ -32,15 +32,21 @@ class EventHubConfig:
 
 # COMMAND ----------
 
-def _transferEventHubDataToLake(eventHubConfig, lakeConfig):
+def _transferEventHubDataToLake(eventHubConfig):
     ehConfig = eventHubConfig.getConfig()
     df = spark.readStream.format("eventhubs").options(**ehConfig).load()
     df = df.withColumn("body", df["body"].cast("string"))
     
+    
     # Standardize on Table names for Event Hub topics:
 #     lakeConfig.tableName = "tbl_bronze_" + eventHubConfig.topic
     tbl_name = normalizeString(eventHubConfig.topic) + "_eh_raw"
-    df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", lakeConfig.getCheckpointLocation(tbl_name)).toTable(lakeConfig.getSchemaName(tbl_name))
+    checkpt = f"{database_config.database_checkpoint_prefix}{database_config.database}.{tbl_name}_checkpoint"
+    dbname = database_config.database+"."+tbl_name
+  
+    writeStreamToTable(database_config,tbl_name,df)
+    #df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", checkpt).toTable(dbname)
+  
 
 # COMMAND ----------
 
@@ -67,8 +73,8 @@ def transferEventHubDataToLake(eventHubTopic):
  ##  root_folder = "/tmp/delta/"
 #     root_folder = 'abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/' 
     
-    lakeConfig = LakeConfig(root_folder, db_name) 
-    _transferEventHubDataToLake(ehConfig, lakeConfig)
+    #lakeConfig = LakeConfig(root_folder, db_name) 
+    _transferEventHubDataToLake(ehConfig)
 
 # COMMAND ----------
 

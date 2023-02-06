@@ -166,3 +166,16 @@ class getTableStream:
         
     def getReadStream(self):
         return spark.readStream.format("delta").option("ignoreDeletes", "true").table(self.input_database_table())
+    
+
+# COMMAND ----------
+
+   
+
+# COMMAND ----------
+
+    # used for raw tables
+    def writeStreamToTable(database_config,tbl_name,df):
+        checkpt = f"{database_config.database_checkpoint_prefix}{database_config.database}.{tbl_name}_checkpoint"
+        dbname = database_config.database+"."+tbl_name 
+        df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", checkpt).toTable(dbname)
