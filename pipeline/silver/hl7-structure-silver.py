@@ -20,15 +20,15 @@ TOPIC = "hl7_structure"
 
 # COMMAND ----------
 
-struct_err_stream = getTableStream(database_config,TOPIC_ERR)
-df_err = struct_err_stream.getReadStream()
 
-struct_ok_stream = getTableStream(database_config,TOPIC_OK)
-df_ok = struct_ok_stream.getReadStream()
+df_err = getTableStream(database_config,TOPIC_ERR)
 
+df_ok = getTableStream(database_config,TOPIC_OK)
 
 lake_util_out = LakeUtil(TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
-#display(df_er.getReadStream().select("*"))
+
+#display(df_err.select("*"))
+
 # check print database_config
 #print( lake_util_out.print_database_config() )
 
@@ -52,7 +52,7 @@ df3 = df2.withColumn("error_concat",concat(col("content"),col("structure"),col("
 df3 = df3.withColumn('error_concat', explode_outer('error_concat'))
 
 df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 'provenance',  'status','error_concat.line','error_concat.column',df3.error_concat.path.alias("field"),'error_concat.description','error_concat.category')
-display(df4)
+#display(df4)
 
 
 
