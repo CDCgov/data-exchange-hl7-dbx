@@ -151,18 +151,20 @@ class LakeUtil:
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### Class to get ReadStream on a table
+#used to get readStream on a table
+def getTableStream(database_config,tbl_name):
+        tblName = database_config.database+"."+tbl_name
+        return spark.readStream.format("delta").option("ignoreDeletes", "true").table(tblName)       
+
 
 # COMMAND ----------
 
-class getTableStream:
-    def __init__(self, database_config,tableName):
-        self.database_config = database_config
-        self.tableName = tableName
-        
-    def input_database_table(self):
-        return f"{self.database_config.database}.{self.tableName}"    
-        
-    def getReadStream(self):
-        return spark.readStream.format("delta").option("ignoreDeletes", "true").table(self.input_database_table())
+   
+
+# COMMAND ----------
+
+    # used for raw tables
+    def writeStreamToTable(database_config,tbl_name,df):
+        checkpt = f"{database_config.database_checkpoint_prefix}{database_config.database}.{tbl_name}_checkpoint"
+        dbname = database_config.database+"."+tbl_name 
+        df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", checkpt).toTable(dbname)
