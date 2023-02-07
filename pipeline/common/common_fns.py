@@ -43,12 +43,15 @@ def normalize(name):
         return name.replace(".", "_").replace(" ", "_").replace("'", "").lower()
     else:
         return str(name)
-  
+
+# TODO: move potentially to environment var
+debugToFileIsEnabled = False
 def printToFile(topic, message):
-    import datetime
-    file_loc = f"./{topic}-output-log.txt"
-    with open(file_loc, "a") as f:
-        f.write(f"{datetime.datetime.now()} - {message}\n")
+  if debugToFileIsEnabled:
+        import datetime
+        file_loc = f"./{topic}-output-log.txt"
+        with open(file_loc, "a") as f:
+            f.write(f"{datetime.datetime.now()} - {message}\n")
 
 # COMMAND ----------
 
