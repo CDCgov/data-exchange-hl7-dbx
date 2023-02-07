@@ -58,13 +58,14 @@ def transferEventHubDataToLake(eventHubTopic):
     db_name =  database
     root_folder =  database_folder
     
-    # TODO: to get per environment
-    ev_sas_key_name = dbutils.secrets.get(scope="dbs-scope-dex", key="tf-eh-namespace-dev-key")
-    ev_sas_key_val = dbutils.secrets.get(scope="dbs-scope-dex", key="tf-eh-namespace-dev-key-val")
+    ## Scope defined by EDAV team
+    scope_name = "dbs-scope-dex"
+    #scope_name = "ocio-ede-dev-vault"
+    key_name = "tf-eh-namespace-key"
+    key_val = "tf-eh-namespace-key-val"
 
-#    ev_sas_key_name = "tf-eventhub-namespace-dev-key"
-#    ev_sas_key_val  = os.getenv("event-hup-policy-key")
-
+    ev_sas_key_name = dbutils.secrets.get(scope=scope_name, key=key_name)
+    ev_sas_key_val = dbutils.secrets.get(scope=scope_name, key=key_val)
 
 ### Creating Connnection String 
     ehConfig = EventHubConfig(ev_namespace, eventHubTopic, ev_sas_key_name, ev_sas_key_val)
