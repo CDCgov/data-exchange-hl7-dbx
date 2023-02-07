@@ -20,17 +20,15 @@ TOPIC = "hl7_mmg_validation"
 
 # COMMAND ----------
 
-struct_err_stream = getTableStream(database_config,TOPIC_ERR)
-df_err = struct_err_stream.getReadStream()
+df_err = getTableStream(database_config,TOPIC_ERR)
 
-struct_ok_stream = getTableStream(database_config,TOPIC_OK)
-df_ok = struct_ok_stream.getReadStream()
+df_ok = getTableStream(database_config,TOPIC_OK)
 
 
 lake_util_out = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 #display(df_er.getReadStream().select("*"))
 # check print database_config
-print( lake_util_out.print_database_config() )
+#print( lake_util_out.print_database_config() )
 
 
 # COMMAND ----------
