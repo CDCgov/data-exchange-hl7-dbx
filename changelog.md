@@ -11,8 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Created merged Silver tables of OK and ERR for Structure and MMG Validation Reports
   - Recoded scala notebooks in python
   - Added Parameters to be able to run notebooks on different environments saving to environment specific database and storage accounts. Refactored all notebooks to use parameters.
-  - Updated Config to pull event hub secret from Key Vault
-
+  - Updated Config to pull event hub name and respective secret from corresponding Key Vault
 
 
 
