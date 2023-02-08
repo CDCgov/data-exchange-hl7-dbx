@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_mmg_validation_ok"
+TOPIC = "hl7_mmg_validation_err"
 STAGE_IN = "bronze"
 STAGE_OUT = "silver"
 
@@ -16,8 +16,10 @@ STAGE_OUT = "silver"
 
 lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
-# check print database_config
-print( lake_util.print_database_config() )
+# COMMAND ----------
+
+lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+
 
 # COMMAND ----------
 
@@ -25,7 +27,6 @@ df = lake_util.read_stream_from_table()
 
 # COMMAND ----------
 
-# spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
 from datetime import datetime
 from pyspark.sql import functions as F
 from pyspark.sql.functions import col,concat

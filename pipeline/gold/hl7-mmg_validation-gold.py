@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_mmg_validation_err"
+TOPIC = "hl7_mmg_validation"
 STAGE_IN = "silver"
 STAGE_OUT = "gold"
 
@@ -30,6 +30,9 @@ from pyspark.sql.functions import *
 
 lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
+# test check print gold database_config
+# print( lake_util.print_database_config() )
+# print( lake_util.print_gold_database_config("myprogramroute") )
 
 # COMMAND ----------
 
@@ -49,19 +52,19 @@ def transformAndSendToRoute(batchDF, batchId):
 
     for program_route in routes_list:
         # working through each batch of route
-        printToFile(TOPIC, "working on (start) route: -> " + str(program_route))
+     #   printToFile(TOPIC, "working on (start) route: -> " + str(program_route))
         # check if route == null, then push data into none table
         if(program_route == 'None'):
             df_one_route = batchDF.filter(col("message_info.route").isNull())
         else:    
             df_one_route = batchDF.filter( col("message_info.route") == program_route )
         
-        printToFile(TOPIC, f"records affected: {df_one_route.count()}")
-        #printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
+   #     printToFile(TOPIC, f"records affected: {df_one_route.count()}")
+   #     printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
         lake_util.write_gold_to_table(df_one_route, program_route)
         
         # working through each batch of route
-        printToFile(TOPIC, "working on (done) route: -> " + str(program_route))
+    #    printToFile(TOPIC, "working on (done) route: -> " + str(program_route))
 
 
 # COMMAND ----------

@@ -4,4 +4,4 @@
 
 # COMMAND ----------
 
-structureOk  = createBronzeStructureValidator("hl7_structure_ok", "STRUCTURE-VALIDATOR")
+structureErr  = createBronzeStructureValidator("hl7_structure_err", "STRUCTURE-VALIDATOR")

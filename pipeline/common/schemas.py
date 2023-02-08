@@ -98,6 +98,21 @@ schema_report = StructType([
 
 # COMMAND ----------
 
+issueTypeSchema = StructType([StructField("classification", StringType(), True),
+                      StructField("category", StringType(), True),
+                      StructField("fieldName", StringType(), True),
+                      StructField("path", StringType(), True),
+                      StructField("line", StringType(), True),
+                      StructField("errorMessage", StringType(), True),
+                      StructField("description", StringType(), True) ])
+
+mmgReportSchema = StructType([StructField("entries", ArrayType(issueTypeSchema, True), True),
+                              StructField("error-count", IntegerType(), True),
+                              StructField("warning-count",  IntegerType(), True),
+                              StructField("status", StringType(), True)])
+
+
+    
 schema_validation_bronze = StructType([
      StructField("message_uuid", StringType(), False),
      StructField("message_info", schema_message_info, True),
@@ -108,9 +123,9 @@ schema_validation_bronze = StructType([
      StructField("start_processing_time", StringType(), True),
      StructField("end_processing_time", StringType(), True),
     # Validation Specific (all the above is common to all bronze tables)
-     StructField("error_count", IntegerType(), True),
-     StructField("warning_count", IntegerType(), True),
-     StructField("validation_status", StringType(), True),
+     StructField("error-count", IntegerType(), True),
+     StructField("warning-count", IntegerType(), True),
+     StructField("status", StringType(), True),
      StructField("report", StringType(), True)
 ])
 
@@ -123,6 +138,75 @@ schema_validation_silver = StructType([
     StructField("field", StringType(), True),
     StructField("description", StringType(), True)
 ])
+
+# COMMAND ----------
+
+# MAGIC %md #### Structure Validation Bronze Schemas
+
+# COMMAND ----------
+
+s_stackTraceSchema = StructType([StructField("assertion", StringType(), True), StructField("reasons", ArrayType(StringType(), True))])
+s_issueTypeSchema = StructType([
+                             StructField("line", StringType(), True),
+                            StructField("column", StringType(), True),
+                            StructField("path", StringType(), True),
+                            StructField("description", StringType(), True),
+                            StructField("category", StringType(), True),
+                            StructField("classification", StringType(), True),
+                            StructField("stackTrace", ArrayType(s_stackTraceSchema, True), True)]) 
+
+s_issueArraySchema = ArrayType(s_issueTypeSchema, False)
+s_entriesSchema = StructType([StructField("content", s_issueArraySchema, True), StructField("structure", s_issueArraySchema, True), StructField("value-set", s_issueArraySchema, True)])
+s_mmgArraySchema = ArrayType(StringType(), False)
+s_messageInfoSchema = StructType([StructField("event_code", StringType(), True), StructField("route", StringType(), True), StructField("mmgs", s_mmgArraySchema, True), StructField("reporting_jurisdiction", StringType(), True)])
+
+s_processSchema = StructType([
+   StructField("process_name", StringType(), True),
+   StructField("process_version", StringType(), True),
+   StructField("status", StringType(), True),
+   StructField("start_processing_time", StringType(), True),
+   StructField("end_processing_time", StringType(), True),
+   StructField("report", StructType([
+         StructField("entries", s_entriesSchema, True),
+         StructField("status", StringType(), True),
+         StructField("error-count", StructType([
+              StructField("structure", IntegerType(), True),
+              StructField("value-set", IntegerType(), True),
+              StructField("content", IntegerType(), True)]), True),
+         StructField("warning-count",  StructType([
+               StructField("structure", IntegerType(), True),
+               StructField("value-set", IntegerType(), True),
+               StructField("content", IntegerType(), True)]), True)]), True)])
+
+s_schema = StructType([
+    StructField("message_info", s_messageInfoSchema, True),
+    StructField("message_uuid", StringType(), True),
+    StructField("metadata_version", StringType(), True),
+    StructField("metadata", StructType([         
+         StructField("provenance", StructType([
+              StructField("file_path", StringType(), True),
+             StructField("file_timestamp", StringType(), True),
+             StructField("event_timestamp", StringType(), True),
+             StructField("file_size", LongType(), True),
+             StructField("message_hash", StringType(), True),
+             StructField("message_index", StringType(), True),
+             StructField("ext_original_file_name", StringType(), True),
+             StructField("ext_system_provider", StringType(), True),
+             StructField("single_or_batch", StringType(), True)]), True),
+         
+        StructField("processes", ArrayType(s_processSchema, True), True )]), True),
+
+    StructField("summary", StructType([
+         StructField("current_status", StringType(), True),
+         StructField("problem", StructType([
+              StructField("process_name", StringType(), True),
+              StructField("exception_class", StringType(), True),
+              StructField("stacktrace", StringType(), True),
+              StructField("error_message", StringType(), True),
+              StructField("should_retry", BooleanType(), True),
+              StructField("retry_count", IntegerType(), True),
+              StructField("max_retries", IntegerType(), True)]), True)]), True)])
+
 
 # COMMAND ----------
 
