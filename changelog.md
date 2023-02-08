@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Created merged Silver tables of OK and ERR for Structure and MMG Validation Reports
   - Recoded scala notebooks in python
   - Added Parameters to be able to run notebooks on different environments saving to environment specific database and storage accounts. Refactored all notebooks to use parameters.
-  - Updated Config to pull event hub name and respective secret from corresponding Key Vault
+  - Updated Config to pull event hub name and respective secret from corresponding Key Vault.
   - Created AD groups to allow customers access to DEX data.
   - Created database for Customers to start interacting with DEX and created Gold tables/views from develop database.
+  - Created Workflow jobs to run data pipelines.
 
 
 ### [0.0.5] - 2023-01-25
