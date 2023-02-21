@@ -46,12 +46,12 @@ df2_err = df_err.select("*")
 
 df_result = df_ok.unionByName(df_err, allowMissingColumns=True)
 
-df2 = df_result.select('message_uuid', 'metadata_version','message_info','summary', 'status', 'provenance','process_start_time','report.entries.content','report.entries.structure','report.entries.value-set','error_count','warning_count' )
+df2 = df_result.select('message_uuid', 'metadata_version','message_info','summary', 'status', 'provenance','start_processing_time','report.entries.content','report.entries.structure','report.entries.value-set','error_count','warning_count' )
 
 df3 = df2.withColumn("error_concat",concat(col("content"),col("structure"),col("value-set"))) 
 df3 = df3.withColumn('error_concat', explode_outer('error_concat'))
 
-df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 'provenance',  'status','error_concat.line','error_concat.column',df3.error_concat.path.alias("field"),'error_concat.description','error_concat.category')
+df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 'provenance',  'status','error_concat.line','error_concat.column',df3.error_concat.path.alias("field"),'error_concat.description','error_concat.classification','error_concat.category')
 #display(df4)
 
 
