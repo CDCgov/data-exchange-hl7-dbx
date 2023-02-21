@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.7] - 2023-02-22
+  DEX Release 0.0.13
+- Updated Structure Validation tables to follow same schema for process columns
+- Added Classification column to structure validation tables.
+- Onboarded CELR team
+- Setting up TEST environment and pipeline
+  
+
 ### [0.0.6] - 2023-02-08
   DEX Release 0.0.12
 	
