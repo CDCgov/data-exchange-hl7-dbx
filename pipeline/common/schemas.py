@@ -240,11 +240,18 @@ schema_evhub_body_v2 = StructType([    #StructField("content", StringType(), Tru
 
 schema_generic_json = MapType(StringType(), StringType())
 
-# {"event_code":"11088","route":"tbrd","mmgs":["mmg:generic_mmg_v2.0","mmg:tbrd"],"reporting_jurisdiction":"51"}
-
-
-
-# {"event_id":"f36ea7ab-a01e-0048-6de0-25b10a060d9f","event_timestamp":"2023-01-11T17:16:51.6934553Z","file_uuid":"56c20706-dc2b-4097-9505-d8432b9711b7","file_path":"https://tfedemessagestoragedev.blob.core.windows.net/hl7ingress/TBRD_V1.0.2_TM_TC04.txt","file_timestamp":"2023-01-11T17:16:51+00:00","file_size":7492,"single_or_batch":"SINGLE","message_hash":"dc9b71cb7f1e2544c548cfc529f54233","ext_system_provider":"BLOB","ext_original_file_name":"TBRD_V1.0.2_TM_TC04.txt","message_index":1}
-
 # mmg-sql-ok tables
 schema_tables =  MapType( StringType(), ArrayType(MapType( StringType(), StringType()) ) ) 
+
+# lake segments
+schema_segment = StructType([    
+    StructField("segment", StringType(), True),
+    StructField("segment_number", IntegerType(), True),
+    StructField("parent_segments", ArrayType(StringType()), True),
+])
+
+schema_lake_segments = ArrayType(schema_segment, True)
+
+# COMMAND ----------
+
+
