@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [0.0.7] - 2023-02-22
   DEX Release 0.0.13
 - Updated Structure Validation tables to follow same schema for process columns
+- Created notebooks for Lake Of Segments Raw, Bronze and Silver tables.
 - Added Classification column to structure validation tables.
 - Onboarded CELR team
 - Setting up TEST environment and pipeline
