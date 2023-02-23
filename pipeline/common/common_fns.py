@@ -8,12 +8,12 @@ dbutils.widgets.dropdown("eventhub_namespace", "tf-eventhub-namespace-dev", ["tf
 
 #
 
+dbutils.widgets.dropdown("scope_name", "dbs-scope-dex", ["dbs-scope-dex"])
 dbutils.widgets.dropdown("database", "ocio_dex_dev", ["ocio_dex_dev"])
 dbutils.widgets.dropdown("database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/"])
 dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/"])
 
 #
-
 ####### this can be used if final gold moves to Edav, etc..
 dbutils.widgets.dropdown("gold_output_database", "ocio_dex_dev", ["ocio_dex_dev"])
 dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/"])
@@ -25,6 +25,7 @@ database =  dbutils.widgets.get("database")
 database_checkpoint_prefix = dbutils.widgets.get("database_checkpoint_prefix")
 database_folder = dbutils.widgets.get("database_folder")
 
+scope_name= dbutils.widgets.get("scope_name")
 gold_output_database =  dbutils.widgets.get("gold_output_database")
 gold_output_database_checkpoint_prefix = dbutils.widgets.get("gold_output_database_checkpoint_prefix")
 

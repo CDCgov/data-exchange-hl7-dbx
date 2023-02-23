@@ -59,7 +59,7 @@ def transferEventHubDataToLake(eventHubTopic):
     root_folder =  database_folder
     
     ## Scope defined by EDAV team
-    scope_name = "dbs-scope-dex"
+   ## scope_name = "dbs-scope-dex"
     #scope_name = "ocio-ede-dev-vault"
     key_name = "tf-eh-namespace-key"
     key_val = "tf-eh-namespace-key-val"
