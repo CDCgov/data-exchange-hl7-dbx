@@ -138,7 +138,7 @@ class LakeUtil:
         return spark.readStream.format("delta").option("ignoreDeletes", "true").table( self.table_config.input_database_table() )
     
     def write_stream_to_table(self, df):
-        df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", self.table_config.output_checkpoint() ).toTable( self.table_config.output_database_table() )
+        df.writeStream.format("delta").outputMode("append").option("mergeSchema", "true").trigger(availableNow=True).option("checkpointLocation", self.table_config.output_checkpoint() ).toTable( self.table_config.output_database_table() )
     
     def write_gold_to_table(self, df, program_route):
         df.write.format("delta").mode("append") \
