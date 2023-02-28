@@ -194,7 +194,8 @@ s_schema = StructType([
              StructField("ext_system_provider", StringType(), True),
              StructField("single_or_batch", StringType(), True)]), True),
          
-        StructField("processes", ArrayType(s_processSchema, True), True )]), True),
+        #StructField("processes", ArrayType(s_processSchema, True), True )]), True),
+        StructField("processes", ArrayType(StringType(), True), True )]), True),
 
     StructField("summary", StructType([
          StructField("current_status", StringType(), True),
