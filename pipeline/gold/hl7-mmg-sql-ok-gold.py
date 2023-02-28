@@ -200,7 +200,12 @@ def transform_send(batch_df, batch_id):
 
 # COMMAND ----------
 
- df1.writeStream.trigger(availableNow=True).foreachBatch(transform_send).start()
+#spark.conf.set("spark.databricks.delta.schema.autoMerge.enabled","true")
+
+# COMMAND ----------
+
+#df1.writeStream.trigger(availableNow=True).foreachBatch(transform_send).start()
+df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true").foreachBatch( transform_send ).start()
 
 # COMMAND ----------
 
