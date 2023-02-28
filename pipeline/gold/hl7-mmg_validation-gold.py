@@ -69,7 +69,12 @@ def transformAndSendToRoute(batchDF, batchId):
 
 # COMMAND ----------
 
-df1.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
+#spark.conf.set("spark.databricks.delta.schema.autoMerge.enabled","true")
+
+# COMMAND ----------
+
+#df1.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
+df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true").foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------
 
