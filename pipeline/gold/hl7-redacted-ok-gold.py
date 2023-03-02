@@ -51,7 +51,7 @@ def transformAndSendToRoute(batchDF, batchId):
         # working through each batch of route
         printToFile(TOPIC, "working on (start) route: -> " + str(program_route))
         # check if route == null, then push data into none table
-        if(program_route == 'None'):
+        if program_route is None:
             df_one_route = batchDF.filter(col("message_info.route").isNull())
         else:    
             df_one_route = batchDF.filter( col("message_info.route") == program_route )
