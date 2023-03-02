@@ -18,8 +18,8 @@ src_db = database_config.database
 trg_prog_db = "ocio_dex_prog_dev"
 
 #df_dex = spark.sql(f"show tables in ocio_dex_dev like '*_gold'")
-df_dex = spark.sql(f"show tables in {src_db} like '*_gold_*'")
-df_prog = spark.sql(f"show tables in {trg_prog_db} like '*_gold_*'")
+df_dex = spark.sql(f"show tables in {src_db} like '*_gold*'")
+df_prog = spark.sql(f"show tables in {trg_prog_db} like '*_gold*'")
 
 ## Identifying new Views to be created 
 tbl_df = df_dex.select('tableName').subtract(df_prog.select('tableName'))
