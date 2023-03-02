@@ -6,3 +6,7 @@
 ##### Stream Eventhub data to to Delta Lake
 eventHubTopic = "hl7-file-dropped"
 transferEventHubDataToLake(eventHubTopic)
+
+# COMMAND ----------
+
+
