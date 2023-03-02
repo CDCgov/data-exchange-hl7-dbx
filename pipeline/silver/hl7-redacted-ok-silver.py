@@ -59,8 +59,8 @@ df1 = lake_util.read_stream_from_table()
 
 df2 = df1.drop( "processes", "status", "process_name", "process_version", "start_processing_time", "end_processing_time") \
         .withColumnRenamed("report", "redacted_report_string") 
-#lake_segments_string
-display( df2 )
+
+#display( df2 )
 
 # COMMAND ----------
 

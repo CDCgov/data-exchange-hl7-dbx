@@ -51,7 +51,7 @@ def transformAndSendToRoute(batchDF, batchId):
         # working through each batch of route
         printToFile(TOPIC, "working on (start) route: -> " + str(program_route))
         # check if route == null, then push data into none table
-        if(program_route == 'None'):
+        if program_route is None:
             df_one_route = batchDF.filter(col("message_info.route").isNull())
         else:    
             df_one_route = batchDF.filter( col("message_info.route") == program_route )
@@ -61,7 +61,7 @@ def transformAndSendToRoute(batchDF, batchId):
         lake_util.write_gold_to_table(df_one_route, program_route)
         
         # working through each batch of route
-        printToFile(TOPIC, "working on (done) route: -> " + program_route)
+        printToFile(TOPIC, "working on (done) route: -> " + str(program_route))
 
 
 # COMMAND ----------
@@ -73,3 +73,7 @@ df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true").foreach
 
 # MAGIC %md
 # MAGIC ### End
+
+# COMMAND ----------
+
+
