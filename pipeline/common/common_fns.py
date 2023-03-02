@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-dbutils.widgets.dropdown("eventhub_namespace", "tf-eventhub-namespace-dev", ["tf-eventhub-namespace-dev"])
+dbutils.widgets.dropdown("eventhub_namespace", "ocio-ede-tst-eventhub-namespace", ["ocio-ede-tst-eventhub-namespace"])
 
 #
 #dbutils.widgets.dropdown("scope_name", "dbs-scope-DEX", ["dbs-scope-DEX"])
@@ -15,8 +15,8 @@ dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededata
 
 #
 ####### this can be used if final gold moves to Edav, etc..
-dbutils.widgets.dropdown("gold_output_database", "ocio_dex_dev", ["ocio_dex_dev"])
-dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/"])
+dbutils.widgets.dropdown("gold_output_database", "ocio_dex_tst", ["ocio_dex_tst"])
+dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio-dex-db-tst@ocioededatalakedbrtst.dfs.core.windows.net/delta/events/", ["abfss://ocio-dex-db-tst@ocioededatalakedbrtst.dfs.core.windows.net/delta/events/"])
 
 # COMMAND ----------
 
@@ -48,11 +48,11 @@ def normalize(name):
 # TODO: move potentially to environment var
 debugToFileIsEnabled = False
 def printToFile(topic, message):
-  if debugToFileIsEnabled:
-        import datetime
-        file_loc = f"./{topic}-output-log.txt"
-        with open(file_loc, "a") as f:
-            f.write(f"{datetime.datetime.now()} - {message}\n")
+  if debugToFileIsEnabled and message:
+      import datetime
+      file_loc = f"./{topic}-output-log.txt"
+      with open(file_loc, "a") as f:
+          f.write(f"{datetime.datetime.now()} - {message}\n")
 
 # COMMAND ----------
 
@@ -139,7 +139,7 @@ class LakeUtil:
         return spark.readStream.format("delta").option("ignoreDeletes", "true").table( self.table_config.input_database_table() )
     
     def write_stream_to_table(self, df):
-        df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", self.table_config.output_checkpoint() ).toTable( self.table_config.output_database_table() )
+        df.writeStream.format("delta").outputMode("append").option("mergeSchema", "true").trigger(availableNow=True).option("checkpointLocation", self.table_config.output_checkpoint() ).toTable( self.table_config.output_database_table() )
     
     def write_gold_to_table(self, df, program_route):
         df.write.format("delta").mode("append") \

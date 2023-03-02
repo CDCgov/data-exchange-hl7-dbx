@@ -194,7 +194,8 @@ s_schema = StructType([
              StructField("ext_system_provider", StringType(), True),
              StructField("single_or_batch", StringType(), True)]), True),
          
-        StructField("processes", ArrayType(s_processSchema, True), True )]), True),
+        #StructField("processes", ArrayType(s_processSchema, True), True )]), True),
+        StructField("processes", ArrayType(StringType(), True), True )]), True),
 
     StructField("summary", StructType([
          StructField("current_status", StringType(), True),
@@ -252,6 +253,12 @@ schema_segment = StructType([
 
 schema_lake_segments = ArrayType(schema_segment, True)
 
-# COMMAND ----------
+#Redactor
+schema_Redactor = StructType([    
+    StructField("path", StringType(), True),
+    StructField("rule", StringType(), True),
+    StructField("lineNumber", IntegerType(), True),
+])
 
-
+schema_Redactor_Report = StructType([StructField("entries",ArrayType(schema_Redactor, True),True),
+                                      StructField("status", StringType(), True)])

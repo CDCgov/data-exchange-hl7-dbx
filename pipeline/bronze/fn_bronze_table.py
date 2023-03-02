@@ -25,19 +25,23 @@ def createBronzeStructureValidator(topic, processName):
     df1 = rawDF.withColumn("bodyJson", from_json(col("body"), s_schema))
     df2 = df1.select("bodyJson.*")
     df3 = df2.withColumn("processes", col("metadata.processes"))
-    df4 = df3.withColumn("structureReport", explode("processes") ).filter( f"structureReport.process_name = '{processName}'").select("message_uuid", "message_info", "summary", "metadata_version", "metadata.provenance", "metadata.processes", "structureReport") \
-  .withColumn("report", col("structureReport.report")) \
-  .withColumn("process_name", col("structureReport.process_name")) \
-  .withColumn("process_version", col("structureReport.process_version")) \
-  .withColumn("status", col("structureReport.status")) \
-  .withColumn("start_processing_time", col("structureReport.start_processing_time")) \
-  .withColumn("end_processing_time", col("structureReport.end_processing_time")) \
-  .withColumn("error_count", col("report.error-count.structure") + col("report.error-count.value-set") + col("report.error-count.content" )) \
-  .withColumn("warning_count", col("report.warning-count.structure") + col("report.warning-count.value-set") + \
+    df4 = df3.withColumn("structureProcess", df3.processes[2])
+    df5 = df4.select("message_uuid", "message_info", "summary", "metadata_version", "metadata.provenance", \
+      from_json("structureProcess", \
+      s_processSchema).alias("processes")) \
+   .withColumn("report", col("processes.report")) \
+   .withColumn("process_name", col("processes.process_name")) \
+   .withColumn("process_version", col("processes.process_version")) \
+   .withColumn("status", col("processes.status")) \
+   .withColumn("start_processing_time", col("processes.start_processing_time")) \
+   .withColumn("end_processing_time", col("processes.end_processing_time")) \
+   .withColumn("error_count", col("report.error-count.structure") + col("report.error-count.value-set") + col("report.error-count.content" )) \
+   .withColumn("warning_count", col("report.warning-count.structure") + col("report.warning-count.value-set") + \
               col("report.warning-count.content" ))
-    df5 = df4.drop("structureReport")
-    lake_util.write_stream_to_table(df5)
-    return df5
+   
+    df6 = df5.drop("processes")
+    lake_util.write_stream_to_table(df6)
+    return df6
 
 def createBronzeMMGValidator(topic, processName):
     lake_util = LakeUtil( TableConfig(database_config, topic, STAGE_IN, STAGE_OUT) )

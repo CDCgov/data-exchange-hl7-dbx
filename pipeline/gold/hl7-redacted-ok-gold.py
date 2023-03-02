@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_structure"
+TOPIC = "hl7_redacted_ok"
 STAGE_IN = "silver"
 STAGE_OUT = "gold"
 
@@ -61,7 +61,7 @@ def transformAndSendToRoute(batchDF, batchId):
         lake_util.write_gold_to_table(df_one_route, program_route)
         
         # working through each batch of route
-        printToFile(TOPIC, "working on (done) route: -> " + str(program_route))
+        printToFile(TOPIC, "working on (done) route: -> " + program_route)
 
 
 # COMMAND ----------
@@ -73,7 +73,3 @@ df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true").foreach
 
 # MAGIC %md
 # MAGIC ### End
-
-# COMMAND ----------
-
-
