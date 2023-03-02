@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-dbutils.widgets.dropdown("eventhub_namespace", "ocio-ede-tst-eventhub-namespace", ["ocio-ede-tst-eventhub-namespace"])
+dbutils.widgets.dropdown("eventhub_namespace", "tf-eventhub-namespace-dev", ["tf-eventhub-namespace-dev"])
 
 #
 #dbutils.widgets.dropdown("scope_name", "dbs-scope-DEX", ["dbs-scope-DEX"])
