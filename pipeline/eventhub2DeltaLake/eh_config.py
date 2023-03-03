@@ -58,6 +58,9 @@ def transferEventHubDataToLake(eventHubTopic):
     db_name =  database
     root_folder =  database_folder
    
+    #key_name = "tf-eh-namespace-key"
+    #key_val = "tf-eh-namespace-key-val"
+    
     key_name = "ocio-ede-eh-namespace-key-name"
     key_val = "ocio-ede-eh-namespace-key-val"
     
