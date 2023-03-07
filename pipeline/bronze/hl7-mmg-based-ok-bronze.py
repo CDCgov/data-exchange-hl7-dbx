@@ -13,9 +13,9 @@
 
 # COMMAND ----------
 
-topic = "hl7_mmg_based_ok"
+TOPIC = "hl7_mmg_based_ok"
 
-process_name = "mmgBasedTransformer"
+PROCESS_NAME = "mmgBasedTransformer"
 
 # COMMAND ----------
 
@@ -24,6 +24,5 @@ process_name = "mmgBasedTransformer"
 
 # COMMAND ----------
 
-
-df1 = createBronzeTable( topic, process_name )
-
+mmg_based_ok = create_bronze_df( TOPIC, PROCESS_NAME )
+create_bronze_table(TOPIC, mmg_based_ok)

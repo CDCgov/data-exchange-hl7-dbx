@@ -4,4 +4,10 @@
 
 # COMMAND ----------
 
-receiverOK  = createBronzeTable("hl7_recdeb_ok", "RECEIVER")
+TOPIC = "hl7_recdeb_ok"
+PROCESS_NAME = "RECEIVER"
+
+# COMMAND ----------
+
+receiver_ok = create_bronze_df( TOPIC, PROCESS_NAME )
+create_bronze_table(TOPIC, receiver_ok)
