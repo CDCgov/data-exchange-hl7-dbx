@@ -13,7 +13,7 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_lake_segments_ok"
+TOPIC = "hl7_lake_segments_err"
 
 PROCESS_NAME = "lakeSegsTransformer"
 
@@ -25,8 +25,8 @@ PROCESS_NAME = "lakeSegsTransformer"
 # COMMAND ----------
 
 
-segments_ok = create_bronze_df( TOPIC, PROCESS_NAME )
-create_bronze_table(TOPIC, segments_ok)
+segments_err = create_bronze_df( TOPIC, PROCESS_NAME )
+create_bronze_table(TOPIC, segments_err)
 
 # COMMAND ----------
 

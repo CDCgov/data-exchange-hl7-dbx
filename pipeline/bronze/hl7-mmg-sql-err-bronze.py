@@ -13,9 +13,9 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_lake_segments_ok"
+TOPIC = "hl7_mmg_sql_err"
 
-PROCESS_NAME = "lakeSegsTransformer"
+PROCESS_NAME = "mmgSQLTransformer"
 
 # COMMAND ----------
 
@@ -24,10 +24,5 @@ PROCESS_NAME = "lakeSegsTransformer"
 
 # COMMAND ----------
 
-
-segments_ok = create_bronze_df( TOPIC, PROCESS_NAME )
-create_bronze_table(TOPIC, segments_ok)
-
-# COMMAND ----------
-
-
+mmg_sql_err = create_bronze_df( TOPIC, PROCESS_NAME )
+create_bronze_table(TOPIC, mmg_sql_err)

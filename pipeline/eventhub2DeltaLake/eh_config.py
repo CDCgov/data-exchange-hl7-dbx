@@ -57,13 +57,10 @@ def transferEventHubDataToLake(eventHubTopic):
     ev_namespace = eventhub_namespace
     db_name =  database
     root_folder =  database_folder
+   
+    key_name = "dbx-eh-namespace-key-name"
+    key_val = "dbx-eh-namespace-key-val"
     
-    ## Scope defined by EDAV team
-    scope_name = "dbs-scope-dex"
-    #scope_name = "ocio-ede-dev-vault"
-    key_name = "tf-eh-namespace-key"
-    key_val = "tf-eh-namespace-key-val"
-
     ev_sas_key_name = dbutils.secrets.get(scope=scope_name, key=key_name)
     ev_sas_key_val = dbutils.secrets.get(scope=scope_name, key=key_val)
 
