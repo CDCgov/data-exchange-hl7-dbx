@@ -4,5 +4,9 @@
 # COMMAND ----------
 
 TOPIC = "hl7_mmg_validation_err"
-validation_err  = create_mmg_validator_df(TOPIC, "MMG-VALIDATOR")
+PROCESS_NAME = "MMG-VALIDATOR"
+
+# COMMAND ----------
+
+validation_err  = create_mmg_validator_df(TOPIC, PROCESS_NAME)
 create_bronze_table(TOPIC, validation_err)

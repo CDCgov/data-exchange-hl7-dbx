@@ -30,7 +30,7 @@ TOPIC = "hl7_failed_messages"
 # COMMAND ----------
 
 def get_selected_fields(topic):
-    return getTableStream(database_config, topic).select('message_uuid', 'message_info', 'provenance', 'processes', 'summary')
+    return getTableStream(database_config, topic).select('message_uuid', 'message_info', 'provenance', 'processes', 'summary', 'start_processing_time', 'end_processing_time', 'status', 'report')
 
 # COMMAND ----------
 
@@ -54,15 +54,11 @@ from pyspark.sql import DataFrame
 combined_dfs = [df_err_mmg_validation, df_err_structure, df_err_recdeb, df_err_mmg_based, df_err_mmg_sql, df_err_lake_segments, df_err_redacted]
 df_result = reduce(DataFrame.union, combined_dfs)
 
-df1 = df_result.select('message_uuid', 'message_info', 'provenance', 'processes', 'summary.current_status', 'summary.problem.*')
-
-processExplodedDF = df1.withColumn( "last_process", element_at( col('processes'), -1) ) \
-               .select("*", "last_process.start_processing_time", "last_process.end_processing_time", "last_process.status", "last_process.report") \
-               .drop ("last_process")
+final_df = df_result.select('message_uuid', 'message_info', 'provenance', 'processes', 'summary.current_status', 'summary.problem.*', 'start_processing_time', 'end_processing_time', 'status', 'report')
 
 
-#display(processExplodedDF)
+#display(final_df)
 
 # COMMAND ----------
 
-lake_util_out.write_stream_to_table(processExplodedDF)
+lake_util_out.write_stream_to_table(final_df)

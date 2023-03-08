@@ -21,16 +21,16 @@ from pyspark.sql.functions import *
 
 def create_structure_validator_df(topic, process_name):
     standard_df = create_bronze_df(topic, process_name)
-    structure_validator_df = standard_df.withColumn("report", from_json(col("report"), schema_report)).withColumn("error_count", col("report.error-count.structure") + col("report.error-count.value-set") + col("report.error-count.content" )) \
-   .withColumn("warning_count", col("report.warning-count.structure") + col("report.warning-count.value-set") + \
-              col("report.warning-count.content" ))
+    structure_validator_df = standard_df.withColumn("struct_report", from_json(col("report"), schema_report)).withColumn("error_count", col("struct_report.error-count.structure") + col("struct_report.error-count.value-set") + col("struct_report.error-count.content" )) \
+   .withColumn("warning_count", col("struct_report.warning-count.structure") + col("struct_report.warning-count.value-set") + \
+              col("struct_report.warning-count.content" )).drop("struct_report")
     
     return structure_validator_df
 
 def create_mmg_validator_df(topic, process_name):
     standard_df = create_bronze_df(topic, process_name)
-    mmg_validator_df = standard_df.withColumn("report", from_json(col("report"), mmgReportSchema)).withColumn("error_count", col("report.error-count")) \
-   .withColumn("warning_count", col("report.warning-count"))
+    mmg_validator_df = standard_df.withColumn("struct_report", from_json(col("report"), mmgReportSchema)).withColumn("error_count", col("struct_report.error-count")) \
+   .withColumn("warning_count", col("struct_report.warning-count")).drop("struct_report")
     
     return mmg_validator_df
 
