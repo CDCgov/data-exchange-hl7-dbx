@@ -41,7 +41,7 @@ def _transferEventHubDataToLake(eventHubConfig):
     # Standardize on Table names for Event Hub topics:
 #     lakeConfig.tableName = "tbl_bronze_" + eventHubConfig.topic
     tbl_name = normalizeString(eventHubConfig.topic) + "_eh_raw"
-    checkpt = f"{database_config.database_checkpoint_prefix}{database_config.database}.{tbl_name}_checkpoint"
+    checkpt = f"{tbl_name}_checkpoint"
     dbname = database_config.database+"."+tbl_name
   
     writeStreamToTable(database_config,tbl_name,df)
