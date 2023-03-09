@@ -208,7 +208,7 @@ def transform_send(batch_df, batch_id):
 
 #df1.writeStream.trigger(availableNow=True).foreachBatch(transform_send).start()
 df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true") \
-     .option("checkpointLocation", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints/hl7_mmg_sql_silvertoGold_checkpoint") \
+         .option("checkpointLocation", f"{database_folder}/checkpoints/hl7_mmg_sql_ok_silver2gold_checkpoint") \
      .foreachBatch( transform_send ).start()
 
 # COMMAND ----------
