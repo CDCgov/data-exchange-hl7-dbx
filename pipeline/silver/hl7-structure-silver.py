@@ -20,6 +20,10 @@ TOPIC = "hl7_structure"
 
 # COMMAND ----------
 
+# MAGIC %run ../common/schemas
+
+# COMMAND ----------
+
 
 df_err = getTableStream(database_config,TOPIC_ERR)
 
@@ -37,7 +41,7 @@ lake_util_out = LakeUtil(TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT
 
 
 from pyspark.sql import functions as F
-from pyspark.sql.functions import col,concat,explode_outer
+from pyspark.sql.functions import col, concat, explode_outer, from_json
 
 df2_ok = df_ok.select("*")
 #display(df2_ok)
@@ -46,7 +50,7 @@ df2_err = df_err.select("*")
 
 df_result = df_ok.unionByName(df_err, allowMissingColumns=True)
 
-df2 = df_result.select('message_uuid', 'metadata_version','message_info','summary', 'status', 'provenance','start_processing_time','report.entries.content','report.entries.structure','report.entries.value-set','error_count','warning_count' )
+df2 = df_result.withColumn("report", from_json('report', schema_report)).select('message_uuid', 'metadata_version','message_info','summary', 'status', 'provenance','start_processing_time','report.entries.content','report.entries.structure','report.entries.value-set','error_count','warning_count' )
 
 df3 = df2.withColumn("error_concat",concat(col("content"),col("structure"),col("value-set"))) 
 df3 = df3.withColumn('error_concat', explode_outer('error_concat'))
