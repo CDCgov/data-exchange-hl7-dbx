@@ -88,7 +88,9 @@ def write_single_table(df_singles, batch_routes_list):
         printToFile(TOPIC, f"records affected: {df_one_batch_singles_2.count()}")
         #printToFile(TOPIC, lake_util.get_for_print_gold_database_config( route_normalized ) )
         lake_util.write_gold_to_table(df_one_batch_singles_2, route_normalized)
-
+#         df.writeStream.format("delta").mode("append").option("mergeSchema", "true") \
+#         .option("checkpointLocation", self.table_config.output_gold_table_checkpoint(program_route) ) \
+#         .toTable( self.table_config.output_gold_table(program_route) )
 
         # working through each row, done this row
         printToFile(TOPIC, "working on (done) route: -> " + route)
@@ -205,7 +207,9 @@ def transform_send(batch_df, batch_id):
 # COMMAND ----------
 
 #df1.writeStream.trigger(availableNow=True).foreachBatch(transform_send).start()
-df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true").foreachBatch( transform_send ).start()
+df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true") \
+     .option("checkpointLocation", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints/hl7_mmg_sql_silvertoGold_checkpoint") \
+     .foreachBatch( transform_send ).start()
 
 # COMMAND ----------
 
