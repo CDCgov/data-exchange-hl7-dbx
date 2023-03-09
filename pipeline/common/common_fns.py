@@ -108,11 +108,11 @@ class TableConfig:
         return  f"{self.database_config.gold_output_database_checkpoint_prefix}/{output_gold_tbl}_gold_checkpoint" 
       
     def output_gold_repeat_table(self, program_route, repeat_table):
-        gold_tbl = f"{self.database_config.gold_output_database}.{normalize(program_route)}_{self.topic}"
-        return f"{gold_tbl}_{repeat_table}_gold"
+        gold_tbl = f"{self.database_config.gold_output_database}.{normalize(program_route)}_{repeat_table}_{self.topic}"
+        return f"{gold_tbl}_gold"
     
     def output_gold_repeat_table_checkpoint(self, program_route, repeat_table):
-        gold_tbl = f"{normalize(program_route)}_{self.topic}_{repeat_table}"
+        gold_tbl = f"{normalize(program_route)}_{repeat_table}_{self.topic}"
         return f"{self.database_config.gold_output_database_checkpoint_prefix}/{gold_tbl}_gold_checkpoint" 
 
 
