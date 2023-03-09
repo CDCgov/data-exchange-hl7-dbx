@@ -20,6 +20,10 @@ TOPIC = "hl7_mmg_validation"
 
 # COMMAND ----------
 
+# MAGIC %run ../common/schemas
+
+# COMMAND ----------
+
 df_err = getTableStream(database_config,TOPIC_ERR)
 
 df_ok = getTableStream(database_config,TOPIC_OK)
@@ -35,7 +39,7 @@ lake_util_out = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OU
 
 
 from pyspark.sql import functions as F
-from pyspark.sql.functions import col,concat
+from pyspark.sql.functions import col, concat, from_json
 
 df2_ok = df_ok.select("*")
 
@@ -43,7 +47,7 @@ df2_err = df_err.select("*")
 
 df_result = df_ok.unionByName(df_err, allowMissingColumns=True)
 
-df2 = df_result.withColumn('issue', F.explode('report.entries'))
+df2 = df_result.withColumn('issue', F.explode((from_json('report', mmgReportSchema)).entries))
 
 df3 = df2.select('message_uuid', 'metadata_version','message_info','status','summary', 'provenance', 'issue.category','issue.line', 
                  df2.issue.path.alias("column"),df2.issue.fieldName.alias("field"),'issue.classification','issue.description' )
