@@ -141,13 +141,13 @@ class LakeUtil:
     def write_gold_to_table(self, df, program_route):
         df.write.format("delta").mode("append").option("mergeSchema", "true") \
         .option("checkpointLocation", self.table_config.output_gold_table_checkpoint(program_route) ) \
-        .saveAsTable( self.table_config.output_gold_table(program_route) )
+        .saveAsTable( self.table_config.output_database_table(program_route) )
     
     def write_gold_repeat_to_table(self, df, program_route, repeat_table):
         #TODO determine if checkpoints are needed here, or should move to the writeStream in the notebooks which should be configured then.
         df.write.format("delta").mode("append").option("mergeSchema", "true") \
         .option("checkpointLocation", self.table_config.output_gold_repeat_table_checkpoint(program_route, repeat_table) ) \
-        .saveAsTable( self.table_config.output_gold_repeat_table(program_route, repeat_table) )
+        .saveAsTable( self.table_config.output_database_repeat_table(program_route, repeat_table) )
        
 
 # COMMAND ----------
