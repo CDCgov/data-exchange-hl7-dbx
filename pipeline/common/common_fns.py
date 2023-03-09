@@ -10,13 +10,13 @@ dbutils.widgets.dropdown("eventhub_namespace", "tf-eventhub-namespace-dev", ["tf
 #dbutils.widgets.dropdown("scope_name", "dbs-scope-DEX", ["dbs-scope-DEX"])
 dbutils.widgets.dropdown("scope_name", "DBS-SCOPE-DEX-DEV", ["DBS-SCOPE-DEX-DEV"])
 dbutils.widgets.dropdown("database", "ocio_dex_dev", ["ocio_dex_dev"])
-dbutils.widgets.dropdown("database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/"])
+dbutils.widgets.dropdown("database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints"])
 dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/"])
 
 #
 ####### this can be used if final gold moves to Edav, etc..
 dbutils.widgets.dropdown("gold_output_database", "ocio_dex_dev", ["ocio_dex_dev"])
-dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/events/"])
+dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints"])
 
 # COMMAND ----------
 
@@ -169,6 +169,6 @@ def getTableStream(database_config,tbl_name):
 
     # used for raw tables
     def writeStreamToTable(database_config,tbl_name,df):
-        checkpt = f"{database_config.database_checkpoint_prefix}{database_config.database}.{tbl_name}_checkpoint"
+        checkpt = f"{database_config.database_checkpoint_prefix}/{tbl_name}_checkpoint"
         dbname = database_config.database+"."+tbl_name 
         df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", checkpt).toTable(dbname)
