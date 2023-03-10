@@ -11,7 +11,7 @@ dbutils.widgets.dropdown("eventhub_namespace", "tf-eventhub-namespace-dev", ["tf
 dbutils.widgets.dropdown("scope_name", "DBS-SCOPE-DEX-DEV", ["DBS-SCOPE-DEX-DEV"])
 dbutils.widgets.dropdown("database", "ocio_dex_dev", ["ocio_dex_dev"])
 dbutils.widgets.dropdown("database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints"])
-dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/"])
+dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta"])
 
 #
 ####### this can be used if final gold moves to Edav, etc..
@@ -46,7 +46,7 @@ def normalize(name):
         return str(name)
 
 # TODO: move potentially to environment var
-debugToFileIsEnabled = False
+debugToFileIsEnabled = True
 def printToFile(topic, message):
   if debugToFileIsEnabled and message:
       import datetime
@@ -98,10 +98,10 @@ class TableConfig:
         return f"{self.database_config.database}.{self.topic}_{self.stage_out}"
     
     def output_gold_table(self, program_route):
-        return f"{self.database_config.gold_output_database}.{normalize(program_route)}_{self.topic}_gold"
+        return f"{self.database_config.database}.{normalize(program_route)}_{self.topic}_gold"
     
     def output_gold_repeat_table(self, program_route, repeat_table):
-        return f"{self.database_config.gold_output_database}.{normalize(program_route)}_{repeat_table}_{self.topic}_gold"
+        return f"{self.database_config.database}.{normalize(program_route)}_{repeat_table}_{self.topic}_gold"
         
     def output_checkpoint(self):
         return f"{self.database_config.database_checkpoint_prefix}/{self.topic}_{self.stage_out}_checkpoint"   
@@ -140,14 +140,12 @@ class LakeUtil:
     
     def write_gold_to_table(self, df, program_route):
         df.write.format("delta").mode("append").option("mergeSchema", "true") \
-        .option("checkpointLocation", self.table_config.output_gold_table_checkpoint(program_route) ) \
-        .saveAsTable( self.table_config.output_database_table(program_route) )
+        .saveAsTable( self.table_config.output_gold_table(program_route) )
     
     def write_gold_repeat_to_table(self, df, program_route, repeat_table):
         #TODO determine if checkpoints are needed here, or should move to the writeStream in the notebooks which should be configured then.
         df.write.format("delta").mode("append").option("mergeSchema", "true") \
-        .option("checkpointLocation", self.table_config.output_gold_repeat_table_checkpoint(program_route, repeat_table) ) \
-        .saveAsTable( self.table_config.output_database_repeat_table(program_route, repeat_table) )
+        .saveAsTable( self.table_config.output_gold_repeat_table(program_route, repeat_table) )
        
 
 # COMMAND ----------
