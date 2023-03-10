@@ -67,7 +67,9 @@ def transformAndSendToRoute(batchDF, batchId):
 # COMMAND ----------
 
 #df1.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
-df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true").foreachBatch( transformAndSendToRoute ).start()
+df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true") \
+    .option("checkpointLocation", f"{database_folder}/checkpoints/hl7_mmg_structure_silver2gold_checkpoint") \
+    .foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------
 

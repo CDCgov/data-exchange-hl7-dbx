@@ -205,7 +205,11 @@ def transform_send(batch_df, batch_id):
 # COMMAND ----------
 
 #df1.writeStream.trigger(availableNow=True).foreachBatch(transform_send).start()
-df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true").foreachBatch( transform_send ).start()
+#.option("checkpointLocation", f"{database_folder}/checkpoints/hl7_mmg_sql_ok_silver2gold_checkpoint") \
+
+df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true") \
+     .option("checkpointLocation", f"{database_folder}/checkpoints/hl7_mmg_sql_ok_silver2gold_checkpoint") \
+     .foreachBatch( transform_send ).start()
 
 # COMMAND ----------
 
