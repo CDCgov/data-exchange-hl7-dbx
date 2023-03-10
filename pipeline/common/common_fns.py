@@ -46,7 +46,8 @@ def normalize(name):
         return str(name)
 
 # TODO: move potentially to environment var
-debugToFileIsEnabled = True
+#debugToFileIsEnabled = True
+debugToFileIsEnabled = False
 def printToFile(topic, message):
   if debugToFileIsEnabled and message:
       import datetime
