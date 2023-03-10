@@ -1,0 +1,289 @@
+2023-03-09 23:42:54.744409 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-09 23:42:59.372686 - records affected: 4
+2023-03-09 23:43:59.801639 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-09 23:44:04.445019 - records affected: 4
+2023-03-09 23:45:21.389243 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-09 23:45:25.974103 - records affected: 4
+2023-03-09 23:49:29.204625 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-09 23:49:33.753282 - records affected: 4
+2023-03-09 23:55:36.393575 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-09 23:55:40.886050 - records affected: 4
+2023-03-09 23:59:06.385067 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-09 23:59:11.036075 - records affected: 4
+2023-03-09 23:59:15.209088 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-09 23:59:15.353695 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-09 23:59:17.917746 - records affected: 5
+2023-03-09 23:59:21.808480 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-09 23:59:21.940717 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-09 23:59:24.590482 - records affected: 1
+2023-03-09 23:59:27.878783 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-09 23:59:28.026800 - working on (start) route: -> hepatitis_v1_0_mmg_core
+2023-03-09 23:59:29.911193 - records affected: 17
+2023-03-09 23:59:32.981227 - working on (done) route: -> hepatitis_v1_0_mmg_core
+2023-03-09 23:59:33.102140 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-09 23:59:47.893098 - records affected: 6
+2023-03-09 23:59:53.165667 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-09 23:59:53.304821 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-09 23:59:58.004593 - records affected: 8
+2023-03-10 00:00:01.904428 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-10 00:00:02.131306 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-10 00:00:02.505798 - working on table (start): -> race_category
+2023-03-10 00:00:03.148465 - records affected: 4
+2023-03-10 00:00:06.116690 - working on table (done): -> race_category
+2023-03-10 00:00:06.239390 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:00:06.537424 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:00:06.668720 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:06.988558 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:07.130609 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:07.585902 - records affected: 8
+2023-03-10 00:00:09.809007 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:09.930764 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-10 00:00:10.064557 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-10 00:00:10.365208 - working on table (start): -> race_category
+2023-03-10 00:00:10.824197 - records affected: 5
+2023-03-10 00:00:13.553671 - working on table (done): -> race_category
+2023-03-10 00:00:13.690683 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:00:14.072663 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:00:14.196962 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:14.703292 - records affected: 1
+2023-03-10 00:00:17.275720 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:17.405395 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:17.678010 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:17.811198 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-10 00:00:17.943375 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-10 00:00:18.287870 - working on table (start): -> race_category
+2023-03-10 00:00:18.759584 - records affected: 1
+2023-03-10 00:00:20.888285 - working on table (done): -> race_category
+2023-03-10 00:00:21.021929 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:00:21.296731 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:00:21.419958 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:21.704085 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:21.826550 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:22.101948 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:22.231820 - working on table (start): -> repeating_blocks_for_vaccine_questions
+2023-03-10 00:00:22.723949 - records affected: 3
+2023-03-10 00:00:25.113966 - working on table (done): -> repeating_blocks_for_vaccine_questions
+2023-03-10 00:00:25.239015 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-10 00:00:25.367528 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_core
+2023-03-10 00:00:25.659231 - working on table (start): -> race_category
+2023-03-10 00:00:26.184228 - records affected: 17
+2023-03-10 00:00:28.547424 - working on table (done): -> race_category
+2023-03-10 00:00:28.666979 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:00:29.012173 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:00:29.183532 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:29.480651 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:29.615253 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:30.107997 - records affected: 139
+2023-03-10 00:00:32.536404 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:32.686834 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_core
+2023-03-10 00:00:32.815380 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-10 00:00:33.083221 - working on table (start): -> race_category
+2023-03-10 00:00:33.545175 - records affected: 8
+2023-03-10 00:00:35.807361 - working on table (done): -> race_category
+2023-03-10 00:00:35.937035 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:00:36.222743 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:00:36.346031 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:37.017945 - records affected: 6
+2023-03-10 00:00:39.394188 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:39.585117 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:40.047926 - records affected: 12
+2023-03-10 00:00:42.549805 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:42.804712 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-10 00:00:42.931650 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-10 00:00:43.210138 - working on table (start): -> race_category
+2023-03-10 00:00:43.687237 - records affected: 8
+2023-03-10 00:00:45.822402 - working on table (done): -> race_category
+2023-03-10 00:00:45.965382 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:00:46.250476 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:00:46.384081 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:46.853709 - records affected: 8
+2023-03-10 00:00:49.459358 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:00:49.593408 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:49.910212 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:00:50.044317 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-10 00:02:36.130256 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-10 00:02:40.710811 - records affected: 4
+2023-03-10 00:02:42.986578 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-10 00:02:43.123316 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-10 00:02:45.855188 - records affected: 5
+2023-03-10 00:02:47.768711 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-10 00:02:47.885629 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-10 00:02:50.488678 - records affected: 1
+2023-03-10 00:02:52.281750 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-10 00:02:52.832049 - working on (start) route: -> hepatitis_v1_0_mmg_core
+2023-03-10 00:02:54.617122 - records affected: 17
+2023-03-10 00:02:56.465237 - working on (done) route: -> hepatitis_v1_0_mmg_core
+2023-03-10 00:02:56.600857 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-10 00:03:11.182758 - records affected: 6
+2023-03-10 00:03:14.747438 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-10 00:03:14.883216 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-10 00:03:19.478852 - records affected: 8
+2023-03-10 00:03:21.883179 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-10 00:03:22.054951 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-10 00:03:22.380319 - working on table (start): -> race_category
+2023-03-10 00:03:22.849097 - records affected: 4
+2023-03-10 00:03:24.112198 - working on table (done): -> race_category
+2023-03-10 00:03:24.257518 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:03:24.543568 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:03:24.662295 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:25.091511 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:25.221276 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:25.662223 - records affected: 8
+2023-03-10 00:03:26.864118 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:26.985429 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-10 00:03:27.115454 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-10 00:03:27.373776 - working on table (start): -> race_category
+2023-03-10 00:03:27.795539 - records affected: 5
+2023-03-10 00:03:29.270902 - working on table (done): -> race_category
+2023-03-10 00:03:29.441034 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:03:29.767090 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:03:30.017040 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:30.568825 - records affected: 1
+2023-03-10 00:03:31.928844 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:32.065471 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:32.462433 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:32.597009 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-10 00:03:32.727783 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-10 00:03:33.024315 - working on table (start): -> race_category
+2023-03-10 00:03:33.531099 - records affected: 1
+2023-03-10 00:03:34.677858 - working on table (done): -> race_category
+2023-03-10 00:03:34.794752 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:03:35.132028 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:03:35.271301 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:35.546206 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:35.669487 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:35.959931 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:36.113641 - working on table (start): -> repeating_blocks_for_vaccine_questions
+2023-03-10 00:03:36.579880 - records affected: 3
+2023-03-10 00:03:38.019312 - working on table (done): -> repeating_blocks_for_vaccine_questions
+2023-03-10 00:03:38.150657 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-10 00:03:38.283167 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_core
+2023-03-10 00:03:38.572031 - working on table (start): -> race_category
+2023-03-10 00:03:39.072317 - records affected: 17
+2023-03-10 00:03:40.292200 - working on table (done): -> race_category
+2023-03-10 00:03:40.411715 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:03:40.688738 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:03:40.849901 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:41.147200 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:41.275306 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:41.766503 - records affected: 139
+2023-03-10 00:03:43.175225 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:43.286149 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_core
+2023-03-10 00:03:43.450100 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-10 00:03:43.703682 - working on table (start): -> race_category
+2023-03-10 00:03:44.124746 - records affected: 8
+2023-03-10 00:03:45.491936 - working on table (done): -> race_category
+2023-03-10 00:03:45.615933 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:03:45.889589 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:03:46.011985 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:46.575082 - records affected: 6
+2023-03-10 00:03:47.806580 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:47.920763 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:48.358944 - records affected: 12
+2023-03-10 00:03:49.565603 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:49.684201 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-10 00:03:49.971363 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-10 00:03:50.224460 - working on table (start): -> race_category
+2023-03-10 00:03:50.648126 - records affected: 8
+2023-03-10 00:03:51.837343 - working on table (done): -> race_category
+2023-03-10 00:03:51.977150 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:03:52.246199 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:03:52.378034 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:52.820190 - records affected: 8
+2023-03-10 00:03:54.211194 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:03:54.325012 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:54.600789 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:03:54.716561 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-10 00:07:49.047930 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-10 00:07:53.611445 - records affected: 4
+2023-03-10 00:07:56.510088 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-10 00:07:56.688580 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-10 00:07:59.352827 - records affected: 5
+2023-03-10 00:08:01.981257 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-10 00:08:02.107122 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-10 00:08:04.759809 - records affected: 1
+2023-03-10 00:08:07.148025 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-10 00:08:07.279632 - working on (start) route: -> hepatitis_v1_0_mmg_core
+2023-03-10 00:08:09.014806 - records affected: 17
+2023-03-10 00:08:11.331714 - working on (done) route: -> hepatitis_v1_0_mmg_core
+2023-03-10 00:08:11.450486 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-10 00:08:25.713034 - records affected: 6
+2023-03-10 00:08:29.904819 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-10 00:08:30.032421 - working on (start) route: -> hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-10 00:08:34.791259 - records affected: 8
+2023-03-10 00:08:37.534863 - working on (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-10 00:08:37.697334 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-10 00:08:38.041420 - working on table (start): -> race_category
+2023-03-10 00:08:38.501544 - records affected: 4
+2023-03-10 00:08:40.529152 - working on table (done): -> race_category
+2023-03-10 00:08:40.683322 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:08:40.999090 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:08:41.137367 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:08:41.414848 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:08:41.550380 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:08:42.006423 - records affected: 8
+2023-03-10 00:08:43.724104 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:08:43.865941 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_a_acute
+2023-03-10 00:08:43.980588 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-10 00:08:44.249188 - working on table (start): -> race_category
+2023-03-10 00:08:44.658898 - records affected: 5
+2023-03-10 00:08:46.314547 - working on table (done): -> race_category
+2023-03-10 00:08:46.512053 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:08:46.786947 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:08:46.912890 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:08:47.385336 - records affected: 1
+2023-03-10 00:08:49.412657 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:08:49.561079 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:08:49.838425 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:08:49.956762 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_chronic_de
+2023-03-10 00:08:50.075303 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-10 00:08:50.355903 - working on table (start): -> race_category
+2023-03-10 00:08:50.856651 - records affected: 1
+2023-03-10 00:08:52.893061 - working on table (done): -> race_category
+2023-03-10 00:08:53.062731 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:08:53.335845 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:08:53.457657 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:08:53.768311 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:08:53.925045 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:08:54.197587 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:08:54.315969 - working on table (start): -> repeating_blocks_for_vaccine_questions
+2023-03-10 00:08:54.778360 - records affected: 3
+2023-03-10 00:08:56.585143 - working on table (done): -> repeating_blocks_for_vaccine_questions
+2023-03-10 00:08:56.719204 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_perinatal_de
+2023-03-10 00:08:56.837629 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_core
+2023-03-10 00:08:57.118753 - working on table (start): -> race_category
+2023-03-10 00:08:57.606167 - records affected: 17
+2023-03-10 00:09:00.126529 - working on table (done): -> race_category
+2023-03-10 00:09:00.246855 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:09:00.529721 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:09:00.647309 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:09:00.926296 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:09:01.102650 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:09:01.712412 - records affected: 139
+2023-03-10 00:09:03.542338 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:09:03.664883 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_core
+2023-03-10 00:09:03.799613 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-10 00:09:04.062136 - working on table (start): -> race_category
+2023-03-10 00:09:04.481787 - records affected: 8
+2023-03-10 00:09:06.122459 - working on table (done): -> race_category
+2023-03-10 00:09:06.264498 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:09:06.558100 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:09:06.684351 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:09:07.138175 - records affected: 6
+2023-03-10 00:09:09.007626 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:09:09.129462 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:09:09.572506 - records affected: 12
+2023-03-10 00:09:11.754645 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:09:11.898763 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_b_acute_de
+2023-03-10 00:09:12.036852 - working on repeat tables (start) route: ->  + hepatitis_v1_0_mmg_hepatitis_c_acute_de
+2023-03-10 00:09:12.284149 - working on table (start): -> race_category
+2023-03-10 00:09:12.786867 - records affected: 8
+2023-03-10 00:09:14.454952 - working on table (done): -> race_category
+2023-03-10 00:09:14.571396 - working on table (start): -> binational_reporting_criteria
+2023-03-10 00:09:14.838361 - working on table (done): -> binational_reporting_criteria
+2023-03-10 00:09:14.956483 - working on table (start): -> repeating_variables_for_disease_exposure
+2023-03-10 00:09:15.415535 - records affected: 8
+2023-03-10 00:09:17.092617 - working on table (done): -> repeating_variables_for_disease_exposure
+2023-03-10 00:09:17.212302 - working on table (start): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:09:17.475073 - working on table (done): -> interpretative_liver_enzyme_testing_repeating_group
+2023-03-10 00:09:17.622556 - working on repeat tables (done) route: -> hepatitis_v1_0_mmg_hepatitis_c_acute_de
