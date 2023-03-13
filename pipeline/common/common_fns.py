@@ -29,6 +29,9 @@
 # gold_output_database =  dbutils.widgets.get("gold_output_database")
 # gold_output_database_checkpoint_prefix = dbutils.widgets.get("gold_output_database_checkpoint_prefix")
 
+dbutils.jobs.taskValues.set(key = "eventhub_namespace", value = dbutils.widgets.get("eventhub_namespace"))
+
+
 # COMMAND ----------
 
 eventhub_namespace = dbutils.jobs.taskValues.get(taskKey = "structure_ok_to_delta_lake", key = "eventhub_namespace", default = "tf-eventhub-namespace-dev", debugValue = "tf-eventhub-namespace-dev")
