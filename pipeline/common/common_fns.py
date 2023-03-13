@@ -41,7 +41,7 @@ def normalizeString(str):
 
 def normalize(name):
     if name is not None:
-        return name.replace(".", "_").replace(" ", "_").replace("'", "").lower()
+        return name.replace(".", "_").replace(" ", "_").replace("'", "").replace("-", "_").lower()
     else:
         return str(name)
 

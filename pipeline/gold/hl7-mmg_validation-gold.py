@@ -61,7 +61,7 @@ def transformAndSendToRoute(batchDF, batchId):
         
    #     printToFile(TOPIC, f"records affected: {df_one_route.count()}")
    #     printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
-        lake_util.write_gold_to_table(df_one_route, program_route)
+        lake_util.write_gold_to_table(df_one_route, normalize(program_route))
         
         # working through each batch of route
     #    printToFile(TOPIC, "working on (done) route: -> " + str(program_route))
