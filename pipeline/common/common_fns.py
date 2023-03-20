@@ -35,12 +35,12 @@
 # COMMAND ----------
 
 eventhub_namespace = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "eventhub_namespace", default = "tf-eventhub-namespace-", debugValue = "tf-eventhub-namespace-")
-database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database", default = "ocio_dex_dev", debugValue = "ocio_dex_dev")
-database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_checkpoint_prefix", default = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", debugValue = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints")
-database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_folder", default = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta", debugValue = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta")
-scope_name = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "scope_name", default = "DBS-SCOPE-DEX-DEV", debugValue = "DBS-SCOPE-DEX-DEV")
-gold_output_database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database", default = "ocio_dex_prog_dev", debugValue = "ocio_dex_prog_dev")
-gold_output_database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database_checkpoint_prefix", default = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", debugValue = "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints")
+database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database", default = "ocio_dex_", debugValue = "ocio_dex_")
+database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_checkpoint_prefix", default = "abfss://ocio-dex-db-@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", debugValue = "abfss://ocio-dex-db-@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints")
+database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_folder", default = "abfss://ocio-dex-db-@ocioededatalakedbr.dfs.core.windows.net/delta", debugValue = "abfss://ocio-dex-db-@ocioededatalakedbr.dfs.core.windows.net/delta")
+scope_name = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "scope_name", default = "DBS-SCOPE-DEX-", debugValue = "DBS-SCOPE-DEX-")
+gold_output_database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database", default = "ocio_dex_prog_", debugValue = "ocio_dex_prog_")
+gold_output_database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database_checkpoint_prefix", default = "abfss://ocio-dex-db-@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", debugValue = "abfss://ocio-dex-db-@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints")
 
 # COMMAND ----------
 
