@@ -15,6 +15,7 @@ dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio
 
 # COMMAND ----------
 
+import os
 # eventhub_namespace =  dbutils.widgets.get("eventhub_namespace")
 # database =  dbutils.widgets.get("database")
 # database_checkpoint_prefix = dbutils.widgets.get("database_checkpoint_prefix")
@@ -24,5 +25,5 @@ dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio
 # gold_output_database =  dbutils.widgets.get("gold_output_database")
 # gold_output_database_checkpoint_prefix = dbutils.widgets.get("gold_output_database_checkpoint_prefix")
 
-dbutils.jobs.taskValues.set(key = "eventhub_namespace", value = dbutils.widgets.get("eventhub_namespace"))
+dbutils.jobs.taskValues.set(key = "eventhub_namespace", value = os.getenv("eventhub_namespace"))
 
