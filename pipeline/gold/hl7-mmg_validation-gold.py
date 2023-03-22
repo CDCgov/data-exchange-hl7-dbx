@@ -61,7 +61,7 @@ def transformAndSendToRoute(batchDF, batchId):
         
    #     printToFile(TOPIC, f"records affected: {df_one_route.count()}")
    #     printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
-        lake_util.write_gold_to_table(df_one_route, program_route)
+        lake_util.write_gold_to_table(df_one_route, normalize(program_route))
         
         # working through each batch of route
     #    printToFile(TOPIC, "working on (done) route: -> " + str(program_route))
@@ -74,7 +74,9 @@ def transformAndSendToRoute(batchDF, batchId):
 # COMMAND ----------
 
 #df1.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
-df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true").foreachBatch( transformAndSendToRoute ).start()
+df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true") \
+    .option("checkpointLocation", f"{database_folder}/checkpoints/hl7_mmg_validation_silver2gold_checkpoint") \
+    .foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------
 
