@@ -23,7 +23,7 @@ schema_metadata = StructType([
 schema_metadata_provenance = StructType([    
     StructField("event_id", StringType(), True),
     StructField("event_timestamp", StringType(), True),
-    StructField("file_uuid", ArrayType(StringType()), True),
+    StructField("file_uuid", StringType(), True),
     StructField("file_path", StringType(), True),
     StructField("file_timestamp", StringType(), True),
     StructField("file_size", StringType(), True),
