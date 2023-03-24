@@ -15,7 +15,7 @@ dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededata
 
 #
 ####### this can be used if final gold moves to Edav, etc..
-dbutils.widgets.dropdown("gold_output_database", "ocio_dex_prog_dev", ["ocio_edav_dex_dev"])
+dbutils.widgets.dropdown("gold_output_database", "ocio_edav_dex_dev", ["ocio_edav_dex_dev"])
 dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints"])
 dbutils.widgets.dropdown("gold_database_folder", "abfss://database@edavdevdatalakedex.dfs.core.windows.net/delta/", ["abfss://database@edavdevdatalakedex.dfs.core.windows.net/delta/"])
 
