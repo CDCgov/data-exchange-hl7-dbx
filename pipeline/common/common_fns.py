@@ -5,7 +5,6 @@
 # COMMAND ----------
 
 dbutils.widgets.dropdown("eventhub_namespace", "tf-eventhub-namespace-dev", ["tf-eventhub-namespace-dev"])
-
 #
 #dbutils.widgets.dropdown("scope_name", "dbs-scope-DEX", ["dbs-scope-DEX"])
 dbutils.widgets.dropdown("scope_name", "DBS-SCOPE-DEX-DEV", ["DBS-SCOPE-DEX-DEV"])
@@ -18,7 +17,6 @@ dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededata
 dbutils.widgets.dropdown("gold_output_database", "ocio_edav_dex_dev", ["ocio_edav_dex_dev"])
 dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints"])
 dbutils.widgets.dropdown("gold_database_folder", "abfss://database@edavdevdatalakedex.dfs.core.windows.net/delta/", ["abfss://database@edavdevdatalakedex.dfs.core.windows.net/delta/"])
-
 
 # COMMAND ----------
 
