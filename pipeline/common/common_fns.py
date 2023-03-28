@@ -43,21 +43,6 @@
 
 # COMMAND ----------
 
-import os
-
-
-eventhub_namespace = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "eventhub_namespace", debugValue = os.getenv("eventhub_namespace"))
-database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database", debugValue = os.getenv("database"))
-database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_checkpoint_prefix", debugValue = os.getenv("database_checkpoint_prefix"))
-database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_folder", debugValue = os.getenv("database_folder"))
-scope_name = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "scope_name", debugValue = os.getenv("scope_name"))
-gold_output_database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database", debugValue = os.getenv("gold_output_database"))
-gold_output_database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database_checkpoint_prefix", debugValue = os.getenv("gold_output_database_checkpoint_prefix"))
-# gold_database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_database_folder", debugValue = os.getenv("gold_database_folder"))
-
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC ### Common Functions
 
@@ -81,6 +66,25 @@ def printToFile(topic, message):
       file_loc = f"./{topic}-output-log.txt"
       with open(file_loc, "a") as f:
           f.write(f"{datetime.datetime.now()} - {message}\n")
+
+# COMMAND ----------
+
+# MAGIC %md # Every CELL BELOW this shall be removed once Refactorig is complete!
+
+# COMMAND ----------
+
+import os
+
+
+eventhub_namespace = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "eventhub_namespace", debugValue = os.getenv("eventhub_namespace"))
+database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database", debugValue = os.getenv("database"))
+database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_checkpoint_prefix", debugValue = os.getenv("database_checkpoint_prefix"))
+database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_folder", debugValue = os.getenv("database_folder"))
+scope_name = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "scope_name", debugValue = os.getenv("scope_name"))
+gold_output_database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database", debugValue = os.getenv("gold_output_database"))
+gold_output_database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database_checkpoint_prefix", debugValue = os.getenv("gold_output_database_checkpoint_prefix"))
+# gold_database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_database_folder", debugValue = os.getenv("gold_database_folder"))
+
 
 # COMMAND ----------
 

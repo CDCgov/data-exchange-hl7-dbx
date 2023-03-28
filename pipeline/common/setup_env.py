@@ -9,7 +9,7 @@ class DEXEnvironment:
     scope_name = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "scope_name", debugValue = os.getenv("scope_name"))
     gold_output_database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database", debugValue = os.getenv("gold_output_database"))
     gold_output_database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database_checkpoint_prefix", debugValue = os.getenv("gold_output_database_checkpoint_prefix"))
-# gold_database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_database_folder", debugValue = os.getenv("gold_database_folder"))
+    gold_database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_database_folder", debugValue = os.getenv("gold_database_folder"))
 
 globalDexEnv = DEXEnvironment()
 
@@ -39,7 +39,10 @@ class LakeDAO:
         return df.writeStream.format("delta").outputMode("append") \
             .trigger(availableNow=True)  \
             .option("checkpointLocation", self.lakeConfig.getCheckpointLocation(tableName)).toTable(self.lakeConfig.getTableRef(tableName))
-        
+    
+    def writeTableTo(self, df, tableName):
+        return df.write.format("delta").mode("append").option("mergeSchema", "true") \
+            .saveAsTable( self.lakeConfig.getTableRef(tableName) )
         
 class EventHubConfig:
     def __init__(self, namespace, scope):
@@ -66,5 +69,6 @@ class EventHubConfig:
 # COMMAND ----------
 
 globalLakeConfig = LakeConfig(globalDexEnv.database, globalDexEnv.database_folder)   
+globalGOLDLakeConfig = LakeConfig(globalDexEnv.gold_output_database, globalDexEnv.gold_database_folder)
 
 globalEventHubConfig = EventHubConfig(globalDexEnv.eventhub_namespace, globalDexEnv.scope_name)
