@@ -4,14 +4,14 @@
 
 # COMMAND ----------
 
-# dbutils.widgets.dropdown("eventhub_namespace", "tf-eventhub-namespace-dev", ["tf-eventhub-namespace-dev"])
+dbutils.widgets.dropdown("eventhub_namespace", "tf-eventhub-namespace-dev", ["tf-eventhub-namespace-dev"])
 
-# #
-# #dbutils.widgets.dropdown("scope_name", "dbs-scope-DEX", ["dbs-scope-DEX"])
-# dbutils.widgets.dropdown("scope_name", "DBS-SCOPE-DEX-DEV", ["DBS-SCOPE-DEX-DEV"])
-# dbutils.widgets.dropdown("database", "ocio_dex_dev", ["ocio_dex_dev"])
-# dbutils.widgets.dropdown("database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints"])
-# dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta"])
+#
+#dbutils.widgets.dropdown("scope_name", "dbs-scope-DEX", ["dbs-scope-DEX"])
+dbutils.widgets.dropdown("scope_name", "DBS-SCOPE-DEX-DEV", ["DBS-SCOPE-DEX-DEV"])
+dbutils.widgets.dropdown("database", "ocio_dex_dev", ["ocio_dex_dev"])
+dbutils.widgets.dropdown("database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints"])
+dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta"])
 
 #
 ####### this can be used if final gold moves to Edav, etc..
@@ -22,15 +22,33 @@ dbutils.widgets.dropdown("gold_database_folder", "abfss://database@edavdevdatala
 
 # COMMAND ----------
 
-# # eventhub_namespace =  dbutils.widgets.get("eventhub_namespace")
-# # database =  dbutils.widgets.get("database")
-# # database_checkpoint_prefix = dbutils.widgets.get("database_checkpoint_prefix")
-# # database_folder = dbutils.widgets.get("database_folder")
+eventhub_namespace =  dbutils.widgets.get("eventhub_namespace")
+database =  dbutils.widgets.get("database")
+database_checkpoint_prefix = dbutils.widgets.get("database_checkpoint_prefix")
+database_folder = dbutils.widgets.get("database_folder")
 
 scope_name= dbutils.widgets.get("scope_name")
 gold_output_database =  dbutils.widgets.get("gold_output_database")
 gold_output_database_checkpoint_prefix = dbutils.widgets.get("gold_output_database_checkpoint_prefix")
 gold_database_folder = dbutils.widgets.get("gold_database_folder")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Task Values
+
+# COMMAND ----------
+
+import os
+
+eventhub_namespace = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "eventhub_namespace", debugValue = os.getenv("eventhub_namespace"))
+database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database", debugValue = os.getenv("database"))
+database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_checkpoint_prefix", debugValue = os.getenv("database_checkpoint_prefix"))
+database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_folder", debugValue = os.getenv("database_folder"))
+scope_name = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "scope_name", debugValue = os.getenv("scope_name"))
+gold_output_database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database", debugValue = os.getenv("gold_output_database"))
+gold_output_database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database_checkpoint_prefix", debugValue = os.getenv("gold_output_database_checkpoint_prefix"))
+# gold_database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_database_folder", debugValue = os.getenv("gold_database_folder"))
 
 # COMMAND ----------
 
