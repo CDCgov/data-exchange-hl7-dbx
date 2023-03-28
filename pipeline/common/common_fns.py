@@ -189,3 +189,36 @@ def writeStreamToTable(database_config,tbl_name,df):
     checkpt = f"{database_config.database_checkpoint_prefix}/{tbl_name}_checkpoint"
     dbname = database_config.database+"."+tbl_name 
     df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", checkpt).toTable(dbname)
+
+# COMMAND ----------
+
+class EventHubConfig:
+    def __init__(self, namespace, scope):
+        self.namespace = namespace
+        self.scopeName = scope
+
+# COMMAND ----------
+
+
+class LakeConfig:
+    def __init__(self, dbName, rootFolder):
+        self.dbName = dbName
+        self.rootFolder = rootFolder
+    
+    def getTableRef(self, tableName):
+        return f"{self.dbName}.{tableName}"
+    
+    def getCheckpointLocation(self, tableName):
+        return f"{self.rootFolder}/checkpoints/{tableName}"
+    
+    
+class LakeDAO:
+    def __init__(self, lakeConfig):
+        self.lakeConfig = lakeConfig
+        
+    def readStreamFrom(self, tableName):
+        return spark.readStream.format("delta").option("ignoreDeletes", "true").table( tableName )    
+    
+    def writeStreamTo(self, df, tableName):
+        return df.writeStream.format("delta").outputMode("append").trigger(availableNow=True).option("checkpointLocation", lakeConfig.getCheckpointLocation(tableName)).toTable(LakeConfig.getTableRef(tableName))
+        
