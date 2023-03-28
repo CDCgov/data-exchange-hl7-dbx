@@ -19,25 +19,24 @@ STAGE_OUT = "bronze"
 
 from pyspark.sql.functions import *
 
-def create_structure_validator_df(topic, process_name):
-    standard_df = create_bronze_df(topic, process_name)
+def create_structure_validator_df(topic, process_name, lake_config):
+    standard_df = create_bronze_df(topic, process_name, lake_config)
     structure_validator_df = standard_df.withColumn("struct_report", from_json(col("report"), schema_report)).withColumn("error_count", col("struct_report.error-count.structure") + col("struct_report.error-count.value-set") + col("struct_report.error-count.content" )) \
    .withColumn("warning_count", col("struct_report.warning-count.structure") + col("struct_report.warning-count.value-set") + \
               col("struct_report.warning-count.content" )).drop("struct_report")
     
     return structure_validator_df
 
-def create_mmg_validator_df(topic, process_name):
-    standard_df = create_bronze_df(topic, process_name)
+def create_mmg_validator_df(topic, process_name, lake_config):
+    standard_df = create_bronze_df(topic, process_name, lake_config)
     mmg_validator_df = standard_df.withColumn("struct_report", from_json(col("report"), mmgReportSchema)).withColumn("error_count", col("struct_report.error-count")) \
    .withColumn("warning_count", col("struct_report.warning-count")).drop("struct_report")
     
     return mmg_validator_df
 
-def create_bronze_df(topic, process_name):
-    lake_util = LakeUtil( TableConfig(database_config, topic, STAGE_IN, STAGE_OUT) )
-
-    rawDF = lake_util.read_stream_from_table()
+def create_bronze_df(topic, process_name, lake_config):
+    lakeDAO = LakeDAO(lake_config)
+    rawDF = lakeDAO.readStreamFrom(f"{topic}_eh_raw")
     
     metadataDF = rawDF.select( from_json("body", schema_evhub_body_v2).alias("data") ).select("data.*")
     

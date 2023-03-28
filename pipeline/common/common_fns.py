@@ -192,12 +192,6 @@ def writeStreamToTable(database_config,tbl_name,df):
 
 # COMMAND ----------
 
-class EventHubConfig:
-    def __init__(self, namespace, scope):
-        self.namespace = namespace
-        self.scopeName = scope
-
-# COMMAND ----------
 
 
 class LakeConfig:

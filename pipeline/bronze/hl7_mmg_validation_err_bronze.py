@@ -5,8 +5,9 @@
 
 TOPIC = "hl7_mmg_validation_err"
 PROCESS_NAME = "MMG-VALIDATOR"
+lakeConfig = LakeConfig(database, database_folder)
 
 # COMMAND ----------
 
-validation_err  = create_mmg_validator_df(TOPIC, PROCESS_NAME)
-create_bronze_table(TOPIC, validation_err)
+validation_err  = create_mmg_validator_df(TOPIC, PROCESS_NAME, lakeConfig)
+create_bronze_table(TOPIC, validation_err, lakeConfig)
