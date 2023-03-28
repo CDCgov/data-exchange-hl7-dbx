@@ -4,16 +4,11 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../common/common_fns
+# MAGIC %run ../common/setup_env
 
 # COMMAND ----------
 
 # MAGIC %run ../common/schemas
-
-# COMMAND ----------
-
-STAGE_IN = "eh_raw"
-STAGE_OUT = "bronze"
 
 # COMMAND ----------
 
@@ -52,9 +47,6 @@ def create_bronze_df(topic, process_name, lake_config):
     return processExplodedDF
 
 def create_bronze_table(topic, input_df, lakeConfig):
-   # lake_util = LakeUtil( TableConfig(database_config, topic, STAGE_IN, STAGE_OUT) )
-   # lake_util.write_stream_to_table(input_df)
-
     lakeDAO = LakeDAO(lakeConfig)
     lakeDAO.writeStreamTo(input_df, f"{topic}_bronze")
 
