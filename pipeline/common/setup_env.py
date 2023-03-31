@@ -72,3 +72,11 @@ globalLakeConfig = LakeConfig(globalDexEnv.database, globalDexEnv.database_folde
 globalGOLDLakeConfig = LakeConfig(globalDexEnv.gold_output_database, globalDexEnv.gold_database_folder)
 
 globalEventHubConfig = EventHubConfig(globalDexEnv.eventhub_namespace, globalDexEnv.scope_name)
+
+# COMMAND ----------
+
+# MAGIC %md # Creating Widgets for different Event Hubs
+
+# COMMAND ----------
+
+dbutils.widgets.dropdown("event_hub", "hl7-recdeb-ok", ["hl7-file-dropped-ok", "hl7-recdeb-ok", "hl7-recdeb-err", "hl7-structure-ok", "hl7-structure-err", "hl7-mmg-validation-ok", "hl7-mmg-validation-err", "hl7-lake-segments-ok", "hl7-lake-segments-err"])

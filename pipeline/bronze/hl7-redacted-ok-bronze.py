@@ -24,5 +24,5 @@ PROCESS_NAME = "REDACTOR"
 
 # COMMAND ----------
 
-redacted_ok = create_bronze_df( TOPIC, PROCESS_NAME )
-create_bronze_table(TOPIC, redacted_ok)
+redacted_ok = create_bronze_df( TOPIC, PROCESS_NAME, globalLakeConfig )
+create_bronze_table(TOPIC, redacted_ok, globalLakeConfig)

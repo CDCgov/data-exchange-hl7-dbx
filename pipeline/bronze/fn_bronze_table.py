@@ -4,6 +4,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ../common/common_fns
+
+# COMMAND ----------
+
 # MAGIC %run ../common/setup_env
 
 # COMMAND ----------
@@ -31,7 +35,7 @@ def create_mmg_validator_df(topic, process_name, lake_config):
 
 def create_bronze_df(topic, process_name, lake_config):
     lakeDAO = LakeDAO(lake_config)
-    rawDF = lakeDAO.readStreamFrom(f"{topic}_eh_raw")
+    rawDF = lakeDAO.readStreamFrom(f"{normalizeString(topic)}_eh_raw")
     
     metadataDF = rawDF.select( from_json("body", schema_evhub_body_v2).alias("data") ).select("data.*")
     
@@ -48,6 +52,6 @@ def create_bronze_df(topic, process_name, lake_config):
 
 def create_bronze_table(topic, input_df, lakeConfig):
     lakeDAO = LakeDAO(lakeConfig)
-    lakeDAO.writeStreamTo(input_df, f"{topic}_bronze")
+    lakeDAO.writeStreamTo(input_df, f"{normalizeString(topic)}_bronze")
 
 
