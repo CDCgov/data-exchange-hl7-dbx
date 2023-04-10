@@ -4,8 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.9] - 2023-03-22
-   DEX Relese 0.0.15
+### [0.0.10] - 2023-04-06
+   DEX Release 0.0.16
+   
+   - Separeted Database for Gold tables in DEV and TST
+   - Parameterized workflow jobs in DEV and TST
+   - Deployed DBX pipeline in STG.
+   	- (waiting for terraforming workflows before deploying to STG)
+   - Bug Fixes
+   	- Redaction pipeline was not flowing to silver/gold tables.
+   	- Fixed file_uuid on schema
+   		
+   		
+### [0.0.9] - 2023-03-22
+   DEX Release 0.0.15
    
    - Shortened column and table names
    - Created  pipeline for failed messages

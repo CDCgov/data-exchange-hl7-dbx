@@ -15,8 +15,10 @@ dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-dev@ocioededata
 
 #
 ####### this can be used if final gold moves to Edav, etc..
-dbutils.widgets.dropdown("gold_output_database", "ocio_dex_prog_dev", ["ocio_dex_prog_dev"])
+dbutils.widgets.dropdown("gold_output_database", "ocio_edav_dex_dev", ["ocio_edav_dex_dev"])
 dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints", ["abfss://ocio-dex-db-dev@ocioededatalakedbr.dfs.core.windows.net/delta/checkpoints"])
+dbutils.widgets.dropdown("gold_database_folder", "abfss://database@edavdevdatalakedex.dfs.core.windows.net/delta/", ["abfss://database@edavdevdatalakedex.dfs.core.windows.net/delta/"])
+
 
 # COMMAND ----------
 
@@ -28,6 +30,25 @@ database_folder = dbutils.widgets.get("database_folder")
 scope_name= dbutils.widgets.get("scope_name")
 gold_output_database =  dbutils.widgets.get("gold_output_database")
 gold_output_database_checkpoint_prefix = dbutils.widgets.get("gold_output_database_checkpoint_prefix")
+gold_database_folder = dbutils.widgets.get("gold_database_folder")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Task Values
+
+# COMMAND ----------
+
+import os
+
+eventhub_namespace = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "eventhub_namespace", debugValue = os.getenv("eventhub_namespace"))
+database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database", debugValue = os.getenv("database"))
+database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_checkpoint_prefix", debugValue = os.getenv("database_checkpoint_prefix"))
+database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_folder", debugValue = os.getenv("database_folder"))
+scope_name = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "scope_name", debugValue = os.getenv("scope_name"))
+gold_output_database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database", debugValue = os.getenv("gold_output_database"))
+gold_output_database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database_checkpoint_prefix", debugValue = os.getenv("gold_output_database_checkpoint_prefix"))
+# gold_database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_database_folder", debugValue = os.getenv("gold_database_folder"))
 
 # COMMAND ----------
 
@@ -99,10 +120,10 @@ class TableConfig:
         return f"{self.database_config.database}.{self.topic}_{self.stage_out}"
     
     def output_gold_table(self, program_route):
-        return f"{self.database_config.database}.{normalize(program_route)}_{self.topic}_gold"
+        return f"{self.database_config.gold_output_database}.{normalize(program_route)}_{self.topic}_gold"
     
     def output_gold_repeat_table(self, program_route, repeat_table):
-        return f"{self.database_config.database}.{normalize(program_route)}_{repeat_table}_{self.topic}_gold"
+        return f"{self.database_config.gold_output_database}.{normalize(program_route)}_{repeat_table}_{self.topic}_gold"
         
     def output_checkpoint(self):
         return f"{self.database_config.database_checkpoint_prefix}/{self.topic}_{self.stage_out}_checkpoint"   

@@ -46,7 +46,7 @@ df1 = lake_util.read_stream_from_table()
 
 # not stream for dev only
 # df1 = spark.read.format("delta").table( f"{database_config.database}.{TOPIC}_{STAGE_IN}" )
-# display( df1 )
+#display( df1 )
 
 
 
@@ -73,7 +73,9 @@ from pyspark.sql import functions as F
 
 df3 = df2.withColumn( "report_arr", from_json( col("redacted_report_string"), schema_Redactor_Report) ) \
          .drop("redacted_report_string")
-df4 = df3.withColumn('issue', F.explode('report_arr.entries'))
+
+df4 = df3.withColumn('issue', F.explode_outer('report_arr.entries'))
+
 df5 = df4.select('message_uuid', 'message_info', 'summary','provenance','issue.path','issue.rule','issue.lineNumber')
 
 #display( df5)
