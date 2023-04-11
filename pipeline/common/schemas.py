@@ -50,6 +50,7 @@ schema_message_info = StructType([
     StructField("route", StringType(), True),
     StructField("mmgs", ArrayType(StringType()), True),
     StructField("reporting_jurisdiction", StringType(), True),
+    StructField("type", StringType(), True)
 ])
 
 schema_problem  = StructType ([
