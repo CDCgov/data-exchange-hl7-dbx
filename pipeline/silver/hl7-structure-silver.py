@@ -7,6 +7,7 @@
 
 TOPIC_ERR = "hl7_structure_err_bronze"
 TOPIC_OK = "hl7_structure_ok_bronze"
+TOPIC_ELR_OK = "hl7_structure_elr_ok_bronze"
 
 STAGE_IN = "bronze"
 STAGE_OUT = "silver"
@@ -29,6 +30,8 @@ df_err = getTableStream(database_config,TOPIC_ERR)
 
 df_ok = getTableStream(database_config,TOPIC_OK)
 
+df_elr_ok = getTableStream(database_config,TOPIC_ELR_OK)
+
 lake_util_out = LakeUtil(TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
 #display(df_err.select("*"))
@@ -48,7 +51,7 @@ df2_ok = df_ok.select("*")
 
 df2_err = df_err.select("*")
 
-df_result = df_ok.unionByName(df_err, allowMissingColumns=True)
+df_result = df_ok.unionByName(df_err, allowMissingColumns=True).unionByName(df_elr_ok, allowMissingColumns=True)
 
 df2 = df_result.withColumn("report", from_json('report', schema_report)).select('message_uuid', 'metadata_version','message_info','summary', 'status', 'provenance','start_processing_time','report.entries.content','report.entries.structure','report.entries.value-set','error_count','warning_count' )
 
