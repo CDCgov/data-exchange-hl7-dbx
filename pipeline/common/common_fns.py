@@ -4,7 +4,20 @@
 
 # COMMAND ----------
 
-## abc
+dbutils.widgets.dropdown("eventhub_namespace", "ocio-ede-tst-eventhub-namespace", ["ocio-ede-tst-eventhub-namespace"])
+
+#
+#dbutils.widgets.dropdown("scope_name", "dbs-scope-DEX", ["dbs-scope-DEX"])
+dbutils.widgets.dropdown("scope_name", "DBS-SCOPE-DEX-TST", ["DBS-SCOPE-DEX-TST"])
+dbutils.widgets.dropdown("database", "ocio_dex_tst", ["ocio_dex_tst"])
+dbutils.widgets.dropdown("database_checkpoint_prefix", "abfss://ocio-dex-db-tst@ocioededatalakedbrtst.dfs.core.windows.net/delta/checkpoints", ["abfss://ocio-dex-db-tst@ocioededatalakedbrtst.dfs.core.windows.net/delta/checkpoints"])
+dbutils.widgets.dropdown("database_folder", "abfss://ocio-dex-db-tst@ocioededatalakedbrtst.dfs.core.windows.net/delta", ["abfss://ocio-dex-db-tst@ocioededatalakedbrtst.dfs.core.windows.net/delta"])
+
+#
+####### this can be used if final gold moves to Edav, etc..
+dbutils.widgets.dropdown("gold_output_database", "ocio_edav_dex_tst", ["ocio_edav_dex_tst"])
+dbutils.widgets.dropdown("gold_output_database_checkpoint_prefix", "abfss://database@edavdevdatalakedextest.dfs.core.windows.net/delta/checkpoints", ["abfss://database@edavdevdatalakedextest.dfs.core.windows.net/delta/checkpoints"])
+dbutils.widgets.dropdown("gold_database_folder", "abfss://database@edavdevdatalakedextest.dfs.core.windows.net/delta/", ["abfss://database@edavdevdatalakedextest.dfs.core.windows.net/delta/"])
 
 # COMMAND ----------
 
