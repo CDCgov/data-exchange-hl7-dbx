@@ -38,7 +38,7 @@ schema_process = StructType([
     StructField("status", StringType(), True),
     StructField("process_name", StringType(), True),
     StructField("eventhub_queued_time", StringType(), True),
-    StructField("eventhub_offset", IntegerType(), True),
+    StructField("eventhub_offset", LongType(), True),
     StructField("eventhub_sequence_number", IntegerType(), True),
     StructField("process_version", StringType(), True),
     StructField("start_processing_time", StringType(), True),
