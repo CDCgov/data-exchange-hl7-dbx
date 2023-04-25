@@ -37,11 +37,14 @@ schema_metadata_provenance = StructType([
 schema_process = StructType([    
     StructField("status", StringType(), True),
     StructField("process_name", StringType(), True),
+    StructField("eventhub_queued_time", StringType(), True),
+    StructField("eventhub_offset", LongType(), True),
+    StructField("eventhub_sequence_number", IntegerType(), True),
     StructField("process_version", StringType(), True),
     StructField("start_processing_time", StringType(), True),
     StructField("end_processing_time", StringType(), True),
     StructField("report", StringType(), True),
-])
+   ])
 
 schema_processes = ArrayType(schema_process, True)
 
@@ -50,6 +53,7 @@ schema_message_info = StructType([
     StructField("route", StringType(), True),
     StructField("mmgs", ArrayType(StringType()), True),
     StructField("reporting_jurisdiction", StringType(), True),
+    StructField("type", StringType(), True)
 ])
 
 schema_problem  = StructType ([

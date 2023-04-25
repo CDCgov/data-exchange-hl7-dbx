@@ -47,7 +47,7 @@ df2_err = df_err.select("*")
 
 df_result = df_ok.unionByName(df_err, allowMissingColumns=True)
 
-df2 = df_result.withColumn('issue', F.explode((from_json('report', mmgReportSchema)).entries))
+df2 = df_result.withColumn('issue', F.explode_outer((from_json('report', mmgReportSchema)).entries))
 
 df3 = df2.select('message_uuid', 'metadata_version','message_info','status','summary', 'provenance', 'issue.category','issue.line', 
                  df2.issue.path.alias("column"),df2.issue.fieldName.alias("field"),'issue.classification','issue.description' )

@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_redacted_ok"
+TOPIC = "hl7_lake_segments_ok"
 STAGE_IN = "silver"
 STAGE_OUT = "gold"
 
@@ -68,7 +68,7 @@ def transformAndSendToRoute(batchDF, batchId):
 
 #df1.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
 df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true") \
-    .option("checkpointLocation", f"{gold_database_folder}/checkpoints/hl7_redacted_ok_silver2gold_checkpoint") \
+    .option("checkpointLocation", f"{gold_database_folder}/checkpoints/hl7_lake_segments_ok_silver2gold_checkpoint") \
     .foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------

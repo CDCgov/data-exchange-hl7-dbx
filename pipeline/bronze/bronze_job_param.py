@@ -8,6 +8,7 @@ processNames = {
     'hl7-recdeb-ok' : 'RECEIVER',
     'hl7-recdeb-err': 'RECEIVER',
     'hl7-structure-ok': 'STRUCTURE-VALIDATOR',
+    'hl7-structure-elr-ok': 'STRUCTURE-VALIDATOR',
     'hl-structure-err': 'STRUCTURE-VALIDATOR',
     'hl7-mmg-validation-ok': 'MMG-VALIDATOR',
     'hl7-mmg-validation-err': 'MMG-VALIDATOR',
