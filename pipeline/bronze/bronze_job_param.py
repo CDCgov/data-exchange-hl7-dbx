@@ -7,6 +7,8 @@ processNames = {
     'hl7-file-dropped-ok': 'FILE_DROPPED',
     'hl7-recdeb-ok' : 'RECEIVER',
     'hl7-recdeb-err': 'RECEIVER',
+    'hl7-redacted-ok': 'REDACTOR',
+    'hl7-redacted-err': 'REDACTOR',
     'hl7-structure-ok': 'STRUCTURE-VALIDATOR',
     'hl7-structure-elr-ok': 'STRUCTURE-VALIDATOR',
     'hl7-structure-err': 'STRUCTURE-VALIDATOR',
