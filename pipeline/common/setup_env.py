@@ -79,4 +79,4 @@ globalEventHubConfig = EventHubConfig(globalDexEnv.eventhub_namespace, globalDex
 
 # COMMAND ----------
 
-dbutils.widgets.dropdown("event_hub", "hl7-recdeb-ok", ["hl7-file-dropped-ok", "hl7-recdeb-ok", "hl7-recdeb-err", "hl7-structure-ok", "hl7-structure-err", "hl7-mmg-validation-ok", "hl7-mmg-validation-err", "hl7-lake-segments-ok", "hl7-lake-segments-err"])
+dbutils.widgets.dropdown("event_hub", "hl7-recdeb-ok", ["hl7-file-dropped-ok", "hl7-recdeb-ok", "hl7-redacted-ok", "hl7-redacted-err", "hl7-recdeb-err", "hl7-structure-ok", "hl7-structure-err", "hl7-mmg-validation-ok", "hl7-mmg-validation-err", "hl7-mmg-based-ok", "hl7-mmg-based-err", "hl7-mmg-sql-ok", "hl7-mmg-sql-err", "hl7-lake-segments-ok", "hl7-lake-segments-err"])

@@ -9,11 +9,15 @@ processNames = {
     'hl7-recdeb-err': 'RECEIVER',
     'hl7-structure-ok': 'STRUCTURE-VALIDATOR',
     'hl7-structure-elr-ok': 'STRUCTURE-VALIDATOR',
-    'hl-structure-err': 'STRUCTURE-VALIDATOR',
+    'hl7-structure-err': 'STRUCTURE-VALIDATOR',
     'hl7-mmg-validation-ok': 'MMG-VALIDATOR',
     'hl7-mmg-validation-err': 'MMG-VALIDATOR',
-    'hl7-lake-segments-ok': 'lakeSegsTransformer',
-    'hl7-lake-segments-err': 'lakeSegsTransformer'
+    'hl7-mmg-based-ok': 'MMG-BASED-TRANSFORMER',
+    'hl7-mmg-based-ERR': 'MMG-BASED-TRANSFORMER',
+    'hl7-mmg-sql-ok': 'MMG-SQL-TRANSFORMER',
+    'hl7-mmg-sql-err': 'MMG-SQL-TRANSFORMER',
+    'hl7-lake-segments-ok': 'LAKE-SEGMENTS-TRANSFORMER',
+    'hl7-lake-segments-err': 'LAKE-SEGMENTS-TRANSFORMER'
 }
 
 # COMMAND ----------
