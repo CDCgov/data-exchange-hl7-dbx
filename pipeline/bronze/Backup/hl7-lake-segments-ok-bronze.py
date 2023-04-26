@@ -14,7 +14,8 @@
 # COMMAND ----------
 
 TOPIC = "hl7_lake_segments_ok"
-PROCESS_NAME = "lakeSegsTransformer"
+
+PROCESS_NAME = "LAKE_OF_SEGMENTS_TRANSFORMER"
 
 # COMMAND ----------
 
