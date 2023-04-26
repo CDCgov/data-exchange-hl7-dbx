@@ -4,6 +4,8 @@
 
 # COMMAND ----------
 
+<<<<<<< HEAD
+=======
 
 TOPIC_ERR = "hl7_structure_err_bronze"
 TOPIC_OK = "hl7_structure_ok_bronze"
@@ -17,6 +19,7 @@ TOPIC = "hl7_structure"
 
 # COMMAND ----------
 
+>>>>>>> origin/develop
 # MAGIC %run ../common/common_fns
 
 # COMMAND ----------
@@ -26,13 +29,23 @@ TOPIC = "hl7_structure"
 # COMMAND ----------
 
 
-df_err = getTableStream(database_config,TOPIC_ERR)
 
-df_ok = getTableStream(database_config,TOPIC_OK)
+# df_err = getTableStream(database_config,TOPIC_ERR)
 
+# df_ok = getTableStream(database_config,TOPIC_OK)
+
+# lake_util_out = LakeUtil(TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+
+<<<<<<< HEAD
+lakeDAO = LakeDAO(globalLakeConfig)
+
+df_err = lakeDAO.readStreamFrom("hl7_structure_err_bronze")
+df_ok =  lakeDAO.readStreamFrom("hl7_structure_ok_bronze")
+=======
 df_elr_ok = getTableStream(database_config,TOPIC_ELR_OK)
 
 lake_util_out = LakeUtil(TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+>>>>>>> origin/develop
 
 #display(df_err.select("*"))
 
@@ -46,10 +59,10 @@ lake_util_out = LakeUtil(TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT
 from pyspark.sql import functions as F
 from pyspark.sql.functions import col, concat, explode_outer, from_json
 
-df2_ok = df_ok.select("*")
+# df2_ok = df_ok.select("*")
 #display(df2_ok)
 
-df2_err = df_err.select("*")
+# df2_err = df_err.select("*")
 
 df_result = df_ok.unionByName(df_err, allowMissingColumns=True).unionByName(df_elr_ok, allowMissingColumns=True)
 
@@ -61,9 +74,8 @@ df3 = df3.withColumn('error_concat', explode_outer('error_concat'))
 df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 'provenance',  'status','error_concat.line','error_concat.column',df3.error_concat.path.alias("field"),'error_concat.description','error_concat.classification','error_concat.category')
 #display(df4)
 
-
-
 # COMMAND ----------
 
-lake_util_out.write_stream_to_table(df4)
+# lake_util_out.write_stream_to_table(df4)
 
+lakeDAO.writeStreamTo(df4, "hl7_structure_silver" )

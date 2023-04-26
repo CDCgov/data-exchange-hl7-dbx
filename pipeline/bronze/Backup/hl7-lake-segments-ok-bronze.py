@@ -25,5 +25,9 @@ PROCESS_NAME = "LAKE_OF_SEGMENTS_TRANSFORMER"
 # COMMAND ----------
 
 
-segments_ok = create_bronze_df( TOPIC, PROCESS_NAME )
-create_bronze_table(TOPIC, segments_ok)
+segments_ok = create_bronze_df( TOPIC, PROCESS_NAME, globalLakeConfig )
+create_bronze_table(TOPIC, segments_ok, globalLakeConfig)
+
+# COMMAND ----------
+
+

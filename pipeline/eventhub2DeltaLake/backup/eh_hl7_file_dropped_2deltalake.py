@@ -4,8 +4,9 @@
 # COMMAND ----------
 
 ##### Stream Eventhub data to to Delta Lake
-eventHubTopic = "hl7-lake-segments-err"
-transferEventHubDataToLake(eventHubTopic)
+eventHubTopic = "hl7-file-dropped"
+
+transferEventHubDataToLake(globalEventHubConfig, globalLakeConfig, eventHubTopic)
 
 # COMMAND ----------
 
