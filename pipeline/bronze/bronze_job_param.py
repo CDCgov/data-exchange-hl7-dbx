@@ -16,8 +16,8 @@ processNames = {
     # 'hl7-mmg-validation-err': 'MMG-VALIDATOR',
     'hl7-mmg-based-ok': 'MMG_BASED_TRANSFORMER',
     'hl7-mmg-based-err': 'MMG_BASED_TRANSFORMER',
-    'hl7-mmg-sql-ok': 'mmgSQLTransformer',
-    'hl7-mmg-sql-err': 'mmgSQLTransformer',
+    'hl7-mmg-sql-ok': 'MMG_BASED_SQL_TRANSFORMER',
+    'hl7-mmg-sql-err': 'MMG_BASED_SQL_TRANSFORMER',
     'hl7-lake-segments-ok': 'LAKE-SEGMENTS-TRANSFORMER',
     'hl7-lake-segments-err': 'LAKE-SEGMENTS-TRANSFORMER'
 }
