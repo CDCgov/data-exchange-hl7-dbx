@@ -4,9 +4,9 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_structure"
-STAGE_IN = "silver"
-STAGE_OUT = "gold"
+# TOPIC = "hl7_structure"
+# STAGE_IN = "silver"
+# STAGE_OUT = "gold"
 
 # COMMAND ----------
 
@@ -28,7 +28,7 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
-lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+# lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
 
 # COMMAND ----------
@@ -38,7 +38,11 @@ lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
 # COMMAND ----------
 
-df1 = lake_util.read_stream_from_table()
+# df1 = lake_util.read_stream_from_table()
+lakeDAO = LakeDAO(globalLakeConfig)
+goldLakeDAO = LakeDAO(globalGOLDLakeConfig)
+
+df1 = lakeDAO.readStreamFrom("hl7_structure_silver")
 
 # COMMAND ----------
 
@@ -49,26 +53,26 @@ def transformAndSendToRoute(batchDF, batchId):
     from functools import reduce
     for program_route in routes_list:
         # working through each batch of route
-        printToFile(TOPIC, "working on (start) route: -> " + str(program_route))
+#         printToFile(TOPIC, "working on (start) route: -> " + str(program_route))
         # check if route == null, then push data into none table
         if program_route is None:
             df_one_route = batchDF.filter(col("message_info.route").isNull())
         else:    
             df_one_route = batchDF.filter( col("message_info.route") == program_route )
 
-        printToFile(TOPIC, f"records affected: {df_one_route.count()}")
+#         printToFile(TOPIC, f"records affected: {df_one_route.count()}")
         #printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
-        lake_util.write_gold_to_table(df_one_route, normalize(program_route))
-        
+#         lake_util.write_gold_to_table(df_one_route, normalize(program_route))
+        goldLakeDAO.writeTableTo(df_one_route, f"{normalize(program_route)}_hl7_structure_gold")
         # working through each batch of route
-        printToFile(TOPIC, "working on (done) route: -> " + str(program_route))
+#         printToFile(TOPIC, "working on (done) route: -> " + str(program_route))
 
 
 # COMMAND ----------
 
 #df1.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
 df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true") \
-    .option("checkpointLocation", f"{gold_database_folder}/checkpoints/hl7_mmg_structure_silver2gold_checkpoint") \
+    .option("checkpointLocation", globalLakeConfig.getCheckpointLocation("hl7_structure_silver2")) \
     .foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------

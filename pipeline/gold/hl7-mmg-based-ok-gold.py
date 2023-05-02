@@ -95,7 +95,7 @@ def transformAndSendToRoute(batchDF, batchId):
 
 #df2.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
 df2.writeStream.trigger(availableNow=True).option("mergeSchema", "true") \
-    .option("checkpointLocation", f"{gold_database_folder}/checkpoints/hl7_mmg_based_ok_silver2gold_checkpoint") \
+    .option("checkpointLocation", f"{globalDexEnv.database_checkpoint_prefix}/checkpoints/hl7_mmg_based_ok_silver2gold_checkpoint") \
     .foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------
