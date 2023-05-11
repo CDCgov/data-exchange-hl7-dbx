@@ -4,17 +4,17 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_mmg_based_ok"
-STAGE_IN = "bronze"
-STAGE_OUT = "silver"
-
-# COMMAND ----------
-
 # MAGIC %run ../common/common_fns
 
 # COMMAND ----------
 
-lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+# MAGIC %run ../common/schemas
+
+# COMMAND ----------
+
+lakeDAO = LakeDAO(globalLakeConfig)
+
+df1 =  lakeDAO.readStreamFrom("hl7_mmg_based_ok_bronze")
 
 
 # COMMAND ----------
@@ -25,24 +25,6 @@ lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 # COMMAND ----------
 
 from pyspark.sql.functions import *
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Schemas Needed
-
-# COMMAND ----------
-
-# MAGIC %run ../common/schemas
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Read Input Table
-
-# COMMAND ----------
-
-df1 = lake_util.read_stream_from_table()
 
 # COMMAND ----------
 
@@ -75,5 +57,5 @@ df3 = df2.withColumn( "mmg_based_model_map", from_json( col("mmg_based_model_str
 
 # COMMAND ----------
 
-lake_util.write_stream_to_table(df3)
+lakeDAO.writeStreamTo(df3, "hl7_mmg_based_ok_silver" )
 

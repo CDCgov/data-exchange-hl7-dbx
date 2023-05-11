@@ -4,18 +4,7 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_redacted_ok"
-STAGE_IN = "bronze"
-STAGE_OUT = "silver"
-
-# COMMAND ----------
-
 # MAGIC %run ../common/common_fns
-
-# COMMAND ----------
-
-lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
-
 
 # COMMAND ----------
 
@@ -42,12 +31,9 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
-df1 = lake_util.read_stream_from_table()
+lakeDAO = LakeDAO(globalLakeConfig)
 
-# not stream for dev only
-# df1 = spark.read.format("delta").table( f"{database_config.database}.{TOPIC}_{STAGE_IN}" )
-#display( df1 )
-
+df1 =  lakeDAO.readStreamFrom("hl7_redacted_ok_bronze")
 
 
 # COMMAND ----------
@@ -87,5 +73,5 @@ df5 = df4.select('message_uuid', 'message_info', 'summary','provenance','issue.p
 
 # COMMAND ----------
 
-lake_util.write_stream_to_table(df5)
+lakeDAO.writeStreamTo(df5, "hl7_redacted_ok_silver" )
 
