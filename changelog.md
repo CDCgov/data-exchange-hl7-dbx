@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.12] -2023-05-03
+  DEX Release 0.0.18
+  
+  - Resolved intermittent failures of pulling data from Event hubs by fixing network issues.
+  - Created Gold tables for Lake of Segments.
+  - Refactored Raw and Bronze tables, removing redundant notebooks and using widget parameters for each event hub.
+  - Synced process names with changes made on FN pipelines.
+  - Created consolidated table with Structure and MMG-Validation Rules for Silver and Gold tables.
+
+	
 ### [0.0.11] -2023-04-19
   DEX Release 0.0.17
   
