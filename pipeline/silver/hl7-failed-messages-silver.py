@@ -29,10 +29,13 @@ TOPIC = "hl7_failed_messages"
 
 # COMMAND ----------
 
+lakeDAO = LakeDAO(globalLakeConfig)
+
 def get_selected_fields(topic):
-    return getTableStream(database_config, topic).select('message_uuid', 'message_info', 'provenance', 'processes', 'summary', 'start_processing_time', 'end_processing_time', 'status', 'report')
+    return lakeDAO.readStreamFrom(topic).select('message_uuid', 'message_info', 'provenance', 'processes', 'summary', 'start_processing_time', 'end_processing_time', 'status', 'report')
 
 # COMMAND ----------
+
 
 df_err_mmg_validation = get_selected_fields(TOPIC_ERR_MMG_VALIDATION)
 df_err_mmg_based = get_selected_fields(TOPIC_ERR_MMG_BASED)
@@ -41,8 +44,6 @@ df_err_recdeb = get_selected_fields(TOPIC_ERR_RECDEB)
 df_err_redacted = get_selected_fields(TOPIC_ERR_REDACTED)
 df_err_lake_segments = get_selected_fields(TOPIC_ERR_LAKE_SEGMENTS)
 df_err_structure = get_selected_fields(TOPIC_ERR_STRUCTURE)
-
-lake_util_out = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
 # COMMAND ----------
 
@@ -61,4 +62,4 @@ final_df = df_result.select('message_uuid', 'message_info', 'provenance', 'proce
 
 # COMMAND ----------
 
-lake_util_out.write_stream_to_table(final_df)
+lakeDAO.writeStreamTo(final_df, "hl7_failed_messages_silver")
