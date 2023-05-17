@@ -52,7 +52,7 @@ df3 = df2.withColumn("mmg_sql_model_map", from_json(col("mmg_sql_model_string"),
 
 df4 = df3.withColumn( "mmg_sql_model_singles",  map_filter("mmg_sql_model_map", lambda k, _: k != "tables" ) ) \
          .withColumn( "mmg_sql_model_tables", from_json( col("mmg_sql_model_map.tables" ), schema_tables) ) \
-         .drop( "mmg_sql_model_map" )
+         .drop( "mmg_sql_model_map" )     
 
 
 # COMMAND ----------
@@ -62,4 +62,4 @@ df4 = df3.withColumn( "mmg_sql_model_singles",  map_filter("mmg_sql_model_map", 
 
 # COMMAND ----------
 
-lakeDAO.writeStreamTo(df3, "hl7_mmg_sql_ok_silver" )
+lakeDAO.writeStreamTo(df4, "hl7_mmg_sql_ok_silver" )
