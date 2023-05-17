@@ -7,6 +7,7 @@
 # MAGIC %run ../common/common_fns
 
 # COMMAND ----------
+
 lakeDAO = LakeDAO(globalLakeConfig)
 df1 =  lakeDAO.readStreamFrom("hl7_lake_segments_ok_bronze")
 
@@ -33,12 +34,10 @@ from pyspark.sql.functions import *
 
 # MAGIC %md
 # MAGIC ### Read Input Table
-
-# not stream for dev only
-# df1 = spark.read.format("delta").table( f"{database_config.database}.{TOPIC}_{STAGE_IN}" )
-# display( df1 )
-
-
+# MAGIC
+# MAGIC # not stream for dev only
+# MAGIC # df1 = spark.read.format("delta").table( f"{database_config.database}.{TOPIC}_{STAGE_IN}" )
+# MAGIC # display( df1 )
 
 # COMMAND ----------
 

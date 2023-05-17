@@ -4,7 +4,6 @@
 
 # COMMAND ----------
 
-
 TOPIC_ERR_MMG_VALIDATION = "hl7_mmg_validation_err_bronze"
 TOPIC_ERR_MMG_BASED = "hl7_mmg_based_err_bronze"
 TOPIC_ERR_MMG_SQL = "hl7_mmg_sql_err_bronze"
@@ -12,12 +11,6 @@ TOPIC_ERR_RECDEB = "hl7_recdeb_err_bronze"
 TOPIC_ERR_REDACTED = "hl7_redacted_err_bronze"
 TOPIC_ERR_LAKE_SEGMENTS = "hl7_lake_segments_err_bronze"
 TOPIC_ERR_STRUCTURE = "hl7_structure_err_bronze"
-
-STAGE_IN = "bronze"
-STAGE_OUT = "silver"
-TOPIC = "hl7_failed_messages"
-
-
 
 # COMMAND ----------
 
@@ -53,6 +46,7 @@ from functools import reduce
 from pyspark.sql import DataFrame
 
 combined_dfs = [df_err_mmg_validation, df_err_structure, df_err_recdeb, df_err_mmg_based, df_err_mmg_sql, df_err_lake_segments, df_err_redacted]
+
 df_result = reduce(DataFrame.union, combined_dfs)
 
 final_df = df_result.select('message_uuid', 'message_info', 'provenance', 'processes', 'summary.current_status', 'summary.problem.*', 'start_processing_time', 'end_processing_time', 'status', 'report')
