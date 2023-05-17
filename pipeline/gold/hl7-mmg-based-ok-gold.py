@@ -4,18 +4,7 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_mmg_based_ok"
-STAGE_IN = "silver"
-STAGE_OUT = "gold"
-
-# COMMAND ----------
-
 # MAGIC %run ../common/common_fns
-
-# COMMAND ----------
-
-lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
-
 
 # COMMAND ----------
 
@@ -42,7 +31,10 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
-df1 = lake_util.read_stream_from_table()
+lakeDAO = LakeDAO(globalLakeConfig)
+goldLakeDAO = LakeDAO(globalGOLDLakeConfig)
+
+df1 = lakeDAO.readStreamFrom("hl7_mmg_based_ok_silver")
 
 # COMMAND ----------
 
@@ -63,7 +55,7 @@ def transformAndSendToRoute(batchDF, batchId):
     from functools import reduce
     for program_route in routes_list:
         # working through each batch of route
-        printToFile(TOPIC, "working on (start) route: -> " + program_route)
+        # printToFile(TOPIC, "working on (start) route: -> " + program_route)
         df_one_route = batchDF.filter( col("message_info.route") == program_route )
 
         # this batch of messages they all have the same mmg, so same keys just need one (first)
@@ -79,12 +71,12 @@ def transformAndSendToRoute(batchDF, batchId):
         # drop no longer needed columns
         df_one_batch_model2 = df_one_batch_model1.drop("mmg_based_model_map", "mmg_based_model_map_keys")
 
-        printToFile(TOPIC, f"records affected: {df_one_batch_model2.count()}")
+        # printToFile(TOPIC, f"records affected: {df_one_batch_model2.count()}")
         #printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
-        lake_util.write_gold_to_table(df_one_batch_model2, program_route)
-
+        # lake_util.write_gold_to_table(df_one_batch_model2, program_route)
+        goldLakeDAO.writeTableTo(df_one_batch_model2, f"{normalize(program_route)}_hl7_mmg_based_ok_gold")
         # working through each batch of route
-        printToFile(TOPIC, "working on (done) route: -> " + program_route)
+        # printToFile(TOPIC, "working on (done) route: -> " + program_route)
 
 
 # COMMAND ----------
@@ -95,7 +87,7 @@ def transformAndSendToRoute(batchDF, batchId):
 
 #df2.writeStream.trigger(availableNow=True).foreachBatch( transformAndSendToRoute ).start()
 df2.writeStream.trigger(availableNow=True).option("mergeSchema", "true") \
-    .option("checkpointLocation", f"{globalDexEnv.database_checkpoint_prefix}/checkpoints/hl7_mmg_based_ok_silver2gold_checkpoint") \
+    .option("checkpointLocation", globalLakeConfig.getCheckpointLocation("hl7_mmg_based_ok_silver2gold_checkpoint")) \
     .foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------

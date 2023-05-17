@@ -4,12 +4,6 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_mmg_sql_ok"
-STAGE_IN = "silver"
-STAGE_OUT = "gold"
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC ### Imports 
 
@@ -22,16 +16,6 @@ from functools import reduce
 # COMMAND ----------
 
 # MAGIC %run ../common/common_fns
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Input and Output Tables
-
-# COMMAND ----------
-
-lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
-
 
 # COMMAND ----------
 
@@ -49,7 +33,10 @@ lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
 # COMMAND ----------
 
-df1 = lake_util.read_stream_from_table()
+lakeDAO = LakeDAO(globalLakeConfig)
+goldLakeDAO = LakeDAO(globalGOLDLakeConfig)
+
+df1 = lakeDAO.readStreamFrom("hl7_mmg_sql_ok_silver")
 
 # COMMAND ----------
 
@@ -64,7 +51,7 @@ def write_single_table(df_singles, batch_routes_list):
     for route in batch_routes_list:
 
         # working through each route
-        printToFile(TOPIC, "working on (start) route: -> " + route)
+        # printToFile(TOPIC, "working on (start) route: -> " + route)
 
         df_one_batch = df_singles.filter( col("message_info.route") == route )
 
@@ -85,13 +72,13 @@ def write_single_table(df_singles, batch_routes_list):
         ######################################################################################
         route_normalized = normalize(route)
         
-        printToFile(TOPIC, f"records affected: {df_one_batch_singles_2.count()}")
+        # printToFile(TOPIC, f"records affected: {df_one_batch_singles_2.count()}")
         #printToFile(TOPIC, lake_util.get_for_print_gold_database_config( route_normalized ) )
-        lake_util.write_gold_to_table(df_one_batch_singles_2, route_normalized)
-
+        # lake_util.write_gold_to_table(df_one_batch_singles_2, route_normalized)
+        goldLakeDAO.writeTableTo(df_one_batch_singles_2, f"{normalize(route_normalized)}_hl7_mmg_sql_ok_gold")
 
         # working through each row, done this row
-        printToFile(TOPIC, "working on (done) route: -> " + route)
+        # printToFile(TOPIC, "working on (done) route: -> " + route)
 
 
 # COMMAND ----------
@@ -107,7 +94,7 @@ def write_repeat_tables(df_tables, batch_routes_list):
     for route in batch_routes_list:
 
         # working through each row
-        printToFile(TOPIC, f"working on repeat tables (start) route: ->  + {route}")
+        # printToFile(TOPIC, f"working on repeat tables (start) route: ->  + {route}")
 
         df_one_batch_tables = df_tables.filter( col("message_info.route") == route )
         program_route = normalize(route)
@@ -126,7 +113,7 @@ def write_repeat_tables(df_tables, batch_routes_list):
 
         # for every column (table)
         for col_table in cols_tables:
-             printToFile(TOPIC, "working on table (start): -> " + col_table)
+            #  printToFile(TOPIC, "working on table (start): -> " + col_table)
 
              # explode column data into rows
              # no longer selecting message_info for tables
@@ -150,16 +137,16 @@ def write_repeat_tables(df_tables, batch_routes_list):
                  ######################################################################################
                  # TODO: repeat_table write append to program table
                  ######################################################################################
-                 printToFile(TOPIC, f"records affected: {repeat_table.count()}")
+                #  printToFile(TOPIC, f"records affected: {repeat_table.count()}")
                  col_table_norm = normalize(col_table)
                  # printToFile(TOPIC, lake_util.get_for_print_gold_database_repeat_config( program_route, col_table_norm ) )
-                 lake_util.write_gold_repeat_to_table(repeat_table, program_route, col_table_norm)
+                #  lake_util.write_gold_repeat_to_table(repeat_table, program_route, col_table_norm)
+                 goldLakeDAO.writeTableTo(repeat_table, f"{normalize(program_route)}_{col_table_norm}_hl7_mmg_sql_ok_gold")
 
-
-             printToFile(TOPIC, "working on table (done): -> " + col_table)
+            #  printToFile(TOPIC, "working on table (done): -> " + col_table)
 
         # working through each row, done this row
-        printToFile(TOPIC, "working on repeat tables (done) route: -> " + route)
+        # printToFile(TOPIC, "working on repeat tables (done) route: -> " + route)
 
 # COMMAND ----------
 
@@ -208,8 +195,8 @@ def transform_send(batch_df, batch_id):
 #.option("checkpointLocation", f"{database_folder}/checkpoints/hl7_mmg_sql_ok_silver2gold_checkpoint") \
 
 df1.writeStream.trigger(availableNow=True).option("mergeSchema", "true") \
-     .option("checkpointLocation", f"{globalDexEnv.database_checkpoint_prefix}/checkpoints/hl7_mmg_sql_ok_silver2gold_checkpoint") \
-     .foreachBatch( transform_send ).start()
+    .option("checkpointLocation", globalLakeConfig.getCheckpointLocation("hl7_mmg_sql_ok_silver2gold_checkpoint")) \
+    .foreachBatch( transform_send ).start()
 
 # COMMAND ----------
 
