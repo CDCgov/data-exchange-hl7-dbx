@@ -15,13 +15,18 @@
 
 lakeDAO = LakeDAO(globalLakeConfig)
 
-df_err = lakeDAO.readStreamFrom("hl7_structure_err_bronze")
-df_ok =  lakeDAO.readStreamFrom("hl7_structure_ok_bronze")
+df_err    = lakeDAO.readStreamFrom("hl7_structure_err_bronze")
+df_ok     = lakeDAO.readStreamFrom("hl7_structure_ok_bronze")
+df_elr_ok = lakeDAO.readStreamFrom("hl7_structure_elr_ok_bronze")
 
-df_elr_ok =  lakeDAO.readStreamFrom("hl7_structure_elr_ok_bronze")
+#display(df_err.select("*"))
+
+# check print database_config
+#print( lake_util_out.print_database_config() )
 
 
 # COMMAND ----------
+
 
 from pyspark.sql import functions as F
 from pyspark.sql.functions import col, concat, explode_outer, from_json
@@ -42,5 +47,7 @@ df4 = df3.select('message_uuid','metadata_version',  'message_info', 'summary', 
 #display(df4)
 
 # COMMAND ----------
+
+# lake_util_out.write_stream_to_table(df4)
 
 lakeDAO.writeStreamTo(df4, "hl7_structure_silver" )
