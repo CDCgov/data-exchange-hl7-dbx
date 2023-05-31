@@ -13,7 +13,3 @@ import os
 
 eventHubTopic = dbutils.widgets.get("event_hub")
 transferEventHubDataToLake(globalEventHubConfig, globalLakeConfig, eventHubTopic)
-
-# COMMAND ----------
-
-
