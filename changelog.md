@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+### [0.0.14] - 2023-05-31
+
+DEX HL7 Release 0.0.20
+
+- Added all TST jobs to run on a scheduler (every 10 min)
+
 ### [0.0.13] - 2023-05-17
 
 DEX Release 0.0.19
