@@ -4,9 +4,9 @@
 
 # COMMAND ----------
 
-TOPIC = "hl7_mmg_validation_ok"
-STAGE_IN = "silver"
-STAGE_OUT = "gold"
+#TOPIC = "hl7_mmg_validation_ok"
+#STAGE_IN = "silver"
+#STAGE_OUT = "gold"
 
 # COMMAND ----------
 
@@ -28,7 +28,10 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
-lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+#lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
+lakeDAO = LakeDAO(globalLakeConfig)
+goldLakeDAO = LakeDAO(globalGOLDLakeConfig)
+
 
 
 # COMMAND ----------
@@ -38,8 +41,8 @@ lake_util = LakeUtil( TableConfig(database_config, TOPIC, STAGE_IN, STAGE_OUT) )
 
 # COMMAND ----------
 
-df1 = lake_util.read_stream_from_table()
-
+#df1 = lake_util.read_stream_from_table()
+df1 = lakeDAO.readStreamFrom("hl7_mmg_validation_ok")
 # COMMAND ----------
 
     
@@ -58,8 +61,8 @@ def transformAndSendToRoute(batchDF, batchId):
             
         printToFile(TOPIC, f"records affected: {df_one_route.count()}")
         #printToFile(TOPIC, lake_util.get_for_print_gold_database_config( program_route ) )
-        lake_util.write_gold_to_table(df_one_route, program_route)
-        
+        #lake_util.write_gold_to_table(df_one_route, program_route)
+        goldLakeDAO.writeTableTo(df_one_batch_model2, f"{normalize(program_route)}_hl7_mmg_validation_ok_gold")
         # working through each batch of route
         printToFile(TOPIC, "working on (done) route: -> " + str(program_route))
 
@@ -67,7 +70,7 @@ def transformAndSendToRoute(batchDF, batchId):
 # COMMAND ----------
 
 df1.writeStream.trigger(availableNow=True).option("mergeSchema", true) \
-    .option("checkpointLocation", f"{gold_database_folder}/checkpoints/hl7_mmg_validation_ok_silver2gold_checkpoint") \
+    .option("checkpointLocation", globalLakeConfig.getCheckpointLocation("hl7_mmg_validation_ok_silver2gold_checkpoint")) \
     .foreachBatch( transformAndSendToRoute ).start()
 
 # COMMAND ----------
