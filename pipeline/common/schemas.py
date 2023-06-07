@@ -8,8 +8,8 @@ from pyspark.sql.types import *
 
 # COMMAND ----------
 
-# MAGIC 
-# MAGIC 
+# MAGIC
+# MAGIC
 # MAGIC %md
 # MAGIC ### Schemas Common ( Bronze )
 
@@ -154,6 +154,12 @@ schema_evhub_body_v2 = StructType([    #StructField("content", StringType(), Tru
     StructField("metadata", schema_metadata, True)
 ])
 
+log_schema = StructType([
+        StructField("timeStamp", StringType(),True),
+        StructField("classification", StringType(),True),
+        StructField("notebook", StringType(),True),
+        StructField("message", StringType(),True)
+    ])
 
 
 # COMMAND ----------
