@@ -1,0 +1,54 @@
+# This is a basic workflow to help you get started with Actions
+
+name: WorkflowMigration
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "develop" branch
+  push:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  Build:
+  # runs-on: ubuntu-latest
+    runs-on: self-hosted
+    #environment: prod  # THIS WAS MISSING
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          path: develop
+      
+      - name: upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: publish
+          path: |
+            ${{ github.workspace }}
+            !{{ github.workspace }}/.github/*.*
+            !{{ github.workspace }}/.git/*.*
+            
+  deploy-Dev:
+    runs-on: self-hosted
+    needs: Build
+    environment: dev
+    env: 
+      PUBLISHPATH: ${{ github.workspace }}\Publish
+    
+    steps: 
+      - name: download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: publish 
+          path: ${{ env.PUBLISHPATH }}
