@@ -28,7 +28,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
         with:
-          path: develop
+          path: Worflow-update
       
       - name: upload artifact
         uses: actions/upload-artifact@v3
