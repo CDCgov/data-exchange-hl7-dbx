@@ -290,11 +290,11 @@
                 }
             ],
             "notebook_task": {
-                "notebook_path": "pipeline/bronze/bronze_mmg_validation_job_param",
+                "notebook_path": "/DEX/{SECRET_Env}#/bronze/bronze_mmg_validation_job_param",
                 "base_parameters": {
                     "event_hub": "hl7-mmg-validation-ok"
                 },
-                "source": "GIT"
+                "source": "WORKSPACE"
             },
             "existing_cluster_id": "{SECRET_ClusterID}#",
             "timeout_seconds": 0,

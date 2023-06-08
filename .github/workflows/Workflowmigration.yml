@@ -71,7 +71,7 @@ jobs:
                $Token=Invoke-WebRequest $url -Method $method -Headers $headers -Body $body -UseBasicParsing | Select  -ExpandProperty content | jq -r .access_token    
                echo "TOKEN=$Token" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         
-      - name: Worflow tokens
+      - name: Worflow Migration
         shell: pwsh
         run: |
                  $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/develop/Devops/ADBWorkflows/*.json" -recurse
@@ -83,10 +83,11 @@ jobs:
                  $headers.Add("Authorization", "Bearer ${{ env.TOKEN }}")
                  $headers.Add('Content-Type', 'application/json')
                  $ADBHost = "${{ secrets.HOSTURL }}"
+                 Write-host "$ADBHost"
 
                  $url = "$ADBHost/api/2.0/jobs/create"
 
-                 $statusCode = Invoke-WebRequest -Uri $url -Method Post -Body $content -Headers $headers
+                 $statusCode = Invoke-WebRequest -Uri $url -Method Post -Body $filecontent -Headers $headers
 
 
                  }
