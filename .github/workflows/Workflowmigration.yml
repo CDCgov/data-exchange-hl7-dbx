@@ -85,9 +85,10 @@ jobs:
                  $ADBHost = "${{ vars.HOSTURL }}"
                  Write-host "$ADBHost"
 
-                 $url = "$ADBHostapi2.0/jobs/create"
+                 $url = "$ADBHost/api2.0/jobs/create"
+                 Write-host "Invoke-WebRequest -Uri $url -Method Post -Body $fileContent -Headers $headers"
 
-                 $statusCode = Invoke-WebRequest -Uri $url -Method Post -Body $filecontent -Headers $headers
+                 $statusCode = Invoke-WebRequest -Uri $url -Method Post -Body $fileContent -Headers $headers
 
 
                  }
