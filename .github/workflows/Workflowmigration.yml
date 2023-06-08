@@ -82,7 +82,7 @@ jobs:
 
                  $headers.Add("Authorization", "Bearer ${{ env.TOKEN }}")
                  $headers.Add('Content-Type', 'application/json')
-                 $ADBHost = "${{ secrets.HOSTURL }}"
+                 $ADBHost = "${{ vars.HOSTURL }}"
                  Write-host "$ADBHost"
 
                  $url = "$ADBHost/api/2.0/jobs/create"
