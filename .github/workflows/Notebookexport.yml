@@ -74,6 +74,46 @@ jobs:
          Add-Content .databrickscfg "token = ${{ env.TOKEN }}" 
          Write-Verbose "Databricks CLI Configured"
          databricks workspace import_dir "${{ env.PUBLISHPATH }}\develop\pipeline" "${{ vars.DEXUPLOADWORKSPACEURL }}" -o
+  
+  deploy-STG:
+    runs-on: self-hosted
+    needs: Build
+    environment: STG
+    env: 
+      PUBLISHPATH: ${{ github.workspace }}\STG
+          
+    steps: 
+      - name: download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: publish 
+          path: ${{ env.PUBLISHPATH }}
+            
+      - name: Export Token
+        shell: pwsh
+        run: |
+               $headers = @{'Content-Type'='application/x-www-form-urlencoded'}
+               $method = 'POST'
+               $url = 'https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/v2.0/token'
+               $body = @{'client_id'='${{ secrets.DEX_APP_ID }}'; 'grant_type'='client_credentials'; 'scope'='2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default'; 'client_secret'='${{ secrets.DEX_CLIENT_SECRET }}'}
+               $Token=Invoke-WebRequest $url -Method $method -Headers $headers -Body $body -UseBasicParsing | Select  -ExpandProperty content | jq -r .access_token    
+               echo "TOKEN=$Token" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append 
+             
+      - name: publish
+        shell: pwsh
+        run: |
+               write-host "Configure databricks access"
+               $Env:DATABRICKS_CONFIG_FILE = "${{ github.workspace }}/.databrickscfg"
+               Set-Location ${{ github.workspace }}
+               Set-Content .databrickscfg "[DEFAULT]"
+               Add-Content .databrickscfg "host = ${{ secrets.HOSTURL }}"
+               Add-Content .databrickscfg "token = ${{ env.TOKEN }}" 
+               Write-Verbose "Databricks CLI Configured"
+               databricks workspace import_dir "${{ env.PUBLISHPATH }}\develop\pipeline" "${{ vars.DEXUPLOADWORKSPACEURL }}" -o
+             
+           
+              
+            
        
      
         
