@@ -56,7 +56,7 @@ jobs:
       - name: Replace tokens
         shell: pwsh
         run: |
-          $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/Devops/ADBWorkflows/*.json" -rec
+          $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/develop/Devops/ADBWorkflows/*.json" -recurse
           foreach ($file in $configFiles)
           {
           (Get-Content $file.PSPath) |Foreach-Object { $_ -replace "{SECRET_Env}#", "${{ secrets.SECRET_ENV }}" -replace "{SECRET_ClusterID}#", "${{ secrets.SECRET_ClusterID }}"  } | Set-Content $file.PSPath
@@ -74,7 +74,7 @@ jobs:
       - name: Replace tokens
         shell: pwsh
         run: |
-                 $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/Devops/ADBWorkflows/*.json" -rec
+                 $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/develop/Devops/ADBWorkflows/*.json" -recurse
                  foreach ($file in $configFiles)
                  {
                  $fileContent = Get-Content $file.PSPath 
