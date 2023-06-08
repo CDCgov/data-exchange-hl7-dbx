@@ -41,8 +41,11 @@ class LakeDAO:
             .option("checkpointLocation", self.lakeConfig.getCheckpointLocation(tableName)).toTable(self.lakeConfig.getTableRef(tableName))
     
     def writeTableTo(self, df, tableName):
-        return df.write.format("delta").mode("append").option("mergeSchema", "true") \
+        try :
+           return df.write.format("delta").mode("append").option("mergeSchema", "true") \
             .saveAsTable( self.lakeConfig.getTableRef(tableName) )
+        except Exception as e:
+            return None   
         
 class EventHubConfig:
     def __init__(self, namespace, scope):
