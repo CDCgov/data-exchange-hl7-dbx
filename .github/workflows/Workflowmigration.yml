@@ -61,34 +61,28 @@ jobs:
           {
           (Get-Content $file.PSPath) |Foreach-Object { $_ -replace "{SECRET_Env}#", "${{ vars.SECRET_ENV }}" -replace "{SECRET_ClusterID}#", "${{ vars.SECRET_ClusterID }}"  } | Set-Content $file.PSPath
           }
-      - name: Export Token
+     
+        
+      - name: Worflow Migration
         shell: pwsh
         run: |
                $headers = @{'Content-Type'='application/x-www-form-urlencoded'}
                $method = 'POST'
                $url = 'https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/v2.0/token'
                $body = @{'client_id'='${{ secrets.DEX_APP_ID }}'; 'grant_type'='client_credentials'; 'scope'='2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default'; 'client_secret'='${{ secrets.DEX_CLIENT_SECRET }}'}
-               $Token=Invoke-WebRequest $url -Method $method -Headers $headers -Body $body -UseBasicParsing | Select  -ExpandProperty content | jq -r .access_token    
-               echo "TOKEN=$Token" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        
-      - name: Worflow Migration
-        shell: pwsh
-        run: |
-                 $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/develop/Devops/ADBWorkflows/*.json" -recurse
-                 foreach ($file in $configFiles)
-                 {
-                 $fileContent = Get-Content $file.PSPath 
-                 [hashtable]$headers=@{}
-
-                 $headers.Add("Authorization", "Bearer ${{ env.TOKEN }}")
-                 $headers.Add('Content-Type', 'application/json')
-                 $ADBHost = "${{ vars.HOSTURL }}"
-                 Write-host "$ADBHost"
-
-                 $url = "$ADBHost/api2.0/jobs/create"
-                 Write-host "Invoke-WebRequest -Uri $url -Method Post -Body $fileContent -Headers $headers"
-
-                 $statusCode = Invoke-WebRequest -Uri $url -Method Post -Body $fileContent -Headers $headers
+               $Token=Invoke-WebRequest $url -Method $method -Headers $headers -Body $body -UseBasicParsing | Select  -ExpandProperty content | jq -r .access_token
+               $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/develop/Devops/ADBWorkflows/*.json" -recurse
+               foreach ($file in $configFiles)
+               {
+               $fileContent = Get-Content $file.PSPath 
+               [hashtable]$headers=@{}
+               $headers.Add("Authorization", "Bearer $Token")
+               $headers.Add('Content-Type', 'application/json')
+               $ADBHost = "${{ vars.HOSTURL }}"
+               Write-host "$ADBHost"
+               $url = "$ADBHost/api2.0/jobs/create"
+               Write-host "Invoke-WebRequest -Uri $url -Method Post -Body $fileContent -Headers $headers"
+               $statusCode = Invoke-WebRequest -Uri $url -Method Post -Body $fileContent -Headers $headers
 
 
                  }
