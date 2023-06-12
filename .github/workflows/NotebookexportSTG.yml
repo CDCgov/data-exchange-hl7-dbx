@@ -78,7 +78,7 @@ jobs:
   
   deploy-STG:
     runs-on: self-hosted
-    needs: Build
+    needs: deploy-TST
     environment: STG
     env: 
       PUBLISHPATH: ${{ github.workspace }}\STG
