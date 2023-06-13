@@ -44,7 +44,7 @@ jobs:
     needs: Build
     environment: dev
     env: 
-      PUBLISHPATH: ${{ github.workspace }}\
+      PUBLISHPATH: ${{ github.workspace }}\Publish
     
     steps: 
       - name: download artifact
@@ -91,7 +91,7 @@ jobs:
     needs: deploy-dev
     environment: dev
     env: 
-      PUBLISHPATH: ${{ github.workspace }}\TST
+      PUBLISHPATH: ${{ github.workspace }}\Publish
                   
     steps: 
       - name: download artifact
