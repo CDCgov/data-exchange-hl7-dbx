@@ -81,7 +81,7 @@ jobs:
     needs: deploy-Dev
     environment: TST
     env: 
-      PUBLISHPATH: ${{ github.workspace }}\TST
+      PUBLISHPATH: ${{ github.workspace }}\Publish
           
     steps: 
       - name: download artifact
@@ -110,7 +110,7 @@ jobs:
                Add-Content .databrickscfg "host = ${{ secrets.HOSTURL }}"
                Add-Content .databrickscfg "token = ${{ env.TOKEN }}" 
                Write-Verbose "Databricks CLI Configured"
-               databricks workspace import_dir "${{ env.PUBLISHPATH }}\TST\develop\pipeline" "${{ vars.DEXUPLOADWORKSPACEURL }}" -o
+               databricks workspace import_dir "${{ env.PUBLISHPATH }}\develop\pipeline" "${{ vars.DEXUPLOADWORKSPACEURL }}" -o
              
            
               
