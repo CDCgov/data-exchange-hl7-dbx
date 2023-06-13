@@ -40,11 +40,11 @@ jobs:
             !{{ github.workspace }}/.git/*.*
             
   deploy-STG:
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows, X64, PRD]
     needs: Build
     environment: STG
     env: 
-      PUBLISHPATH: ${{ github.workspace }}\
+      PUBLISHPATH: ${{ github.workspace }}\STG
     
     steps: 
       - name: download artifact
