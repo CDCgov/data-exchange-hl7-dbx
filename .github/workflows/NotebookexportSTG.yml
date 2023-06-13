@@ -41,7 +41,7 @@ jobs:
             !{{ github.workspace }}/.git/*.*
             
   deploy-TST:
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows, X64, Dev]
     needs: Build
     environment: TST
     env: 
