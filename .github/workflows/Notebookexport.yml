@@ -41,7 +41,7 @@ jobs:
             !{{ github.workspace }}/.git/*.*
             
   deploy-Dev:
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows, X64, Dev]
     needs: Build
     environment: dev
     env: 
@@ -77,7 +77,7 @@ jobs:
          databricks workspace import_dir "${{ env.PUBLISHPATH }}\develop\pipeline" "${{ vars.DEXUPLOADWORKSPACEURL }}" -o
   
   deploy-TST:
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows, X64, Dev]
     needs: deploy-Dev
     environment: TST
     env: 
