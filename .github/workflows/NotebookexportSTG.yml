@@ -81,7 +81,7 @@ jobs:
     needs: deploy-TST
     environment: STG
     env: 
-      PUBLISHPATH: ${{ github.workspace }}\STG
+      PUBLISHPATH: ${{ github.workspace }}\Publish
           
     steps: 
       - name: download artifact
