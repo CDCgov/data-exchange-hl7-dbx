@@ -24,6 +24,12 @@ jobs:
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
+      - name: cleanup Directories
+        shell: pwsh
+        run: |
+             Get-ChildItem -Path ${{ github.workspace }} -Recurse | Remove-Item -force -recurse
+
       - name: checkout
         uses: actions/checkout@v3
         with:
@@ -89,7 +95,7 @@ jobs:
   deploy-TST:
     runs-on: self-hosted
     needs: deploy-dev
-    environment: dev
+    environment: TST
     env: 
       PUBLISHPATH: ${{ github.workspace }}\Publish
                   
