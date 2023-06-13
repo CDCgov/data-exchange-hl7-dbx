@@ -59,7 +59,7 @@ jobs:
           $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/Worflow-update/Devops/ADBWorkflows/*.json" -recurse
           foreach ($file in $configFiles)
           {
-          (Get-Content $file.PSPath) |Foreach-Object { $_ -replace "{SECRET_Env}#", "${{ vars.SECRET_ENV }}" -replace "{SECRET_ClusterID}#", "${{ vars.SECRET_ClusterID }}"  } | Set-Content $file.PSPath
+          (Get-Content $file.PSPath) |Foreach-Object { $_ -replace "{SECRET_Env}#", "${{ vars.SECRET_ENV }}" -replace "{SECRET_ClusterID}#", "${{ vars.SECRET_CLUSTERID }}"  } | Set-Content $file.PSPath
           }
      
         
@@ -106,7 +106,7 @@ jobs:
                $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/Worflow-update/Devops/ADBWorkflows/*.json" -recurse
                foreach ($file in $configFiles)
                {
-               (Get-Content $file.PSPath) |Foreach-Object { $_ -replace "{SECRET_Env}#", "${{ vars.SECRET_ENV }}" -replace "{SECRET_ClusterID}#", "${{ vars.SECRET_ClusterID }}"  } | Set-Content $file.PSPath
+               (Get-Content $file.PSPath) |Foreach-Object { $_ -replace "{SECRET_Env}#", "${{ vars.SECRET_ENV }}" -replace "{SECRET_ClusterID}#", "${{ vars.SECRET_CLUSTERID }}"  } | Set-Content $file.PSPath
                }
                    
                       
