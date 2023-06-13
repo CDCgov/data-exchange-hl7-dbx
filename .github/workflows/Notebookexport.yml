@@ -78,7 +78,7 @@ jobs:
   
   deploy-TST:
     runs-on: self-hosted
-    needs: Build
+    needs: deploy-Dev
     environment: TST
     env: 
       PUBLISHPATH: ${{ github.workspace }}\TST
