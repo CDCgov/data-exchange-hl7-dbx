@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 DEX HL7 Release 0.0.21
 - Performance Testing - working with EDAV and DevOps on issues identified (authorization, timeouts, etc)
 - Using audit log to better identify problems.
-- Adding CI/CD for workflow deployments.
+- Adding CI/CD for workflow deployments for DEV environemnt.
+- Fix bug on Lake of Segments workflow.
 
 
 ### [0.0.14] - 2023-05-31
