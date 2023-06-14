@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+### [0.0.15] - 2023-06-14
+
+DEX HL7 Release 0.0.21
+- Performance Testing - working with EDAV and DevOps on issues identified (authorization, timeouts, etc)
+- Using audit log to better identify problems.
+- Adding CI/CD for workflow deployments.
+
+
 ### [0.0.14] - 2023-05-31
 
 DEX HL7 Release 0.0.20
