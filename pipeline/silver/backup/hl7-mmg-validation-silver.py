@@ -2,7 +2,6 @@
 # MAGIC %md
 # MAGIC ### Notebook setting 
 
-
 # COMMAND ----------
 
 # MAGIC %run ../common/common_fns
@@ -12,6 +11,7 @@
 # MAGIC %run ../common/schemas
 
 # COMMAND ----------
+
 lakeDAO = LakeDAO(globalLakeConfig)
 
 df_err    = lakeDAO.readStreamFrom("hl7_mmg_validation_err_bronze")
