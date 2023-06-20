@@ -38,6 +38,7 @@ class LakeDAO:
     def writeStreamTo(self, df, tableName):
         return df.writeStream.format("delta").outputMode("append") \
             .trigger(availableNow=True)  \
+            .option("mergeSchema", "true")  \
             .option("checkpointLocation", self.lakeConfig.getCheckpointLocation(tableName)).toTable(self.lakeConfig.getTableRef(tableName))
     
     def writeTableTo(self, df, tableName):
