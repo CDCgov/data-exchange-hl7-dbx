@@ -19,7 +19,9 @@ processNames = {
     'hl7-mmg-sql-ok': 'MMG_BASED_SQL_TRANSFORMER',
     'hl7-mmg-sql-err': 'MMG_BASED_SQL_TRANSFORMER',
     'hl7-lake-segments-ok': 'LAKE-SEGMENTS-TRANSFORMER',
-    'hl7-lake-segments-err': 'LAKE-SEGMENTS-TRANSFORMER'
+    'hl7-lake-segments-err': 'LAKE-SEGMENTS-TRANSFORMER',
+    'hl7-json-lake-ok':'HL7-JSON-LAKE-TRANSFORMER',
+    'hl7-json-lake-err':'HL7-JSON-LAKE-TRANSFORMER'
 }
 
 # COMMAND ----------
