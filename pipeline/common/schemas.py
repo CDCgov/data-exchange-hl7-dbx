@@ -44,6 +44,7 @@ schema_process = StructType([
     StructField("start_processing_time", StringType(), True),
     StructField("end_processing_time", StringType(), True),
     StructField("report", StringType(), True),
+    StructField("config",ArrayType(StringType()), nullable=True),
    ])
 
 schema_processes = ArrayType(schema_process, True)
