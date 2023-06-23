@@ -28,7 +28,7 @@ def transferEventHubDataToLake(eventHubConfig, lakeConfig, topic):
     tbl_name = normalizeString(topic) + "_eh_raw"
 
     timestamp = datetime.datetime.now()
-    json_string = f'''{{"processes":[{{"process_name":"{tbl_name}_eh_raw","created_timestamp":"{timestamp}"}}]}}'''
+    json_string = f'''{{"processes":[{{"process_name":"{tbl_name}","created_timestamp":"{timestamp}"}}]}}'''
     df = df.withColumn("body", df["body"].cast("string"))
     
     df = df.withColumn("lake_metadata",lit(json_string))
