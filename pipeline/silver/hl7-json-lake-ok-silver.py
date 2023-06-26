@@ -46,7 +46,7 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
-df2 = df1.select("message_uuid","message_info","summary","metadata_version","provenance","eventhub_queued_time","eventhub_offset","eventhub_sequence_number","report")
+df2 = df1.select("message_uuid","message_info","summary","metadata_version","provenance","eventhub_queued_time","eventhub_offset","config","eventhub_sequence_number","report")
         
 
 #display( df2 )

@@ -32,19 +32,19 @@ from pyspark.sql.functions import col, concat, explode_outer, from_json
 ### Structure validation related logic
 df_structure_result = df_structure_ok.unionByName(df_structure_err, allowMissingColumns=True).unionByName(df_structure_elr_ok, allowMissingColumns=True)
 
-df2_structure = df_structure_result.withColumn("report", from_json('report', schema_report)).select('message_uuid', 'metadata_version','message_info','summary', 'status', 'provenance','start_processing_time','report.entries.content','report.entries.structure','report.entries.value-set','error_count','warning_count', 'process_name' )
+df2_structure = df_structure_result.withColumn("report", from_json('report', schema_report)).select('message_uuid', 'metadata_version','message_info','summary', 'status', 'provenance','start_processing_time','config','report.entries.content','report.entries.structure','report.entries.value-set','error_count','warning_count', 'process_name' )
 
 df3_structure = df2_structure.withColumn("error_concat",concat(col("content"),col("structure"),col("value-set"))) 
 df3_structure = df3_structure.withColumn('error_concat', explode_outer('error_concat'))
 
-df4_structure = df3_structure.select('message_uuid','metadata_version',  'message_info', 'summary', 'provenance',  'status','error_concat.line','error_concat.column',df3_structure.error_concat.path.alias("field"),'error_concat.description','error_concat.classification','error_concat.category', 'process_name')
+df4_structure = df3_structure.select('message_uuid','metadata_version',  'message_info', 'summary', 'provenance',  'status','config','error_concat.line','error_concat.column',df3_structure.error_concat.path.alias("field"),'error_concat.description','error_concat.classification','error_concat.category', 'process_name')
 
 ### MMG validation related logic
 df_mmg_result = df_mmg_ok.unionByName(df_mmg_err, allowMissingColumns=True)
 
 df2_mmg = df_mmg_result.withColumn('issue', F.explode_outer((from_json('report', mmgReportSchema)).entries))
 
-df3_mmg = df2_mmg.select('message_uuid', 'metadata_version','message_info','summary', 'provenance','status','issue.line', 
+df3_mmg = df2_mmg.select('message_uuid', 'metadata_version','message_info','summary', 'provenance','status', 'config','issue.line', 
                  df2_mmg.issue.path.alias("column"),df2_mmg.issue.fieldName.alias("field"),'issue.description','issue.classification', 'issue.category', 'process_name' )
 
 ### Combine both Structure and MMG validation dataframes
