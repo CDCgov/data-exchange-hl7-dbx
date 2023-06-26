@@ -19,7 +19,7 @@ lakeDAO = LakeDAO(globalLakeConfig)
 df1 =  lakeDAO.readStreamFrom("hl7_json_lake_ok_bronze")
 
  
-df1 = lake_metadata_create(f"hl7_json_lake_ok_silver",df1)
+df1 = lake_metadata_create(f"hl7_json_lake_ok_silver",df1,"append")
 
 # COMMAND ----------
 

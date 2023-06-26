@@ -71,21 +71,26 @@ def printToFile(topic, message):
       with open(file_loc, "a") as f:
           f.write(f"{datetime.datetime.now()} - {message}\n")
 
-def lake_metadata_create(topic,df):
+def lake_metadata_create(topic,df,action_type):
     timestamp = datetime.datetime.now()
-    json_str = f'''{{"process_name":"{topic}","created_timestamp":"{timestamp}"}}'''
+    options = ["insert","append"]
     
+    if action_type not in options:
+        return print('Action type needs to be: "insert" or "append')
+    
+
+    json_str = f'''{{"process_name":"{topic}","created_timestamp":"{timestamp}"}}'''
     df = df.withColumn("json_str",lit(json_str))
     df = df.withColumn("json_str",from_json("json_str",schema_lake_metadata_processes))
-    
-    if "lake_metadata" not in df.columns or df.select("lake_metadata.processes.process_name").limit(1).collect()[0][0] is None:
+
+    if action_type.lower() == 'insert':
         df = df.withColumn("lake_metadata",struct(array(col("json_str")).alias("processes")))
+        
+    elif action_type.lower() == 'append':
+         df = df.withColumn("lake_metadata",struct(array_union(col("lake_metadata.processes"),array(col("json_str"))).alias("processes")))
 
-    else:
-        df = df.withColumn("lake_metadata",struct(array_union(col("lake_metadata.processes"),array(col("json_str"))).alias("processes")))
-
-    df = df.drop(col("json_str"))       
-            
+    df = df.drop(col("json_str"))
+    
     return df
 
 # COMMAND ----------

@@ -36,9 +36,10 @@ def create_mmg_validator_df(topic, process_name, lake_config):
 
 def create_bronze_df(topic, process_name, lake_config):
     lakeDAO = LakeDAO(lake_config)
+    
     rawDF = lakeDAO.readStreamFrom(f"{normalizeString(topic)}_eh_raw")
     
-    rawDF = lake_metadata_create(f"{normalizeString(topic)}_bronze",rawDF)
+    rawDF = lake_metadata_create(f"{normalizeString(topic)}_bronze",rawDF,'append')
     
     metadataDF = rawDF.select( from_json("body", schema_evhub_body_v2).alias("data"),"lake_metadata" ).select("data.*","lake_metadata")
     
