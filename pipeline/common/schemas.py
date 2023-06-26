@@ -8,8 +8,8 @@ from pyspark.sql.types import *
 
 # COMMAND ----------
 
-# MAGIC 
-# MAGIC 
+# MAGIC
+# MAGIC
 # MAGIC %md
 # MAGIC ### Schemas Common ( Bronze )
 
@@ -32,6 +32,7 @@ schema_metadata_provenance = StructType([
     StructField("ext_system_provider", StringType(), True),
     StructField("ext_original_file_name", StringType(), True),
     StructField("message_index", StringType(), True),
+    StructField("ext_original_file_timestamp", StringType(), True),
  ])
 
 schema_process = StructType([    
@@ -44,6 +45,7 @@ schema_process = StructType([
     StructField("start_processing_time", StringType(), True),
     StructField("end_processing_time", StringType(), True),
     StructField("report", StringType(), True),
+    StructField("config",ArrayType(StringType()), nullable=True),
    ])
 
 schema_processes = ArrayType(schema_process, True)
@@ -154,6 +156,12 @@ schema_evhub_body_v2 = StructType([    #StructField("content", StringType(), Tru
     StructField("metadata", schema_metadata, True)
 ])
 
+log_schema = StructType([
+        StructField("timeStamp", StringType(),True),
+        StructField("classification", StringType(),True),
+        StructField("notebook", StringType(),True),
+        StructField("message", StringType(),True)
+    ])
 
 
 # COMMAND ----------

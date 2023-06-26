@@ -8,12 +8,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../common/schemas
-
-# COMMAND ----------
-
 lakeDAO = LakeDAO(globalLakeConfig)
-
 df1 =  lakeDAO.readStreamFrom("hl7_lake_segments_ok_bronze")
 
 
@@ -29,6 +24,24 @@ from pyspark.sql.functions import *
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC ### Schemas Needed
+
+# COMMAND ----------
+
+# MAGIC %run ../common/schemas
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Read Input Table
+# MAGIC
+# MAGIC # not stream for dev only
+# MAGIC # df1 = spark.read.format("delta").table( f"{database_config.database}.{TOPIC}_{STAGE_IN}" )
+# MAGIC # display( df1 )
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ### Drop and Rename Columns
 
 # COMMAND ----------
@@ -36,6 +49,7 @@ from pyspark.sql.functions import *
 df2 = df1.drop("summary", "metadata_version", "processes", "status", "process_name", "process_version", "start_processing_time", "end_processing_time") \
         .withColumnRenamed("report", "lake_segments_string")
 
+# display( df2 )
 
 # COMMAND ----------
 
@@ -53,7 +67,7 @@ df3 = df2.withColumn( "lake_segments_arr", from_json( col("lake_segments_string"
          .withColumn("parent_segments", col('segment_struct.parent_segments')) \
          .drop("segment_struct")
 
-
+# display( df3 )
 
 # COMMAND ----------
 
