@@ -19,13 +19,7 @@ lakeDAO = LakeDAO(globalLakeConfig)
 df1 =  lakeDAO.readStreamFrom("hl7_json_lake_ok_bronze")
 
  
-timestamp = datetime.datetime.now()
-json_str = f'''{{"process_name":"hl7_json_lake_ok_silver","created_timestamp":"{timestamp}"}}'''
-
-
-df1 = df1.withColumn("json_str",lit(json_str))
-df1 = df1.withColumn("json_str",from_json("json_str",schema_lake_metadata_processes))
-df1 = df1.withColumn("lake_metadata",struct(array_union(col("lake_metadata.processes"),array(col("json_str"))).alias("processes")))
+df1 = lake_metadata_create(f"hl7_json_lake_ok_silver",df1)
 
 # COMMAND ----------
 

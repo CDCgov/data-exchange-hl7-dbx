@@ -1,4 +1,8 @@
 # Databricks notebook source
+import datetime
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ### Widgets
 
@@ -66,6 +70,23 @@ def printToFile(topic, message):
       file_loc = f"./{topic}-output-log.txt"
       with open(file_loc, "a") as f:
           f.write(f"{datetime.datetime.now()} - {message}\n")
+
+def lake_metadata_create(topic,df):
+    timestamp = datetime.datetime.now()
+    json_str = f'''{{"process_name":"{topic}","created_timestamp":"{timestamp}"}}'''
+    
+    df = df.withColumn("json_str",lit(json_str))
+    df = df.withColumn("json_str",from_json("json_str",schema_lake_metadata_processes))
+    
+    if "lake_metadata" not in df.columns or df.select("lake_metadata.processes.process_name").limit(1).collect()[0][0] is None:
+        df = df.withColumn("lake_metadata",struct(array(col("json_str")).alias("processes")))
+
+    else:
+        df = df.withColumn("lake_metadata",struct(array_union(col("lake_metadata.processes"),array(col("json_str"))).alias("processes")))
+
+    df = df.drop(col("json_str"))       
+            
+    return df
 
 # COMMAND ----------
 

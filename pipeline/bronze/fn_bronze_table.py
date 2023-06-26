@@ -38,13 +38,7 @@ def create_bronze_df(topic, process_name, lake_config):
     lakeDAO = LakeDAO(lake_config)
     rawDF = lakeDAO.readStreamFrom(f"{normalizeString(topic)}_eh_raw")
     
-    timestamp = datetime.datetime.now()
-    json_str = f'''{{"process_name":"{normalizeString(topic)}_bronze","created_timestamp":"{timestamp}"}}'''
-
-    rawDF = rawDF.withColumn("json_str",lit(json_str))
-    rawDF = rawDF.withColumn("json_str",from_json("json_str",schema_lake_metadata_processes))
-    rawDF = rawDF.withColumn("lake_metadata",struct(array_union(col("lake_metadata.processes"),array(col("json_str"))).alias("processes")))
-    
+    rawDF = lake_metadata_create(f"{normalizeString(topic)}_bronze",rawDF)
     
     metadataDF = rawDF.select( from_json("body", schema_evhub_body_v2).alias("data"),"lake_metadata" ).select("data.*","lake_metadata")
     
