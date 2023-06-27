@@ -82,7 +82,10 @@ jobs:
          databricks workspace import_dir "${{ env.PUBLISHPATH }}\develop\pipeline" "${{ vars.DEXUPLOADWORKSPACEURL }}" -o
   
   deploy-STG:
+
     runs-on: [self-hosted, Windows, X64, PRD]
+
+    
     needs: deploy-TST
     environment: STG
     env: 

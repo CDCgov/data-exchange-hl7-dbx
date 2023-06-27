@@ -38,6 +38,7 @@ class LakeDAO:
     def writeStreamTo(self, df, tableName):
         return df.writeStream.format("delta").outputMode("append") \
             .trigger(availableNow=True)  \
+            .option("mergeSchema", "true")  \
             .option("checkpointLocation", self.lakeConfig.getCheckpointLocation(tableName)).toTable(self.lakeConfig.getTableRef(tableName))
     
     def writeTableTo(self, df, tableName):
@@ -79,4 +80,4 @@ globalEventHubConfig = EventHubConfig(globalDexEnv.eventhub_namespace, globalDex
 
 # COMMAND ----------
 
-dbutils.widgets.dropdown("event_hub", "hl7-recdeb-ok", ["hl7-file-dropped-ok", "hl7-recdeb-ok", "hl7-recdeb-err", "hl7-redacted-ok", "hl7-redacted-err",  "hl7-structure-ok", "hl7-structure-elr-ok" "hl7-structure-err", "hl7-mmg-validation-ok", "hl7-mmg-validation-err", "hl7-mmg-based-ok", "hl7-mmg-based-err", "hl7-mmg-sql-ok", "hl7-mmg-sql-err", "hl7-lake-segments-ok", "hl7-lake-segments-err"])
+dbutils.widgets.dropdown("event_hub", "hl7-recdeb-ok", ["hl7-file-dropped-ok", "hl7-recdeb-ok", "hl7-recdeb-err", "hl7-redacted-ok", "hl7-redacted-err",  "hl7-structure-ok", "hl7-structure-elr-ok" "hl7-structure-err", "hl7-mmg-validation-ok", "hl7-mmg-validation-err", "hl7-mmg-based-ok", "hl7-mmg-based-err", "hl7-mmg-sql-ok", "hl7-mmg-sql-err", "hl7-lake-segments-ok", "hl7-lake-segments-err","hl7-json-lake-ok","hl7-json-lake-err"])
