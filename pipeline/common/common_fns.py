@@ -1,5 +1,6 @@
 # Databricks notebook source
 import datetime
+from pyspark.sql.functions import *
 
 # COMMAND ----------
 
@@ -78,7 +79,7 @@ def lake_metadata_create(topic,df,action_type):
     if action_type not in options:
         return print('Action type needs to be: "insert" or "append')
     
-
+    
     json_str = f'''{{"process_name":"{topic}","created_timestamp":"{timestamp}"}}'''
     df = df.withColumn("json_str",lit(json_str))
     df = df.withColumn("json_str",from_json("json_str",schema_lake_metadata_processes))
