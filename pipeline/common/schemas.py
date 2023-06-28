@@ -49,6 +49,7 @@ schema_metadata_provenance = StructType([
     StructField("ext_system_provider", StringType(), True),
     StructField("ext_original_file_name", StringType(), True),
     StructField("message_index", StringType(), True),
+    StructField("ext_original_file_timestamp", StringType(), True),
  ])
 
 schema_process = StructType([    
@@ -71,7 +72,8 @@ schema_message_info = StructType([
     StructField("route", StringType(), True),
     StructField("mmgs", ArrayType(StringType()), True),
     StructField("reporting_jurisdiction", StringType(), True),
-    StructField("type", StringType(), True)
+    StructField("type", StringType(), True),
+    StructField("local_record_id", StringType(), True)
 ])
 
 schema_problem  = StructType ([

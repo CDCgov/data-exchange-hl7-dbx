@@ -39,7 +39,7 @@ df1 = lake_metadata_create(f"hl7_json_lake_ok_silver",df1,"append")
 
 import datetime
 
-df2 = df1.select("message_uuid","message_info","summary","metadata_version","provenance","eventhub_queued_time","eventhub_offset","eventhub_sequence_number","report","lake_metadata")
+df2 = df1.select("message_uuid","message_info","summary","metadata_version","provenance","eventhub_queued_time","eventhub_offset","config","eventhub_sequence_number","report","lake_metadata")
         
 
 

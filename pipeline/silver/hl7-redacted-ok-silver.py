@@ -62,7 +62,7 @@ df3 = df2.withColumn( "report_arr", from_json( col("redacted_report_string"), sc
 
 df4 = df3.withColumn('issue', F.explode_outer('report_arr.entries'))
 
-df5 = df4.select('message_uuid', 'message_info', 'summary','provenance','issue.path','issue.rule','issue.lineNumber')
+df5 = df4.select('message_uuid', 'message_info', 'summary','provenance','config','issue.path','issue.rule','issue.lineNumber')
 
 #display( df5)
 
