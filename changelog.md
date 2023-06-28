@@ -13,6 +13,7 @@ DEX HL7 Release 0.0.22
 - Implemented pipeline for new HL7-Json model.
 - Added Config column to all tables to identify configuration used by processes.
 - Added local_record_id to message_info schema.
+- Implemented CI/CD for DEV, TST and STG for notebooks and workflows.
 
 ### [0.0.15] - 2023-06-14
 
