@@ -79,6 +79,7 @@ schema_reportType = StructType([
     StructField("line", StringType(), True),
     StructField("column", StringType(), True),
     StructField("path", StringType(), True),
+    StructField("fieldName", StringType(), True),
     StructField("description", StringType(), True),
     StructField("category", StringType(), True),
     StructField("classification", StringType(), True),    
