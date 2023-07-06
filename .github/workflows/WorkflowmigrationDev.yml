@@ -24,6 +24,14 @@ jobs:
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
+
+      - name: cleanup Directories
+        shell: pwsh
+        run: |
+             Get-ChildItem -Path ${{ github.workspace }} -Recurse | Remove-Item -force -recurse
+
+
       - name: checkout
         uses: actions/checkout@v3
         with:
@@ -44,8 +52,9 @@ jobs:
     needs: Build
     environment: dev
     env: 
-      PUBLISHPATH: ${{ github.workspace }}\
-    
+
+      PUBLISHPATH: ${{ github.workspace }}\Publish
+
     steps: 
       - name: download artifact
         uses: actions/download-artifact@v3
@@ -56,10 +65,12 @@ jobs:
       - name: Replace tokens
         shell: pwsh
         run: |
-          $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/develop/Devops/ADBWorkflows/*.json" -recurse
+
+          $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/Worflow-update/Devops/ADBWorkflows/*.json" -recurse
           foreach ($file in $configFiles)
           {
-          (Get-Content $file.PSPath) |Foreach-Object { $_ -replace "{SECRET_Env}#", "${{ vars.SECRET_ENV }}" -replace "{SECRET_ClusterID}#", "${{ vars.SECRET_ClusterID }}"  } | Set-Content $file.PSPath
+          (Get-Content $file.PSPath) |Foreach-Object { $_ -replace "{SECRET_Env}#", "${{ vars.SECRET_ENV }}" -replace "{SECRET_ClusterID}#", "${{ vars.SECRET_CLUSTERID }}"  } | Set-Content $file.PSPath
+
           }
      
         
@@ -71,7 +82,9 @@ jobs:
                $url = 'https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/v2.0/token'
                $body = @{'client_id'='${{ secrets.DEX_APP_ID }}'; 'grant_type'='client_credentials'; 'scope'='2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default'; 'client_secret'='${{ secrets.DEX_CLIENT_SECRET }}'}
                $Token=Invoke-WebRequest $url -Method $method -Headers $headers -Body $body -UseBasicParsing | Select  -ExpandProperty content | jq -r .access_token
-               $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/develop/Devops/ADBWorkflows/*.json" -recurse
+
+               $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/Worflow-update/Devops/ADBWorkflows/*.json" -recurse
+
                foreach ($file in $configFiles)
                {
                $fileContent = Get-Content $file.PSPath 
@@ -89,9 +102,11 @@ jobs:
   deploy-TST:
     runs-on: self-hosted
     needs: deploy-dev
-    environment: dev
+
+    environment: TST
     env: 
-      PUBLISHPATH: ${{ github.workspace }}\TST
+      PUBLISHPATH: ${{ github.workspace }}\Publish
+
                   
     steps: 
       - name: download artifact
@@ -103,10 +118,12 @@ jobs:
       - name: Replace tokens
         shell: pwsh
         run: |
-               $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/develop/Devops/ADBWorkflows/*.json" -recurse
+
+               $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/Worflow-update/Devops/ADBWorkflows/*.json" -recurse
                foreach ($file in $configFiles)
                {
-               (Get-Content $file.PSPath) |Foreach-Object { $_ -replace "{SECRET_Env}#", "${{ vars.SECRET_ENV }}" -replace "{SECRET_ClusterID}#", "${{ vars.SECRET_ClusterID }}"  } | Set-Content $file.PSPath
+               (Get-Content $file.PSPath) |Foreach-Object { $_ -replace "{SECRET_Env}#", "${{ vars.SECRET_ENV }}" -replace "{SECRET_ClusterID}#", "${{ vars.SECRET_CLUSTERID }}"  } | Set-Content $file.PSPath
+
                }
                    
                       
@@ -118,7 +135,9 @@ jobs:
                 $url = 'https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/v2.0/token'
                 $body = @{'client_id'='${{ secrets.DEX_APP_ID }}'; 'grant_type'='client_credentials'; 'scope'='2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default'; 'client_secret'='${{ secrets.DEX_CLIENT_SECRET }}'}
                 $Token=Invoke-WebRequest $url -Method $method -Headers $headers -Body $body -UseBasicParsing | Select  -ExpandProperty content | jq -r .access_token
-                $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/develop/Devops/ADBWorkflows/*.json" -recurse
+
+                $configFiles = Get-ChildItem "${{ env.PUBLISHPATH }}/Worflow-update/Devops/ADBWorkflows/*.json" -recurse
+
                 foreach ($file in $configFiles)
                 {
                 $fileContent = Get-Content $file.PSPath 
@@ -134,4 +153,4 @@ jobs:
               
               
                 }
-                               
+
