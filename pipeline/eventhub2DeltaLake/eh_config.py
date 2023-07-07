@@ -21,8 +21,8 @@ def transferEventHubDataToLake(eventHubConfig, lakeConfig, topic):
     df = df.withColumn("body", df["body"].cast("string"))
    
     # Standardize on Table names for Event Hub topics:
-    tbl_name = normalizeString(topic) + "_eh_raw" +"_alex"
-    #############REMOVE ALEX FROM TBL_NAME#######################
+    tbl_name = normalizeString(topic) + "_eh_raw"
+
     df = lake_metadata_create(tbl_name,df,"insert",lakeConfig)
 
 

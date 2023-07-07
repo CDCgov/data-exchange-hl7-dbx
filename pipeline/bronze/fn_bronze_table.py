@@ -37,9 +37,9 @@ def create_mmg_validator_df(topic, process_name, lake_config):
 def create_bronze_df(topic, process_name, lake_config):
     lakeDAO = LakeDAO(lake_config)
     
-    rawDF = lakeDAO.readStreamFrom(f"{normalizeString(topic)}_eh_raw_alex")
-    #############REMOVE ALEX FROM RAW_DF TOPIC STRING#######################
-    rawDF = lake_metadata_create(f"{normalizeString(topic)}_bronze_alex",rawDF,'append',lake_config)
+    rawDF = lakeDAO.readStreamFrom(f"{normalizeString(topic)}_eh_raw")
+
+    rawDF = lake_metadata_create(f"{normalizeString(topic)}_bronze",rawDF,'append',lake_config)
     
     metadataDF = rawDF.select( from_json("body", schema_evhub_body_v2).alias("data"),"lake_metadata" ).select("data.*","lake_metadata")
     
@@ -56,6 +56,6 @@ def create_bronze_df(topic, process_name, lake_config):
 
 def create_bronze_table(topic, input_df, lakeConfig):
     lakeDAO = LakeDAO(lakeConfig)
-    lakeDAO.writeStreamTo(input_df, f"{normalizeString(topic)}_bronze_alex")
+    lakeDAO.writeStreamTo(input_df, f"{normalizeString(topic)}_bronze")
 
 
