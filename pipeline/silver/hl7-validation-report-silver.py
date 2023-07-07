@@ -57,7 +57,7 @@ df3_mmg = df2_mmg.select('message_uuid', 'metadata_version','message_info','summ
 
 ### Combine both Structure and MMG validation dataframes
 df_combined_result = df3_mmg.unionByName(df4_structure, allowMissingColumns=True)
-df_combined_result = lake_metadata_create("hl7_validation_report_silver",df_combined_result,"append")
+df_combined_result = lake_metadata_create("hl7_validation_report_silver",df_combined_result,"append",globalLakeConfig)
 #display(df_combined_result.select("lake_metadata").where("lake_metadata.processes is not null"))
 
 # COMMAND ----------
