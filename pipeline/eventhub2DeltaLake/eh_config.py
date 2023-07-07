@@ -19,11 +19,11 @@ def transferEventHubDataToLake(eventHubConfig, lakeConfig, topic):
     ehConfig = eventHubConfig.getConfig(topic)
     df = spark.readStream.format("eventhubs").options(**ehConfig).load()
     df = df.withColumn("body", df["body"].cast("string"))
-    
+   
     # Standardize on Table names for Event Hub topics:
-    tbl_name = normalizeString(topic) + "_eh_raw"
-
-    df = lake_metadata_create(tbl_name,df,"insert")
+    tbl_name = normalizeString(topic) + "_eh_raw" +"_alex"
+    #############REMOVE ALEX FROM TBL_NAME#######################
+    df = lake_metadata_create(tbl_name,df,"insert",lakeConfig)
 
 
     lakeDAO = LakeDAO(lakeConfig)

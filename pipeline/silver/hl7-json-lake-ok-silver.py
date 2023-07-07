@@ -16,10 +16,10 @@ import datetime
 from pyspark.sql.functions import *
 
 lakeDAO = LakeDAO(globalLakeConfig)
-df1 =  lakeDAO.readStreamFrom("hl7_json_lake_ok_bronze")
+df1 =  lakeDAO.readStreamFrom("hl7_json_lake_ok_bronze_alex")
 
  
-df1 = lake_metadata_create(f"hl7_json_lake_ok_silver",df1,"append")
+df1 = lake_metadata_create(f"hl7_json_lake_ok_silver_alex",df1,"append",globalLakeConfig)
 
 # COMMAND ----------
 
@@ -52,4 +52,4 @@ df2 = df1.select("message_uuid","message_info","summary","metadata_version","pro
 
 # COMMAND ----------
 
-lakeDAO.writeStreamTo(df2, "hl7_json_lake_ok_silver" )
+lakeDAO.writeStreamTo(df2, "hl7_json_lake_ok_silver_alex" )

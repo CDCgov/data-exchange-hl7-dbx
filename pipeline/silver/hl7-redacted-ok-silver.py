@@ -65,7 +65,7 @@ df4 = df3.withColumn('issue', F.explode_outer('report_arr.entries'))
 
 df5 = df4.select('message_uuid', 'message_info', 'summary','provenance','config','issue.path','issue.rule','issue.lineNumber','lake_metadata')
 
-df5 = lake_metadata_create("hl7_redacted_ok_silver",df5,"append")
+df5 = lake_metadata_create("hl7_redacted_ok_silver",df5,"append",globalLakeConfig)
 
 
 #display( df5)
