@@ -8,6 +8,23 @@ from pyspark.sql.types import *
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Schemas Common (Raw)
+
+# COMMAND ----------
+
+schema_lake_metadata_processes = StructType([
+    StructField("process_name",StringType(),True),
+    StructField("created_timestamp",TimestampType(),True)
+
+])
+
+schema_lake_metadata = StructType([
+                                StructField("processes",ArrayType(schema_lake_metadata_processes),True)
+])
+
+# COMMAND ----------
+
 # MAGIC
 # MAGIC
 # MAGIC %md
