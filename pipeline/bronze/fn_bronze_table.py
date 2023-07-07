@@ -17,6 +17,7 @@
 # COMMAND ----------
 
 from pyspark.sql.functions import *
+import datetime
 
 def create_structure_validator_df(topic, process_name, lake_config):
     standard_df = create_bronze_df(topic, process_name, lake_config)
@@ -35,12 +36,15 @@ def create_mmg_validator_df(topic, process_name, lake_config):
 
 def create_bronze_df(topic, process_name, lake_config):
     lakeDAO = LakeDAO(lake_config)
+    
     rawDF = lakeDAO.readStreamFrom(f"{normalizeString(topic)}_eh_raw")
     
-    metadataDF = rawDF.select( from_json("body", schema_evhub_body_v2).alias("data") ).select("data.*")
+    rawDF = lake_metadata_create(f"{normalizeString(topic)}_bronze",rawDF,'append')
+    
+    metadataDF = rawDF.select( from_json("body", schema_evhub_body_v2).alias("data"),"lake_metadata" ).select("data.*","lake_metadata")
     
     mdExplodedDF = metadataDF.select("message_uuid", "message_info", "summary", "metadata_version",  \
-        from_json("metadata.provenance", schema_metadata_provenance).alias("provenance"), from_json("metadata.processes", schema_processes).alias("processes"))   
+        from_json("metadata.provenance", schema_metadata_provenance).alias("provenance"), from_json("metadata.processes", schema_processes).alias("processes"),"lake_metadata")   
 
     processExplodedDF = mdExplodedDF.withColumn("receiver_processes", expr(f"filter(processes, x -> x.process_name = '{process_name}')")) \
                .withColumn( "receiver_process", element_at( col('receiver_processes'), -1) ) \
