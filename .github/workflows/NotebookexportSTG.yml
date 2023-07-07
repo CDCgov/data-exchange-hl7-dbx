@@ -1,6 +1,8 @@
 # This is a basic workflow to help you get started with Actions
 
-name: NoteBookExport
+
+name: NoteBookExportRelease
+
 
 # Controls when the workflow will run
 on:
@@ -25,6 +27,13 @@ jobs:
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
+      - name: cleanup Directories
+        shell: pwsh
+        run: |
+             Get-ChildItem -Path ${{ github.workspace }} -Recurse | Remove-Item -force -recurse
+             
+
       - name: checkout
         uses: actions/checkout@v3
         with:
@@ -41,7 +50,9 @@ jobs:
             !{{ github.workspace }}/.git/*.*
             
   deploy-TST:
-    runs-on: self-hosted
+
+    runs-on: [self-hosted, Windows, X64, Dev]
+
     needs: Build
     environment: TST
     env: 
@@ -77,11 +88,16 @@ jobs:
          databricks workspace import_dir "${{ env.PUBLISHPATH }}\develop\pipeline" "${{ vars.DEXUPLOADWORKSPACEURL }}" -o
   
   deploy-STG:
-    runs-on: self-hosted
+
+
+    runs-on: [self-hosted, Windows, X64, PRD]
+
+    
     needs: deploy-TST
     environment: STG
     env: 
-      PUBLISHPATH: ${{ github.workspace }}\STG
+      PUBLISHPATH: ${{ github.workspace }}\Publish
+
           
     steps: 
       - name: download artifact

@@ -12,6 +12,7 @@ lakeDAO = LakeDAO(globalLakeConfig)
 df1 =  lakeDAO.readStreamFrom("hl7_lake_segments_ok_bronze")
 
 
+
 # COMMAND ----------
 
 # MAGIC %md
@@ -67,7 +68,8 @@ df3 = df2.withColumn( "lake_segments_arr", from_json( col("lake_segments_string"
          .withColumn("parent_segments", col('segment_struct.parent_segments')) \
          .drop("segment_struct")
 
-# display( df3 )
+df3 = lake_metadata_create("hl7_lake_segments_ok_silver",df3,"append")
+#display( df3.select("lake_metadata").where("lake_metadata.processes is not null")) 
 
 # COMMAND ----------
 
