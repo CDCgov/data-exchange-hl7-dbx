@@ -25,11 +25,13 @@ jobs:
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
       - name: cleanup Directories
         shell: pwsh
         run: |
              Get-ChildItem -Path ${{ github.workspace }} -Recurse | Remove-Item -force -recurse
              
+
       - name: checkout
         uses: actions/checkout@v3
         with:
@@ -46,7 +48,9 @@ jobs:
             !{{ github.workspace }}/.git/*.*
             
   deploy-Dev:
+
     runs-on: [self-hosted, Windows, X64, Dev]
+
     needs: Build
     environment: dev
     env: 
@@ -82,11 +86,13 @@ jobs:
          databricks workspace import_dir "${{ env.PUBLISHPATH }}\develop\pipeline" "${{ vars.DEXUPLOADWORKSPACEURL }}" -o
   
   deploy-TST:
+
     runs-on: [self-hosted, Windows, X64, Dev]
     needs: deploy-Dev
     environment: TST
     env: 
       PUBLISHPATH: ${{ github.workspace }}\Publish
+
           
     steps: 
       - name: download artifact
@@ -121,6 +127,4 @@ jobs:
               
             
        
-     
-        
-      
+

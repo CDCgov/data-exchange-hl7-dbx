@@ -4,31 +4,22 @@
 
 # COMMAND ----------
 
+# MAGIC %run ../common/schemas
+
+# COMMAND ----------
+
 # MAGIC %run ../common/common_fns
 
 # COMMAND ----------
 
+import datetime
+from pyspark.sql.functions import *
+
 lakeDAO = LakeDAO(globalLakeConfig)
 df1 =  lakeDAO.readStreamFrom("hl7_json_lake_ok_bronze")
 
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Imports 
-
-# COMMAND ----------
-
-from pyspark.sql.functions import *
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Schemas Needed
-
-# COMMAND ----------
-
-# MAGIC %run ../common/schemas
+ 
+df1 = lake_metadata_create(f"hl7_json_lake_ok_silver",df1,"append",globalLakeConfig)
 
 # COMMAND ----------
 
@@ -46,8 +37,11 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
-df2 = df1.select("message_uuid","message_info","summary","metadata_version","provenance","eventhub_queued_time","eventhub_offset","config","eventhub_sequence_number","report")
+import datetime
+
+df2 = df1.select("message_uuid","message_info","summary","metadata_version","provenance","eventhub_queued_time","eventhub_offset","config","eventhub_sequence_number","report","lake_metadata")
         
+
 
 #display( df2 )
 

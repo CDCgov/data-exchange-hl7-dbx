@@ -47,8 +47,8 @@ df2 = df1.drop("processes", "status", "process_name", "process_version", "start_
 
 df3 = df2.withColumn( "mmg_based_model_map", from_json( col("mmg_based_model_string"), schema_generic_json) ) \
          .drop("mmg_based_model_string")
-
-# display( df3 )
+df3 = lake_metadata_create("hl7_mmg_based_ok_silver",df3,"append",globalLakeConfig)
+#display( df3.select("lake_metadata.processes").where("lake_metadata.processes is not null") )
 
 # COMMAND ----------
 

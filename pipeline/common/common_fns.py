@@ -1,4 +1,9 @@
 # Databricks notebook source
+import datetime
+from pyspark.sql.functions import *
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ### Widgets
 
@@ -66,6 +71,45 @@ def printToFile(topic, message):
       file_loc = f"./{topic}-output-log.txt"
       with open(file_loc, "a") as f:
           f.write(f"{datetime.datetime.now()} - {message}\n")
+
+def column_exist(colName,tableName):
+    colNames_df = spark.sql(f"show columns in {tableName}")
+    exists_check = colNames_df.filter(colNames_df.col_name == f'{colName}').collect()
+    
+    return exists_check
+
+
+
+def lake_metadata_create(topic,df,action_type,lakeConfig):
+    timestamp = datetime.datetime.now()
+    options = ["insert","append"]
+
+    tableName = lakeConfig.getTableRef(f"{topic}")
+    dbName = lakeConfig.dbName
+
+    if spark.catalog.tableExists(tableName):
+        if not column_exist("lake_metadata",tableName):
+            spark.sql(f'''alter table {tableName}
+                        add columns (lake_metadata struct<processes:array<struct<process_name:string,created_timestamp:timestamp>>>)''')
+            
+
+    if action_type not in options:
+        return print('Action type needs to be: "insert" or "append')        
+    
+    json_str = f'''{{"process_name":"{topic}","created_timestamp":"{timestamp}"}}'''
+    df = df.withColumn("json_str",lit(json_str))
+    df = df.withColumn("json_str",from_json("json_str",schema_lake_metadata_processes))
+
+    if action_type.lower() == 'insert':
+        df = df.withColumn("lake_metadata",struct(array(col("json_str")).alias("processes")))
+        
+    elif action_type.lower() == 'append':
+    
+         df = df.withColumn("lake_metadata",struct(array_union(col("lake_metadata.processes"),array(col("json_str"))).alias("processes")))
+
+    df = df.drop(col("json_str"))
+    
+    return df
 
 # COMMAND ----------
 

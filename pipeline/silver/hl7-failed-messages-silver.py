@@ -11,6 +11,7 @@ TOPIC_ERR_RECDEB = "hl7_recdeb_err_bronze"
 TOPIC_ERR_REDACTED = "hl7_redacted_err_bronze"
 TOPIC_ERR_LAKE_SEGMENTS = "hl7_lake_segments_err_bronze"
 TOPIC_ERR_STRUCTURE = "hl7_structure_err_bronze"
+TOPIC_ERR_JSON_LAKE = "hl7_json_lake_err_bronze"
 
 # COMMAND ----------
 
@@ -37,6 +38,7 @@ df_err_recdeb = get_selected_fields(TOPIC_ERR_RECDEB)
 df_err_redacted = get_selected_fields(TOPIC_ERR_REDACTED)
 df_err_lake_segments = get_selected_fields(TOPIC_ERR_LAKE_SEGMENTS)
 df_err_structure = get_selected_fields(TOPIC_ERR_STRUCTURE)
+df_err_json_lake = get_selected_fields(TOPIC_ERR_JSON_LAKE)
 
 # COMMAND ----------
 

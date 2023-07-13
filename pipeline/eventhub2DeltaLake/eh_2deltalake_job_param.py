@@ -16,7 +16,7 @@ import os
 import datetime
 
 
-eventHubTopic = dbutils.widgets.get("event_hub")
+eventHubTopic =  dbutils.widgets.get("event_hub")
 ct = str(datetime.datetime.now())
 
 df = [(ct,"Info",eventHubTopic,"eh_2deltalake intiated")]
