@@ -16,7 +16,6 @@ import datetime
 # COMMAND ----------
 
 def transferEventHubDataToLake(eventHubConfig, lakeConfig, topic):
-    topic ="hl7-recdeb-ok"
     ehConfig = eventHubConfig.getConfig(topic)
     df = spark.readStream.format("eventhubs").options(**ehConfig).option("maxEventsPerTrigger","1000000").load()
     df = df.withColumn("body", df["body"].cast("string"))
