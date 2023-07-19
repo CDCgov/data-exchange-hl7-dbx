@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+### [0.0.17] -2023-07-12
+DEX Release 0.0.23
+
+- Updated Validation Report schema
+- Apended Lake_metadata column with timestamps of each row creation across the pipeline.
+
 
 ### [0.0.16] - 2023-06-28
 
