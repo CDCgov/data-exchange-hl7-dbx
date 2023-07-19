@@ -43,6 +43,7 @@ df2 = df1.select("message_uuid","message_info","summary","metadata_version","pro
         
 
 
+
 #display( df2 )
 
 # COMMAND ----------
