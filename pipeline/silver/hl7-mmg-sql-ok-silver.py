@@ -53,7 +53,8 @@ df3 = df2.withColumn("mmg_sql_model_map", from_json(col("mmg_sql_model_string"),
 df4 = df3.withColumn( "mmg_sql_model_singles",  map_filter("mmg_sql_model_map", lambda k, _: k != "tables" ) ) \
          .withColumn( "mmg_sql_model_tables", from_json( col("mmg_sql_model_map.tables" ), schema_tables) ) \
          .drop( "mmg_sql_model_map" )     
-
+df4 = lake_metadata_create("hl7_mmg_sql_ok_silver",df4,"append",globalLakeConfig)
+#display(df4.select("lake_metadata.processes").where("lake_metadata.processes is not null"))
 
 # COMMAND ----------
 

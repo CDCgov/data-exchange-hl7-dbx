@@ -34,4 +34,5 @@ processName = processNames[eventHubTopic]
 # COMMAND ----------
 
 bronzeDF  = create_bronze_df(eventHubTopic, processName, globalLakeConfig)
+#display(bronzeDF.select("lake_metadata").where("lake_metadata.processes is not null"))
 create_bronze_table(eventHubTopic, bronzeDF, globalLakeConfig)
