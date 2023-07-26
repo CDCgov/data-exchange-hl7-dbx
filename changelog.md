@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+### [0.0.18] -2023-07-26
+  DEX Release 0.0.24
+
+- Created HL7-JSON workflow job
+- Added Lake_metadata with processes timestamp on all tables on our lake.
+
+
+### [0.0.17] -2023-07-12
+DEX Release 0.0.23
+
+- Updated Validation Report schema
+- Apended Lake_metadata column with timestamps of each row creation across the pipeline.
 
 ### [0.0.17] -2023-07-12
 DEX Release 0.0.23
