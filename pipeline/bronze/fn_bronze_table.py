@@ -45,6 +45,11 @@ def create_bronze_df(topic, process_name, lake_config):
     
     mdExplodedDF = metadataDF.select("message_uuid", "message_info", "summary", "metadata_version",  \
         from_json("metadata.provenance", schema_metadata_provenance).alias("provenance"), from_json("metadata.processes", schema_processes).alias("processes"),"lake_metadata")   
+    
+    mdExplodedDF = mdExplodedDF.selectExpr("*",
+                               "CASE WHEN LEFT(provenance.source_metadata,1) = '[' and right(provenance.source_metadata,1)= ']' THEN substring(provenance.source_metadata,2,length(provenance.source_metadata)-2) ELSE provenance.source_metadata end as sub")
+    
+    mdExplodedDF = mdExplodedDF.withColumn("provenance",col("provenance").withField("source_metadata",col("sub"))).drop("sub").withColumn("provenance",col("provenance").withField("source_metadata",from_json("provenance.source_metadata",MapType(StringType(),StringType()))))
 
     processExplodedDF = mdExplodedDF.withColumn("receiver_processes", expr(f"filter(processes, x -> x.process_name = '{process_name}')")) \
                .withColumn( "receiver_process", element_at( col('receiver_processes'), -1) ) \

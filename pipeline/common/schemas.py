@@ -50,6 +50,7 @@ schema_metadata_provenance = StructType([
     StructField("ext_original_file_name", StringType(), True),
     StructField("message_index", StringType(), True),
     StructField("ext_original_file_timestamp", StringType(), True),
+    StructField("source_metadata",StringType(),True),
  ])
 
 schema_process = StructType([    
