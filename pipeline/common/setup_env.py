@@ -74,6 +74,7 @@ globalGOLDLakeConfig = LakeConfig(globalDexEnv.gold_output_database, globalDexEn
 
 globalEventHubConfig = EventHubConfig(globalDexEnv.eventhub_namespace, globalDexEnv.scope_name)
 
+
 # COMMAND ----------
 
 # MAGIC %md # Creating Widgets for different Event Hubs
