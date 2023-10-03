@@ -4,11 +4,11 @@ import os
 class DEXEnvironment:
     eventhub_namespace = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "eventhub_namespace", debugValue = os.getenv("eventhub_namespace"))
     database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database", debugValue = os.getenv("database"))
-    database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_checkpoint_prefix", debugValue = os.getenv("database_checkpoint_prefix"))
+    #database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_checkpoint_prefix", debugValue = os.getenv("database_checkpoint_prefix"))
     database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "database_folder", debugValue = os.getenv("database_folder"))
     scope_name = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "scope_name", debugValue = os.getenv("scope_name"))
     gold_output_database = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database", debugValue = os.getenv("gold_output_database"))
-    gold_output_database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database_checkpoint_prefix", debugValue = os.getenv("gold_output_database_checkpoint_prefix"))
+    #gold_output_database_checkpoint_prefix = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_output_database_checkpoint_prefix", debugValue = os.getenv("gold_output_database_checkpoint_prefix"))
     gold_database_folder = dbutils.jobs.taskValues.get(taskKey = "set_job_params", key = "gold_database_folder", debugValue = os.getenv("gold_database_folder"))
 
 globalDexEnv = DEXEnvironment()
@@ -38,6 +38,7 @@ class LakeDAO:
     def writeStreamTo(self, df, tableName):
         return df.writeStream.format("delta").outputMode("append") \
             .trigger(availableNow=True)  \
+            .option("mergeSchema", "true")  \
             .option("checkpointLocation", self.lakeConfig.getCheckpointLocation(tableName)).toTable(self.lakeConfig.getTableRef(tableName))
     
     def writeTableTo(self, df, tableName):
@@ -73,10 +74,11 @@ globalGOLDLakeConfig = LakeConfig(globalDexEnv.gold_output_database, globalDexEn
 
 globalEventHubConfig = EventHubConfig(globalDexEnv.eventhub_namespace, globalDexEnv.scope_name)
 
+
 # COMMAND ----------
 
 # MAGIC %md # Creating Widgets for different Event Hubs
 
 # COMMAND ----------
 
-dbutils.widgets.dropdown("event_hub", "hl7-recdeb-ok", ["hl7-file-dropped-ok", "hl7-recdeb-ok", "hl7-redacted-ok", "hl7-redacted-err", "hl7-recdeb-err", "hl7-structure-ok", "hl7-structure-err", "hl7-mmg-validation-ok", "hl7-mmg-validation-err", "hl7-mmg-based-ok", "hl7-mmg-based-err", "hl7-mmg-sql-ok", "hl7-mmg-sql-err", "hl7-lake-segments-ok", "hl7-lake-segments-err"])
+dbutils.widgets.dropdown("event_hub", "hl7-recdeb-ok", ["hl7-file-dropped-ok", "hl7-recdeb-ok", "hl7-recdeb-err", "hl7-redacted-ok", "hl7-redacted-err",  "hl7-structure-ok", "hl7-structure-elr-ok" "hl7-structure-err", "hl7-mmg-validation-ok", "hl7-mmg-validation-err", "hl7-mmg-based-ok", "hl7-mmg-based-err", "hl7-mmg-sql-ok", "hl7-mmg-sql-err", "hl7-lake-segments-ok", "hl7-lake-segments-err","hl7-json-lake-ok","hl7-json-lake-err"])

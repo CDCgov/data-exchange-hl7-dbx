@@ -1,0 +1,130 @@
+# This is a basic workflow to help you get started with Actions
+
+name: NoteBookExport
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "develop" branch
+  push:
+    branches: [ "develop" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  Build:
+  # runs-on: ubuntu-latest
+    runs-on: self-hosted
+    #environment: prod  # THIS WAS MISSING
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      - name: cleanup Directories
+        shell: pwsh
+        run: |
+             Get-ChildItem -Path ${{ github.workspace }} -Recurse | Remove-Item -force -recurse
+             
+
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          path: develop
+          ref: develop
+      
+      - name: upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: publish
+          path: |
+            ${{ github.workspace }}
+            !{{ github.workspace }}/.github/*.*
+            !{{ github.workspace }}/.git/*.*
+            
+  deploy-Dev:
+
+    runs-on: [self-hosted, Windows, X64, Dev]
+
+    needs: Build
+    environment: dev
+    env: 
+      PUBLISHPATH: ${{ github.workspace }}\Publish
+    
+    steps: 
+      - name: download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: publish 
+          path: ${{ env.PUBLISHPATH }}
+      
+      - name: Export Token
+        shell: pwsh
+        run: |
+         $headers = @{'Content-Type'='application/x-www-form-urlencoded'}
+         $method = 'POST'
+         $url = 'https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/v2.0/token'
+         $body = @{'client_id'='${{ secrets.DEX_APP_ID }}'; 'grant_type'='client_credentials'; 'scope'='2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default'; 'client_secret'='${{ secrets.DEX_CLIENT_SECRET }}'}
+         $Token=Invoke-WebRequest $url -Method $method -Headers $headers -Body $body -UseBasicParsing | Select  -ExpandProperty content | jq -r .access_token    
+         echo "TOKEN=$Token" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append 
+       
+      - name: publish
+        shell: pwsh
+        run: |
+         write-host "Configure databricks access"
+         $Env:DATABRICKS_CONFIG_FILE = "${{ github.workspace }}/.databrickscfg"
+         Set-Location ${{ github.workspace }}
+         Set-Content .databrickscfg "[DEFAULT]"
+         Add-Content .databrickscfg "host = ${{ secrets.HOSTURL }}"
+         Add-Content .databrickscfg "token = ${{ env.TOKEN }}" 
+         Write-Verbose "Databricks CLI Configured"
+         databricks workspace import_dir "${{ env.PUBLISHPATH }}\develop\pipeline" "${{ vars.DEXUPLOADWORKSPACEURL }}" -o
+  
+  deploy-TST:
+
+    runs-on: [self-hosted, Windows, X64, Dev]
+    needs: deploy-Dev
+    environment: TST
+    env: 
+      PUBLISHPATH: ${{ github.workspace }}\Publish
+
+          
+    steps: 
+      - name: download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: publish 
+          path: ${{ env.PUBLISHPATH }}
+            
+      - name: Export Token
+        shell: pwsh
+        run: |
+               $headers = @{'Content-Type'='application/x-www-form-urlencoded'}
+               $method = 'POST'
+               $url = 'https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/v2.0/token'
+               $body = @{'client_id'='${{ secrets.DEX_APP_ID }}'; 'grant_type'='client_credentials'; 'scope'='2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default'; 'client_secret'='${{ secrets.DEX_CLIENT_SECRET }}'}
+               $Token=Invoke-WebRequest $url -Method $method -Headers $headers -Body $body -UseBasicParsing | Select  -ExpandProperty content | jq -r .access_token    
+               echo "TOKEN=$Token" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append 
+             
+      - name: publish
+        shell: pwsh
+        run: |
+               write-host "Configure databricks access"
+               $Env:DATABRICKS_CONFIG_FILE = "${{ github.workspace }}/.databrickscfg"
+               Set-Location ${{ github.workspace }}
+               Set-Content .databrickscfg "[DEFAULT]"
+               Add-Content .databrickscfg "host = ${{ secrets.HOSTURL }}"
+               Add-Content .databrickscfg "token = ${{ env.TOKEN }}" 
+               Write-Verbose "Databricks CLI Configured"
+               databricks workspace import_dir "${{ env.PUBLISHPATH }}\develop\pipeline" "${{ vars.DEXUPLOADWORKSPACEURL }}" -o
+             
+           
+              
+            
+       
+

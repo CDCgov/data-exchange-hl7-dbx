@@ -4,6 +4,76 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+### [0.0.22] -2023-09-20
+  DEX Release 0.0.28
+  
+No Changes!
+
+### [0.0.21] -2023-09-06
+  DEX Release 0.0.27
+  
+No Changes!
+
+### [0.0.20] -2023-08-23
+  DEX Release 0.0.26
+  
+ No Changes!
+
+
+### [0.0.19] -2023-08-09
+  DEX Release 0.0.25
+
+- Added test engineer script for validating new column creation and its respective data.
+- Added sample queries/notebooks for programs to utilize.
+
+### [0.0.18] -2023-07-26
+  DEX Release 0.0.24
+
+- Created HL7-JSON workflow job
+- Added Lake_metadata with processes timestamp on all tables on our lake.
+
+
+### [0.0.17] -2023-07-12
+DEX Release 0.0.23
+
+- Updated Validation Report schema
+- Apended Lake_metadata column with timestamps of each row creation across the pipeline.
+
+
+### [0.0.16] - 2023-06-28
+
+DEX HL7 Release 0.0.22
+
+- Implemented pipeline for new HL7-Json model.
+- Added Config column to all tables to identify configuration used by processes.
+- Added local_record_id to message_info schema.
+- Implemented CI/CD for DEV, TST and STG for notebooks and workflows.
+
+
+### [0.0.15] - 2023-06-14
+
+DEX HL7 Release 0.0.21
+- Performance Testing - working with EDAV and DevOps on issues identified (authorization, timeouts, etc)
+- Using audit log to better identify problems.
+- Adding CI/CD for workflow deployments for DEV environemnt.
+- Fix bug on Lake of Segments workflow.
+
+
+### [0.0.14] - 2023-05-31
+
+DEX HL7 Release 0.0.20
+
+- Added all TST jobs to run on a scheduler (every 10 min)
+
+### [0.0.13] - 2023-05-17
+
+DEX Release 0.0.19
+
+  - Finished refactoring of Silver and Gold notebooks to use LakeDAO class 
+    (Deprecated DatabaseConfig, LakeUtils and TableConfig classes)
+
+
 ### [0.0.12] -2023-05-03
   DEX Release 0.0.18
   
