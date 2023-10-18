@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	- Fixed bug with status column on Validation Report.
 	- Removed MMGs and elr event hubs due to clean up.
 
-
 ### [0.0.23] -2023-10-04
   DEX Release 0.0.29
 
