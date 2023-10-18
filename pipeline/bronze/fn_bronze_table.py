@@ -50,7 +50,8 @@ def create_bronze_df(topic, process_name, lake_config):
                .withColumn( "receiver_process", element_at( col('receiver_processes'), -1) ) \
                .drop( "receiver_processes" ) \
                .select("*", "receiver_process.*") \
-               .drop ("receiver_process")
+               .drop ("receiver_process") \
+               .withColumn ("status", col("summary.current_status"))
 
     return processExplodedDF
 
