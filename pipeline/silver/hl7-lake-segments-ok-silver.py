@@ -66,9 +66,11 @@ df3 = df2.withColumn( "lake_segments_arr", from_json( col("lake_segments_string"
          .withColumn("segment_number", col('segment_struct.segment_number')) \
          .withColumn("segment", col('segment_struct.segment')) \
          .withColumn("parent_segments", col('segment_struct.parent_segments')) \
+         .withColumn("segment_id", col('segment_struct.segment_id')) \
          .drop("segment_struct")
 
 df3 = lake_metadata_create("hl7_lake_segments_ok_silver",df3,"append",globalLakeConfig)
+display(df3)
 #display( df3.select("lake_metadata").where("lake_metadata.processes is not null")) 
 
 # COMMAND ----------

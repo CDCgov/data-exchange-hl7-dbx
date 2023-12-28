@@ -200,6 +200,7 @@ schema_segment = StructType([
     StructField("segment", StringType(), True),
     StructField("segment_number", IntegerType(), True),
     StructField("parent_segments", ArrayType(StringType()), True),
+    StructField("segment_id", StringType(), True),
 ])
 
 schema_lake_segments = ArrayType(schema_segment, True)
@@ -213,3 +214,7 @@ schema_Redactor = StructType([
 
 schema_Redactor_Report = StructType([StructField("entries",ArrayType(schema_Redactor, True),True),
                                       StructField("status", StringType(), True)])
+
+# COMMAND ----------
+
+
