@@ -214,7 +214,3 @@ schema_Redactor = StructType([
 
 schema_Redactor_Report = StructType([StructField("entries",ArrayType(schema_Redactor, True),True),
                                       StructField("status", StringType(), True)])
-
-# COMMAND ----------
-
-
