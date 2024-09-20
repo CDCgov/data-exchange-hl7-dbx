@@ -18,8 +18,7 @@ permissions:
 jobs:
   # This workflow contains a single job called "build"
   Build:
-  # runs-on: ubuntu-latest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     #environment: prod  # THIS WAS MISSING
     
     # Steps represent a sequence of tasks that will be executed as part of the job
